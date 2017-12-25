@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>requireJs 配置可重用 - 平凡的世界</title>
+  <meta name="author" content="linuxlsx">
+
+  
+  <meta name="description" content="最近做项目的时候需要配套一个后台界面供运营人员查看相关数据。因为后台应用没有专职的前端, 所以一般的做法是找一套 bootstrap 的模板, 然后再实现具体的逻辑。一般的 javascript 逻辑都是写个每个页面里面的，没什么重用性。想通过模块的方式来实现重用, &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-111612120-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      .lsx
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">平凡的世界</a></h1>
+  
+    <h2>Hello Little Cat</h2>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:linuxlsx.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/">macOS Docker 容器网络代理设置</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/08/25/react-shi-zhan-part-1/">React 实战Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/03/02/huan-cun-she-ji-si-lu/">缓存设计思路</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/">requireJs 配置可重用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/">SpringMVC 使用AOP拦截Controller</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/linuxlsx">@linuxlsx</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">requireJs 配置可重用</h1>
+    </header>
+  
+  <div class="entry-content"><p>最近做项目的时候需要配套一个后台界面供运营人员查看相关数据。因为后台应用没有专职的前端, 所以一般的做法是找一套 bootstrap 的模板, 然后再实现具体的逻辑。一般的 javascript 逻辑都是写个每个页面里面的，没什么重用性。想通过模块的方式来实现重用, 需要有个东西来管理模块之间的依赖, 正好有其他的后台应用使用了require.js, 就照样使用了起来。</p>
+
+<!-- more -->
+
+
+<p>具体关于 require.js 的使用介绍网上有很多, 我也看了好几篇, 推荐几篇比较靠谱的:</p>
+
+<ol>
+<li>JavaScript模块化开发系列. <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-basics/">第一篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-commonjs/">第二篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-amd/">第三篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-requirejs/">第4篇</a></li>
+<li>阮一峰的<code>Javascript模块化编程</code>系列. <a href="http://www.ruanyifeng.com/blog/2012/10/javascript_module.html">第一篇</a> <a href="http://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html">第二篇</a> <a href="http://www.ruanyifeng.com/blog/2012/11/require_js.html">第三篇</a></li>
+</ol>
+
+
+<p>学习完了以后对 require.js 以及 AMD 相关的概念有了一定的了解。也达到了模块化开发的目标。这里主要想说明的一个问题是如何使 require.js 的全局配置能达到重用的效果。</p>
+
+<p>这个是我一个页面的JS模块:</p>
+
+<pre><code>requirejs.config({
+    baseUrl : "/assets",
+
+    shim : {
+        "bootstrap" : { "deps" :['jquery'] },
+        "dist" :{"deps" :['bootstrap']},
+        "paginator" : {"deps" : ['jquery']},
+        "menu" :{"deps": ['jquery']}
+    },
+
+    paths: {
+        jquery: 'plugins/jQuery/jQuery-2.1.4.min',
+        bootstrap : 'bootstrap/js/bootstrap.min',
+        dist: 'dist/js/app',
+        paginator : 'plugins/bootstrap-paginator/bootstrap-paginator',
+        menu : 'page/module/menu',
+        pager : 'page/module/simplepager',
+    }
+});
+require(['jquery', 'bootstrap', 'dist', 'paginator' , 'menu', 'pager'],function($, bootstrap, dist, paginator ,menu, pager){
+
+    $(document).ready(function(){
+
+        var init = function(){
+            menu.initMenu();
+            pager.initPager();
+        }
+
+        init();
+    });
+  });
+</code></pre>
+
+<p><code>requirejs.config()</code> 其实是一个全局的配置, 但是按照标准的 requireJs 的引入方法是无法重用这个配置的。 在开始阶段我不得不在每个页面中重复的拷贝这个配置。对于有节操的码农来说这是不可接受的。所以我开始寻找解决重复配置的方法, 终于在<code>stackoverflow</code>上找到了答案。<a href="http://stackoverflow.com/questions/16067042/requirejs-and-common-config">原始的问题链接</a></p>
+
+<p>解决的主要方法就是分开引入。先引入 require.js, 再引入你的全部配置 config.js, 然后在引入你要执行的模块。</p>
+
+<pre><code>//1. 首先引入 require.js
+&lt;script src="/assets/require.js"  type="text/javascript" &gt;&lt;/script&gt;
+//2. 引入全部的配置文件
+&lt;script src="/assets/config.js" type="text/javascript" &gt;&lt;/script&gt;
+
+&lt;script type="text/javascript"&gt;
+    //3. 引入你要执行的模块
+    require(['/assets/page/feedback.js'])
+&lt;/script&gt;
+</code></pre>
+
+<p>通过以上的配置就能减少代码重复了。另外有文章提到可以通过 require.js 的插件机制来达到效果，但是没有找到可行的解决方案。</p>
+
+<h5>参考资料</h5>
+
+<ol>
+<li><a href="http://requirejs.org/">require.js官网</a></li>
+<li><a href="https://github.com/togakangaroo/Blog/blob/master/setting-up-requirejs.md">setting-up-requirejs</a></li>
+</ol>
+
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/requirejs/'>requirejs</a>, <a class='category' href='/blog/categories/reuse/'>reuse</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-01-15T13:53:16+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/" title="Previous Post: SpringMVC 使用AOP拦截Controller">&laquo; SpringMVC 使用AOP拦截Controller</a>
+      &nbsp;&nbsp;
+      
+        <a class="basic-alignment right" href="/blog/2016/03/02/huan-cun-she-ji-si-lu/" title="Next Post: 缓存设计思路"> 缓存设计思路 &raquo;</a>
+      
+    </div>
+  </footer>
+
+
+</article>
+
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2017 linuxlsx
+  </p>
+</div>
+
+</footer>
+    
+
+<script type="text/javascript">
+  disqus_shortname = 'linuxlsx';
+  
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'linuxlsx',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Java | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2017-12-25T11:19:14+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Synchronized 作用于局部变量]]></title>
+    <link href="http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string/"/>
+    <updated>2015-12-10T20:36:22+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string</id>
+    <content type="html"><![CDATA[<p><code>synchronized</code> 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 <code>synchronized</code> 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式:</p>
+
+<pre><code>1. 对于普通方法, 锁是当前对象的实例
+2. 对于静态同步方法, 锁是当前类的 Class 对象
+3. 对于同步方法块, 锁是 synchronized 括号里面配置的对象
+</code></pre>
+
+<!-- more -->
+
+
+<p>今天代码review 的时候, 发现一个新奇的写法，简化后的代码如下:</p>
+
+<pre><code>public static Object get(String key){
+
+  String syncKey = key + "something else";
+
+  synchronized (syncKey){
+      // 简化的逻辑
+      // obj = map.get(syncKey)
+      // if obj == null
+      //      obj = Provider.get()
+      //      map.put(obj)
+      // return obj
+  }
+}
+</code></pre>
+
+<p>咋一看这跟我们常规的写法不一样，常规的写法 一般是将 <code>syncKey</code> 定义为类的一个属性, 这样能够保证多线程确实是基于同一个对象实例来做同步的。对于这个写法作者的解释是 java 对于String 是做过特殊处理的，值一样的String 是会做缓存的。所以多线程访问的情况下仍然是作用在同一个对象上, 可以达到同步的效果。</p>
+
+<p>对于这个结论是一半对一半不对, 具体能不能达到想要的同步效果，就要看是不是作用在同一个对象实例上。那String 到底是不是同一个对象实例呢？ 那就要从 String 的内存模型说起了。具体详解可以参考<a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java：String</a></p>
+
+<p>所以针对这个示例，其实是不对的。 <code>String syncKey = key + "something else"</code> 每次都返回一个 <code>new String()</code> 对于 <code>synchronized</code> 来说肯定不是同一个对象实例, 所以就达不到同步的效果。但是如果修改成如下的就是可以的:</p>
+
+<pre><code>public static Object get(String key){
+
+  String syncKey = "something else";
+
+  synchronized (syncKey){
+      // 简化的逻辑
+      // obj = map.get(syncKey)
+      // if obj == null
+      //      obj = Provider.get()
+      //      map.put(obj)
+      // return obj
+  }
+}
+</code></pre>
+
+<p><code>String syncKey = "something else";</code> 这样的方式是将 <code>something else</code> 这个字符串保存到了JVM 的字符串常量池中, 并且可以共享。所以多线程访问的时候拿到的都是同一个对象, 就能达到同步的效果。</p>
+
+<p>Java 还有没有能够达到这种效果的对象吗？答案是肯定的, 以下的几种情况得到的都是同一个对象实例:</p>
+
+<pre><code>1. byte(Byte), short(Short), int(Integer), long(Long) 值在[-128,127] 之间
+2. boolean (true or false)
+3. char 值在 ['\u0000' - '\u007f']
+</code></pre>
+
+<p>这个是Java 语言规范中定义的。这些值会在JVM中缓存下来, 每次使用都会返回同一个实例。但是仅限<code>Integer i = 1</code> 这样的方式. 如果是 <code>Integer i = new Integer(1)</code> 的话， 那就是不同的对象了。</p>
+
+<h4>结论</h4>
+
+<p><code>synchronized</code> 将锁标记保存在对象头中, 所以只要对象是同一个就能够达到同步的效果，也不一定要是实例变量。而Java 语言中某些对象实例虽然是局部变量, 但是由于一些性能优化上的考虑, 会对String, Byte,Short,Boolean,Integer,Long 类型的数据做一些优化。</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java: String</a></li>
+<li><a href="http://java-performance.info/string-intern-in-java-6-7-8/">String.intern in Java 6, 7 and 8 – string pooling</a></li>
+<li><a href="http://codelog.me/2015/01/20/2015-01-20-string-intern/">深入理解Java String#intern() 内存模型</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jrebel VerifyError]]></title>
+    <link href="http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror/"/>
+    <updated>2015-12-04T15:40:14+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror</id>
+    <content type="html"><![CDATA[<p>Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手.  但是今天启动应用的时候，报了如下的错误:</p>
+
+<pre><code>Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside of a branch
+Exception Details:
+Location:
+  com/taobao/healthcenter/web/servlet/StatusServlet.&lt;init&gt;(Lcom/zeroturnaround/javarebel/Ge;I[Ljava/lang/Object;)V @11: invokespecial
+Reason:
+  Error exists in the bytecode
+Bytecode:
+  0000000: 04b8 008e c600 0b2a 2b1c 2db7 0113 b112
+  0000010: 771c b800 7dbf                         
+Stackmap Table:
+  same_frame(@15)
+
+  java version : 1.7.0_67
+  jrebel version : 6.0.0
+</code></pre>
+
+<p>Google 发现Jrebel官网已经有人提出了这个问题: <a href="http://zeroturnaround.com/forums/topic/verifyerror-bad-method-call-from-inside-of-a-branch/">VerifyError</a></p>
+
+<!-- more -->
+
+
+<p>根据帖子中提到的<a href="https://bugs.openjdk.java.net/browse/JDK-8051012">JDK Bug</a> 1.7版本最早修复该bug 的版本是 7u72.</p>
+
+<p>根据帖子中提供的方案在JVM参数中添加 <code>-noverify</code> 解决问题。</p>
+
+<h5>Tip</h5>
+
+<p>我其实用 jdk7 和 jrebel 6 已经好久了，为什么今天就碰到这个问题了呢。 通过对比发现是: 之前我都是将 Java 的编译版本设置为了 1.6, 而今天出问题的时候我将编译版本设置成了 1.7, 而jdk7 相比 jdk6 生成的字节码引入了一些功能, 导致 jrebel 修改字节码后会出现一些验证的问题。</p>
+
+<p>原本打算直接升级到 jdk8 的， 但是受限于公司规定的框架只能先升级到 jdk7. 看来还要等会才能在线上使用 lambda 了</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="http://chrononsystems.com/blog/java-7-design-flaw-leads-to-huge-backward-step-for-the-jvm">Java 7 Bytecode Verifier: Huge backward step for the JVM</a></li>
+<li><a href="http://stackoverflow.com/questions/300639/use-of-noverify-when-launching-java-apps">Use of -noverify when launching java apps</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

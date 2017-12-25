@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Synchronized 作用于局部变量 - 平凡的世界</title>
+  <meta name="author" content="linuxlsx">
+
+  
+  <meta name="description" content="synchronized 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 synchronized 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式: 1. 对于普通方法, 锁是当前对象的实例
+2. 对于静态同步方法, &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-111612120-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      .lsx
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">平凡的世界</a></h1>
+  
+    <h2>Hello Little Cat</h2>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:linuxlsx.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/">macOS Docker 容器网络代理设置</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/08/25/react-shi-zhan-part-1/">React 实战Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/03/02/huan-cun-she-ji-si-lu/">缓存设计思路</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/">requireJs 配置可重用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/">SpringMVC 使用AOP拦截Controller</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/linuxlsx">@linuxlsx</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">Synchronized 作用于局部变量</h1>
+    </header>
+  
+  <div class="entry-content"><p><code>synchronized</code> 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 <code>synchronized</code> 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式:</p>
+
+<pre><code>1. 对于普通方法, 锁是当前对象的实例
+2. 对于静态同步方法, 锁是当前类的 Class 对象
+3. 对于同步方法块, 锁是 synchronized 括号里面配置的对象
+</code></pre>
+
+<!-- more -->
+
+
+<p>今天代码review 的时候, 发现一个新奇的写法，简化后的代码如下:</p>
+
+<pre><code>public static Object get(String key){
+
+  String syncKey = key + "something else";
+
+  synchronized (syncKey){
+      // 简化的逻辑
+      // obj = map.get(syncKey)
+      // if obj == null
+      //      obj = Provider.get()
+      //      map.put(obj)
+      // return obj
+  }
+}
+</code></pre>
+
+<p>咋一看这跟我们常规的写法不一样，常规的写法 一般是将 <code>syncKey</code> 定义为类的一个属性, 这样能够保证多线程确实是基于同一个对象实例来做同步的。对于这个写法作者的解释是 java 对于String 是做过特殊处理的，值一样的String 是会做缓存的。所以多线程访问的情况下仍然是作用在同一个对象上, 可以达到同步的效果。</p>
+
+<p>对于这个结论是一半对一半不对, 具体能不能达到想要的同步效果，就要看是不是作用在同一个对象实例上。那String 到底是不是同一个对象实例呢？ 那就要从 String 的内存模型说起了。具体详解可以参考<a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java：String</a></p>
+
+<p>所以针对这个示例，其实是不对的。 <code>String syncKey = key + "something else"</code> 每次都返回一个 <code>new String()</code> 对于 <code>synchronized</code> 来说肯定不是同一个对象实例, 所以就达不到同步的效果。但是如果修改成如下的就是可以的:</p>
+
+<pre><code>public static Object get(String key){
+
+  String syncKey = "something else";
+
+  synchronized (syncKey){
+      // 简化的逻辑
+      // obj = map.get(syncKey)
+      // if obj == null
+      //      obj = Provider.get()
+      //      map.put(obj)
+      // return obj
+  }
+}
+</code></pre>
+
+<p><code>String syncKey = "something else";</code> 这样的方式是将 <code>something else</code> 这个字符串保存到了JVM 的字符串常量池中, 并且可以共享。所以多线程访问的时候拿到的都是同一个对象, 就能达到同步的效果。</p>
+
+<p>Java 还有没有能够达到这种效果的对象吗？答案是肯定的, 以下的几种情况得到的都是同一个对象实例:</p>
+
+<pre><code>1. byte(Byte), short(Short), int(Integer), long(Long) 值在[-128,127] 之间
+2. boolean (true or false)
+3. char 值在 ['\u0000' - '\u007f']
+</code></pre>
+
+<p>这个是Java 语言规范中定义的。这些值会在JVM中缓存下来, 每次使用都会返回同一个实例。但是仅限<code>Integer i = 1</code> 这样的方式. 如果是 <code>Integer i = new Integer(1)</code> 的话， 那就是不同的对象了。</p>
+
+<h4>结论</h4>
+
+<p><code>synchronized</code> 将锁标记保存在对象头中, 所以只要对象是同一个就能够达到同步的效果，也不一定要是实例变量。而Java 语言中某些对象实例虽然是局部变量, 但是由于一些性能优化上的考虑, 会对String, Byte,Short,Boolean,Integer,Long 类型的数据做一些优化。</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java: String</a></li>
+<li><a href="http://java-performance.info/string-intern-in-java-6-7-8/">String.intern in Java 6, 7 and 8 – string pooling</a></li>
+<li><a href="http://codelog.me/2015/01/20/2015-01-20-string-intern/">深入理解Java String#intern() 内存模型</a></li>
+</ol>
+
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/local-variable/'>local variable</a>, <a class='category' href='/blog/categories/synchronized/'>synchronized</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-10T20:36:22+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/04/jrebel-verifyerror/" title="Previous Post: Jrebel VerifyError">&laquo; Jrebel VerifyError</a>
+      &nbsp;&nbsp;
+      
+        <a class="basic-alignment right" href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/" title="Next Post: SpringMVC 使用AOP拦截Controller"> SpringMVC 使用AOP拦截Controller &raquo;</a>
+      
+    </div>
+  </footer>
+
+
+</article>
+
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2017 linuxlsx
+  </p>
+</div>
+
+</footer>
+    
+
+<script type="text/javascript">
+  disqus_shortname = 'linuxlsx';
+  
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'linuxlsx',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>

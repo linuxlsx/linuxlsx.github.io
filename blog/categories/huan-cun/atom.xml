@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 缓存 | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/huan-cun/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2017-12-25T11:19:14+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[缓存设计思路]]></title>
+    <link href="http://linuxlsx.github.io/blog/2016/03/02/huan-cun-she-ji-si-lu/"/>
+    <updated>2016-03-02T22:04:57+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2016/03/02/huan-cun-she-ji-si-lu</id>
+    <content type="html"><![CDATA[<p>无意中读到陈天的<a href="http://mp.weixin.qq.com/s?__biz=MzA3NDM0ODQwMw==&amp;mid=401641618&amp;idx=1&amp;sn=3a6dbb475ceb85a4610e49910443a098&amp;scene=4#wechat_redirect">谈谈系统设计面试</a> 对于其中的一些思想深以为然。看待问题不能只看表象，需要深入的了解问题的背景、原因以及解决问题的预期目标，只有了解了这些以后才能给出一个完整、有效的解决方案。</p>
+
+<!-- more -->
+
+
+<p>以下是我读完后结合自己的实践写一个总结。
+问题: 某个系统出现性能瓶颈, 现在需要你给出一套缓存方案来解决性能问题。</p>
+
+<p>步骤1: 了解问题的背景</p>
+
+<pre><code>1. 当前性能情况怎么样。QPS,TPS,RT多少, 数据量有多少.
+2. 当前系统架构如何。是否已经使用缓存
+3. 系能的瓶颈在哪里。是数据库压力大,还是应用服务器压力大
+</code></pre>
+
+<p>步骤2: 了解缓存的对象</p>
+
+<pre><code>1. 数据是什么类型, 占用多少空间(最小/平均/最大)。不同的空间占用有不同的缓存方案。
+2. 数据的读写比怎样。
+</code></pre>
+
+<p>步骤3: 了解目标</p>
+
+<pre><code>1. 预期的性能是多少。QPS,TPS,RT等   
+2. 能够使用的资源有多少。
+</code></pre>
+
+<p>步骤4: 了解工具</p>
+
+<pre><code>1. 有哪些工具可用。
+2. 这些工具能达到的性能以及适合使用场景
+3. 公司内部是否对这些工具有成熟的运维工具, 否则需要在设计缓存管理的工具
+</code></pre>
+
+<p>步骤5: 提出方案</p>
+
+<pre><code>1. 方案review及修改
+2. 根据方案开始实施
+</code></pre>
+
+<p>步骤6: 方案成果分析</p>
+
+<pre><code>1. 收集方案实施前后的性能数据
+2. 对比性能数据判断方案是否达到预期目标
+</code></pre>
+
+<p>按照这6个步骤执行,一般来说会得到一个理想的结果。</p>
+]]></content>
+  </entry>
+  
+</feed>

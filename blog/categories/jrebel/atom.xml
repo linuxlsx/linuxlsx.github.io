@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Jrebel | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/jrebel/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2017-12-25T11:19:14+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Jrebel VerifyError]]></title>
+    <link href="http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror/"/>
+    <updated>2015-12-04T15:40:14+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror</id>
+    <content type="html"><![CDATA[<p>Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手.  但是今天启动应用的时候，报了如下的错误:</p>
+
+<pre><code>Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside of a branch
+Exception Details:
+Location:
+  com/taobao/healthcenter/web/servlet/StatusServlet.&lt;init&gt;(Lcom/zeroturnaround/javarebel/Ge;I[Ljava/lang/Object;)V @11: invokespecial
+Reason:
+  Error exists in the bytecode
+Bytecode:
+  0000000: 04b8 008e c600 0b2a 2b1c 2db7 0113 b112
+  0000010: 771c b800 7dbf                         
+Stackmap Table:
+  same_frame(@15)
+
+  java version : 1.7.0_67
+  jrebel version : 6.0.0
+</code></pre>
+
+<p>Google 发现Jrebel官网已经有人提出了这个问题: <a href="http://zeroturnaround.com/forums/topic/verifyerror-bad-method-call-from-inside-of-a-branch/">VerifyError</a></p>
+
+<!-- more -->
+
+
+<p>根据帖子中提到的<a href="https://bugs.openjdk.java.net/browse/JDK-8051012">JDK Bug</a> 1.7版本最早修复该bug 的版本是 7u72.</p>
+
+<p>根据帖子中提供的方案在JVM参数中添加 <code>-noverify</code> 解决问题。</p>
+
+<h5>Tip</h5>
+
+<p>我其实用 jdk7 和 jrebel 6 已经好久了，为什么今天就碰到这个问题了呢。 通过对比发现是: 之前我都是将 Java 的编译版本设置为了 1.6, 而今天出问题的时候我将编译版本设置成了 1.7, 而jdk7 相比 jdk6 生成的字节码引入了一些功能, 导致 jrebel 修改字节码后会出现一些验证的问题。</p>
+
+<p>原本打算直接升级到 jdk8 的， 但是受限于公司规定的框架只能先升级到 jdk7. 看来还要等会才能在线上使用 lambda 了</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="http://chrononsystems.com/blog/java-7-design-flaw-leads-to-huge-backward-step-for-the-jvm">Java 7 Bytecode Verifier: Huge backward step for the JVM</a></li>
+<li><a href="http://stackoverflow.com/questions/300639/use-of-noverify-when-launching-java-apps">Use of -noverify when launching java apps</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

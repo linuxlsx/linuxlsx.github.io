@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Javascript | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2017-12-25T11:19:14+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[requireJs 配置可重用]]></title>
+    <link href="http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/"/>
+    <updated>2016-01-15T13:53:16+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong</id>
+    <content type="html"><![CDATA[<p>最近做项目的时候需要配套一个后台界面供运营人员查看相关数据。因为后台应用没有专职的前端, 所以一般的做法是找一套 bootstrap 的模板, 然后再实现具体的逻辑。一般的 javascript 逻辑都是写个每个页面里面的，没什么重用性。想通过模块的方式来实现重用, 需要有个东西来管理模块之间的依赖, 正好有其他的后台应用使用了require.js, 就照样使用了起来。</p>
+
+<!-- more -->
+
+
+<p>具体关于 require.js 的使用介绍网上有很多, 我也看了好几篇, 推荐几篇比较靠谱的:</p>
+
+<ol>
+<li>JavaScript模块化开发系列. <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-basics/">第一篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-commonjs/">第二篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-amd/">第三篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-requirejs/">第4篇</a></li>
+<li>阮一峰的<code>Javascript模块化编程</code>系列. <a href="http://www.ruanyifeng.com/blog/2012/10/javascript_module.html">第一篇</a> <a href="http://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html">第二篇</a> <a href="http://www.ruanyifeng.com/blog/2012/11/require_js.html">第三篇</a></li>
+</ol>
+
+
+<p>学习完了以后对 require.js 以及 AMD 相关的概念有了一定的了解。也达到了模块化开发的目标。这里主要想说明的一个问题是如何使 require.js 的全局配置能达到重用的效果。</p>
+
+<p>这个是我一个页面的JS模块:</p>
+
+<pre><code>requirejs.config({
+    baseUrl : "/assets",
+
+    shim : {
+        "bootstrap" : { "deps" :['jquery'] },
+        "dist" :{"deps" :['bootstrap']},
+        "paginator" : {"deps" : ['jquery']},
+        "menu" :{"deps": ['jquery']}
+    },
+
+    paths: {
+        jquery: 'plugins/jQuery/jQuery-2.1.4.min',
+        bootstrap : 'bootstrap/js/bootstrap.min',
+        dist: 'dist/js/app',
+        paginator : 'plugins/bootstrap-paginator/bootstrap-paginator',
+        menu : 'page/module/menu',
+        pager : 'page/module/simplepager',
+    }
+});
+require(['jquery', 'bootstrap', 'dist', 'paginator' , 'menu', 'pager'],function($, bootstrap, dist, paginator ,menu, pager){
+
+    $(document).ready(function(){
+
+        var init = function(){
+            menu.initMenu();
+            pager.initPager();
+        }
+
+        init();
+    });
+  });
+</code></pre>
+
+<p><code>requirejs.config()</code> 其实是一个全局的配置, 但是按照标准的 requireJs 的引入方法是无法重用这个配置的。 在开始阶段我不得不在每个页面中重复的拷贝这个配置。对于有节操的码农来说这是不可接受的。所以我开始寻找解决重复配置的方法, 终于在<code>stackoverflow</code>上找到了答案。<a href="http://stackoverflow.com/questions/16067042/requirejs-and-common-config">原始的问题链接</a></p>
+
+<p>解决的主要方法就是分开引入。先引入 require.js, 再引入你的全部配置 config.js, 然后在引入你要执行的模块。</p>
+
+<pre><code>//1. 首先引入 require.js
+&lt;script src="http://linuxlsx.github.io/assets/require.js"  type="text/javascript" &gt;&lt;/script&gt;
+//2. 引入全部的配置文件
+&lt;script src="http://linuxlsx.github.io/assets/config.js" type="text/javascript" &gt;&lt;/script&gt;
+
+&lt;script type="text/javascript"&gt;
+    //3. 引入你要执行的模块
+    require(['/assets/page/feedback.js'])
+&lt;/script&gt;
+</code></pre>
+
+<p>通过以上的配置就能减少代码重复了。另外有文章提到可以通过 require.js 的插件机制来达到效果，但是没有找到可行的解决方案。</p>
+
+<h5>参考资料</h5>
+
+<ol>
+<li><a href="http://requirejs.org/">require.js官网</a></li>
+<li><a href="https://github.com/togakangaroo/Blog/blob/master/setting-up-requirejs.md">setting-up-requirejs</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

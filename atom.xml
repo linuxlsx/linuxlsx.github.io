@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2017-12-25T11:19:14+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[macOS Docker 容器网络代理设置]]></title>
+    <link href="http://linuxlsx.github.io/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/"/>
+    <updated>2017-12-25T10:47:46+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi</id>
+    <content type="html"><![CDATA[<p>最近公司中绝大部分的容器都已经切换到Docker中了，所以准备深入学习下Docker 相关的内容。</p>
+
+<p>在<a href="https://www.docker.com/community-edition">Docker官网</a>下载了最新的Mac版本，然后按照<a href="https://www.amazon.cn/dp/B015QSNIY0/ref=sr_1_2?s=books&amp;ie=UTF8&amp;qid=1514114219&amp;sr=1-2&amp;keywords=%E7%AC%AC%E4%B8%80%E6%9C%ACdocker%E4%B9%A6">第一本Docker书</a> 中逐步学习。不过这本书是基于Docker 1.9 版本编写，最新的Docker Mac 版本已经有了不少的变化, 不过基本的命令还是没有变化的。</p>
+
+<!-- more -->
+
+
+<p>按照书本上的例子，我下载了 ubuntu 的 docker镜像。按照 <code>docker run -i -t ubuntu /bin/bash</code> 的命令进入到容器中。按照示例接下来需要执行<code>apt-get -yqq update</code> 来更新元数据。但是在默认的配置下出现了意外的网络问题。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@3511c8b519ea:/# apt-get -yqq update
+</span><span class='line'>W: The repository 'http://security.ubuntu.com/ubuntu xenial-security Release' does not have a Release file.
+</span><span class='line'>W: The repository 'http://archive.ubuntu.com/ubuntu xenial Release' does not have a Release file.
+</span><span class='line'>W: The repository 'http://archive.ubuntu.com/ubuntu xenial-updates Release' does not have a Release file.
+</span><span class='line'>W: The repository 'http://archive.ubuntu.com/ubuntu xenial-backports Release' does not have a Release file.
+</span><span class='line'>E: Failed to fetch http://security.ubuntu.com/ubuntu/dists/xenial-security/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+</span><span class='line'>E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+</span><span class='line'>E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-updates/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+</span><span class='line'>E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-backports/main/binary-amd64/Packages  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+</span><span class='line'>E: Some index files failed to download. They have been ignored, or old ones used instead.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在网上搜索了相关资料后，发现是网络代理设置的问题：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@3511c8b519ea:/# set | grep proxy
+</span><span class='line'>http_proxy=docker.for.mac.localhost:6152
+</span><span class='line'>https_proxy=docker.for.mac.localhost:6152</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>docker.for.mac.localhost</code> 是从 <strong>17.06</strong> 版本开始引入的一个Mac DNS 名称，会被解析成外部主机的IP。6152 是我设置的代理端口。</p>
+
+<p>要想代理能够生效需要增加一个 <strong>http</strong> 的前缀：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@1e9af09f86a4:/# set | grep proxy
+</span><span class='line'>http_proxy=http://docker.for.mac.localhost:6152
+</span><span class='line'>https_proxy=http://docker.for.mac.localhost:6152</span></code></pre></td></tr></table></div></figure>
+
+
+<p>或者直接设置不需要使用代理：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root@1e9af09f86a4:/# set | grep proxy
+</span><span class='line'>http_proxy=no_proxy
+</span><span class='line'>https_proxy=no_proxy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样设置完了以后，就可以更新 <strong>apt-get</strong> 的元数据，然后就可以安装想要的工具了。</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="https://stackoverflow.com/questions/46632967/docker-apt-get-got-cannot-inititate-the-connection-to-800080-connect">docker apt-get got <code>Cannot inititate the connection to 8000:80 (…) - connect (22: Invalid Argument)</code></a></li>
+<li><a href="https://docs.docker.com/docker-for-mac/networking/#i-cannot-ping-my-containers">Networking features in Docker for Mac</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[React 实战Part 1]]></title>
+    <link href="http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1/"/>
+    <updated>2016-08-25T21:00:08+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1</id>
+    <content type="html"><![CDATA[<p>React 是由FB开发的一款高性能的前端渲染框架。我们在公司的内部项目中也开始采用React 来替换原有的开发框架。由于前端资源不足，所以自告奋勇提出由自己来完成一部分的前端工作，从此开始接触到React.</p>
+
+<!-- more -->
+
+
+<p>由于我也是刚接触到React, 所以这一篇不讲(其实是讲不出来)什么原理性的东西，只是把我这几天用React 碰到的一些问题给记录下。</p>
+
+<p>首先是推荐一款优秀的前端组件库: <code>antd</code>。是由蚂蚁金服的同学发起并维护的。<a href="http://ant.design/">官网地址</a>。整体设计非常简洁，模块化，用起来非常容易上手。</p>
+
+<p>碰到的第一个问题其实也跟 <code>antd</code> 相关，在表单中使用了表单的 <code>getFieldProps</code> 属性。刚开始也是瞎蒙的，看着示例代码就开搞。在使用了这个属性的同时又设置了 onChange 属性。 如下:</p>
+
+<pre><code>&lt;Select {...getFieldProps('componentId', {
+    initialValue: (PageData.create &amp;&amp; PageData.create.id) ? PageData.create.componentId : '',
+    rules: [
+        {required: true, message: '请选择组件实例分类'},
+        ],
+          )} onChange={this.handleComponentChange}&gt;
+            {
+              this.props.componentDatas.map((o, n)=&gt;{return (
+                &lt;Option value={'' + o.id} key={n}&gt;{o.name}&lt;/Option&gt;
+              )})
+            }
+&lt;/Select&gt;
+</code></pre>
+
+<p>测试过程中碰到的问题就是死活无法选中下拉框中的选项，但是事件又触发了。去掉<code>onChange</code> 属性能够选中选项，但没法处理事件。检查文档发现 <code>getFieldProps</code> 已经包含了<code>id</code> <code>value</code> <code>ref</code> <code>onChange</code> 属性，不能重复设置属性。 所以正确的做法是在 <code>getFieldProps</code> 中指定时间处理函数。</p>
+
+<p>第二个问题跟CodeMirror相关。项目中需要编辑代码，自然想到就是将CodeMirror引入到项目中来。搜索后发现<a href="https://github.com/JedWatson/react-codemirror">react-codemirror</a> 还不错，就引入到项目中。第一次尝试很成功一次就过，但是当同一个页面中出现多个CodeMirror 的实例时会出现 <strong>状态变化后, 只有最底下的一个实例能够响应状态的变更</strong>。这个显然不是我想要的结果。GitHub 项目中的 issue 是个好东西，你碰到过的问题肯定有其他人也碰到过。该项目的
+ <a href="https://github.com/JedWatson/react-codemirror/issues/46">issue #46</a> <a href="https://github.com/JedWatson/react-codemirror/issues/47">issue #47</a> <a href="https://github.com/JedWatson/react-codemirror/issues/49">issue #49</a>都提到了这个问题。 这个问题的原因就是 <code>componentWillReceiveProps</code> 这个方法被 <code>debounce</code> 后变成异步执行的了，所有只会有最后一个实例才会收到状态变更的消息。</p>
+
+<p> 解决办法就是将 <code>componentWillReceiveProps</code> 改为同步执行的。目前作者还没有修复这个问题，只能在代码中通过重写这个方法来完成。具体的实现参见 <a href="https://github.com/mozilla-services/react-jsonschema-form/pull/175">解决方案</a></p>
+
+<p>两个问题都不是什么大问题，但是从发现问题到解决问题还是花费了我不少的时间。三个解决问题的经验:</p>
+
+<ul>
+<li>查看文档。文档中通常都会详细的说明一些需要特殊注意的场景，而这些场景往往就是出问题的地方。</li>
+<li>如果是开源项目，那就先检查 issues 中是否已经有过类似的问题了。看是不是可以通过升级版本解决问题。</li>
+<li>再不行的话只能通过万能的 Google 了，前提是要能科学上网。</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[缓存设计思路]]></title>
+    <link href="http://linuxlsx.github.io/blog/2016/03/02/huan-cun-she-ji-si-lu/"/>
+    <updated>2016-03-02T22:04:57+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2016/03/02/huan-cun-she-ji-si-lu</id>
+    <content type="html"><![CDATA[<p>无意中读到陈天的<a href="http://mp.weixin.qq.com/s?__biz=MzA3NDM0ODQwMw==&amp;mid=401641618&amp;idx=1&amp;sn=3a6dbb475ceb85a4610e49910443a098&amp;scene=4#wechat_redirect">谈谈系统设计面试</a> 对于其中的一些思想深以为然。看待问题不能只看表象，需要深入的了解问题的背景、原因以及解决问题的预期目标，只有了解了这些以后才能给出一个完整、有效的解决方案。</p>
+
+<!-- more -->
+
+
+<p>以下是我读完后结合自己的实践写一个总结。
+问题: 某个系统出现性能瓶颈, 现在需要你给出一套缓存方案来解决性能问题。</p>
+
+<p>步骤1: 了解问题的背景</p>
+
+<pre><code>1. 当前性能情况怎么样。QPS,TPS,RT多少, 数据量有多少.
+2. 当前系统架构如何。是否已经使用缓存
+3. 系能的瓶颈在哪里。是数据库压力大,还是应用服务器压力大
+</code></pre>
+
+<p>步骤2: 了解缓存的对象</p>
+
+<pre><code>1. 数据是什么类型, 占用多少空间(最小/平均/最大)。不同的空间占用有不同的缓存方案。
+2. 数据的读写比怎样。
+</code></pre>
+
+<p>步骤3: 了解目标</p>
+
+<pre><code>1. 预期的性能是多少。QPS,TPS,RT等   
+2. 能够使用的资源有多少。
+</code></pre>
+
+<p>步骤4: 了解工具</p>
+
+<pre><code>1. 有哪些工具可用。
+2. 这些工具能达到的性能以及适合使用场景
+3. 公司内部是否对这些工具有成熟的运维工具, 否则需要在设计缓存管理的工具
+</code></pre>
+
+<p>步骤5: 提出方案</p>
+
+<pre><code>1. 方案review及修改
+2. 根据方案开始实施
+</code></pre>
+
+<p>步骤6: 方案成果分析</p>
+
+<pre><code>1. 收集方案实施前后的性能数据
+2. 对比性能数据判断方案是否达到预期目标
+</code></pre>
+
+<p>按照这6个步骤执行,一般来说会得到一个理想的结果。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[requireJs 配置可重用]]></title>
+    <link href="http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/"/>
+    <updated>2016-01-15T13:53:16+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong</id>
+    <content type="html"><![CDATA[<p>最近做项目的时候需要配套一个后台界面供运营人员查看相关数据。因为后台应用没有专职的前端, 所以一般的做法是找一套 bootstrap 的模板, 然后再实现具体的逻辑。一般的 javascript 逻辑都是写个每个页面里面的，没什么重用性。想通过模块的方式来实现重用, 需要有个东西来管理模块之间的依赖, 正好有其他的后台应用使用了require.js, 就照样使用了起来。</p>
+
+<!-- more -->
+
+
+<p>具体关于 require.js 的使用介绍网上有很多, 我也看了好几篇, 推荐几篇比较靠谱的:</p>
+
+<ol>
+<li>JavaScript模块化开发系列. <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-basics/">第一篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-commonjs/">第二篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-amd/">第三篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-requirejs/">第4篇</a></li>
+<li>阮一峰的<code>Javascript模块化编程</code>系列. <a href="http://www.ruanyifeng.com/blog/2012/10/javascript_module.html">第一篇</a> <a href="http://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html">第二篇</a> <a href="http://www.ruanyifeng.com/blog/2012/11/require_js.html">第三篇</a></li>
+</ol>
+
+
+<p>学习完了以后对 require.js 以及 AMD 相关的概念有了一定的了解。也达到了模块化开发的目标。这里主要想说明的一个问题是如何使 require.js 的全局配置能达到重用的效果。</p>
+
+<p>这个是我一个页面的JS模块:</p>
+
+<pre><code>requirejs.config({
+    baseUrl : "/assets",
+
+    shim : {
+        "bootstrap" : { "deps" :['jquery'] },
+        "dist" :{"deps" :['bootstrap']},
+        "paginator" : {"deps" : ['jquery']},
+        "menu" :{"deps": ['jquery']}
+    },
+
+    paths: {
+        jquery: 'plugins/jQuery/jQuery-2.1.4.min',
+        bootstrap : 'bootstrap/js/bootstrap.min',
+        dist: 'dist/js/app',
+        paginator : 'plugins/bootstrap-paginator/bootstrap-paginator',
+        menu : 'page/module/menu',
+        pager : 'page/module/simplepager',
+    }
+});
+require(['jquery', 'bootstrap', 'dist', 'paginator' , 'menu', 'pager'],function($, bootstrap, dist, paginator ,menu, pager){
+
+    $(document).ready(function(){
+
+        var init = function(){
+            menu.initMenu();
+            pager.initPager();
+        }
+
+        init();
+    });
+  });
+</code></pre>
+
+<p><code>requirejs.config()</code> 其实是一个全局的配置, 但是按照标准的 requireJs 的引入方法是无法重用这个配置的。 在开始阶段我不得不在每个页面中重复的拷贝这个配置。对于有节操的码农来说这是不可接受的。所以我开始寻找解决重复配置的方法, 终于在<code>stackoverflow</code>上找到了答案。<a href="http://stackoverflow.com/questions/16067042/requirejs-and-common-config">原始的问题链接</a></p>
+
+<p>解决的主要方法就是分开引入。先引入 require.js, 再引入你的全部配置 config.js, 然后在引入你要执行的模块。</p>
+
+<pre><code>//1. 首先引入 require.js
+&lt;script src="http://linuxlsx.github.io/assets/require.js"  type="text/javascript" &gt;&lt;/script&gt;
+//2. 引入全部的配置文件
+&lt;script src="http://linuxlsx.github.io/assets/config.js" type="text/javascript" &gt;&lt;/script&gt;
+
+&lt;script type="text/javascript"&gt;
+    //3. 引入你要执行的模块
+    require(['/assets/page/feedback.js'])
+&lt;/script&gt;
+</code></pre>
+
+<p>通过以上的配置就能减少代码重复了。另外有文章提到可以通过 require.js 的插件机制来达到效果，但是没有找到可行的解决方案。</p>
+
+<h5>参考资料</h5>
+
+<ol>
+<li><a href="http://requirejs.org/">require.js官网</a></li>
+<li><a href="https://github.com/togakangaroo/Blog/blob/master/setting-up-requirejs.md">setting-up-requirejs</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SpringMVC 使用AOP拦截Controller]]></title>
+    <link href="http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/"/>
+    <updated>2016-01-14T19:44:22+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller</id>
+    <content type="html"><![CDATA[<p>最近使用SpringMVC开发一个后台应用, 要求对操作进行权限控制并记录操作日志。这是典型的AOP应用场景, 所以自然而然的想通过 AOP 拦截 SpringMVC 的 Controller 执行来达到想要的效果. 但是在按照之前的配置调试的时候, AOP的拦截代码并没有得到执行。经过几番研究后找到了答案。</p>
+
+<!-- more -->
+
+
+<p>首先因为 SpringMVC 的 Controller 是没有接口的, 但是Spring 默认使用的JDK的动态代理。动态代理会限制必须有接口才行，所以在配置上要指定使用cglib代理。通过以下的配置可以指定 Spring 使用 cglib:</p>
+
+<pre><code>&lt;aop:aspectj-autoproxy proxy-target-class="true"/&gt;
+</code></pre>
+
+<p>但是要想达到想要的效果, 这个配置的声明位置还有讲究。这个主要是 Spring 的父子容器访问规则导致的。子容器可以访问父容器中配置的bean, 但是父容器不能访问子容器中的bean .</p>
+
+<p>SpringMVC 实现的时候就是这样一个父子结构。通过 <code>ContextLoaderListener</code> 创建的容器作为父容器。 每个 <code>DispatcherServlet</code> 创建的容器作为子容器。</p>
+
+<p>所以当把上面的申明放到父容器相关的配置文件中的时候, 父容器会尝试寻找切入点, 但是这个时候切入点其实在子容器, 父容器访问不到子容器中的bean, 达不到拦截的效果。</p>
+
+<p>将配置迁移到 子容器相关的配置文件中就能达到拦截的效果。至于 Aspect 的bean 可以配置在父容器中 也可以配置在子容器中。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Synchronized 作用于局部变量]]></title>
+    <link href="http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string/"/>
+    <updated>2015-12-10T20:36:22+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string</id>
+    <content type="html"><![CDATA[<p><code>synchronized</code> 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 <code>synchronized</code> 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式:</p>
+
+<pre><code>1. 对于普通方法, 锁是当前对象的实例
+2. 对于静态同步方法, 锁是当前类的 Class 对象
+3. 对于同步方法块, 锁是 synchronized 括号里面配置的对象
+</code></pre>
+
+<!-- more -->
+
+
+<p>今天代码review 的时候, 发现一个新奇的写法，简化后的代码如下:</p>
+
+<pre><code>public static Object get(String key){
+
+  String syncKey = key + "something else";
+
+  synchronized (syncKey){
+      // 简化的逻辑
+      // obj = map.get(syncKey)
+      // if obj == null
+      //      obj = Provider.get()
+      //      map.put(obj)
+      // return obj
+  }
+}
+</code></pre>
+
+<p>咋一看这跟我们常规的写法不一样，常规的写法 一般是将 <code>syncKey</code> 定义为类的一个属性, 这样能够保证多线程确实是基于同一个对象实例来做同步的。对于这个写法作者的解释是 java 对于String 是做过特殊处理的，值一样的String 是会做缓存的。所以多线程访问的情况下仍然是作用在同一个对象上, 可以达到同步的效果。</p>
+
+<p>对于这个结论是一半对一半不对, 具体能不能达到想要的同步效果，就要看是不是作用在同一个对象实例上。那String 到底是不是同一个对象实例呢？ 那就要从 String 的内存模型说起了。具体详解可以参考<a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java：String</a></p>
+
+<p>所以针对这个示例，其实是不对的。 <code>String syncKey = key + "something else"</code> 每次都返回一个 <code>new String()</code> 对于 <code>synchronized</code> 来说肯定不是同一个对象实例, 所以就达不到同步的效果。但是如果修改成如下的就是可以的:</p>
+
+<pre><code>public static Object get(String key){
+
+  String syncKey = "something else";
+
+  synchronized (syncKey){
+      // 简化的逻辑
+      // obj = map.get(syncKey)
+      // if obj == null
+      //      obj = Provider.get()
+      //      map.put(obj)
+      // return obj
+  }
+}
+</code></pre>
+
+<p><code>String syncKey = "something else";</code> 这样的方式是将 <code>something else</code> 这个字符串保存到了JVM 的字符串常量池中, 并且可以共享。所以多线程访问的时候拿到的都是同一个对象, 就能达到同步的效果。</p>
+
+<p>Java 还有没有能够达到这种效果的对象吗？答案是肯定的, 以下的几种情况得到的都是同一个对象实例:</p>
+
+<pre><code>1. byte(Byte), short(Short), int(Integer), long(Long) 值在[-128,127] 之间
+2. boolean (true or false)
+3. char 值在 ['\u0000' - '\u007f']
+</code></pre>
+
+<p>这个是Java 语言规范中定义的。这些值会在JVM中缓存下来, 每次使用都会返回同一个实例。但是仅限<code>Integer i = 1</code> 这样的方式. 如果是 <code>Integer i = new Integer(1)</code> 的话， 那就是不同的对象了。</p>
+
+<h4>结论</h4>
+
+<p><code>synchronized</code> 将锁标记保存在对象头中, 所以只要对象是同一个就能够达到同步的效果，也不一定要是实例变量。而Java 语言中某些对象实例虽然是局部变量, 但是由于一些性能优化上的考虑, 会对String, Byte,Short,Boolean,Integer,Long 类型的数据做一些优化。</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java: String</a></li>
+<li><a href="http://java-performance.info/string-intern-in-java-6-7-8/">String.intern in Java 6, 7 and 8 – string pooling</a></li>
+<li><a href="http://codelog.me/2015/01/20/2015-01-20-string-intern/">深入理解Java String#intern() 内存模型</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jrebel VerifyError]]></title>
+    <link href="http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror/"/>
+    <updated>2015-12-04T15:40:14+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror</id>
+    <content type="html"><![CDATA[<p>Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手.  但是今天启动应用的时候，报了如下的错误:</p>
+
+<pre><code>Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside of a branch
+Exception Details:
+Location:
+  com/taobao/healthcenter/web/servlet/StatusServlet.&lt;init&gt;(Lcom/zeroturnaround/javarebel/Ge;I[Ljava/lang/Object;)V @11: invokespecial
+Reason:
+  Error exists in the bytecode
+Bytecode:
+  0000000: 04b8 008e c600 0b2a 2b1c 2db7 0113 b112
+  0000010: 771c b800 7dbf                         
+Stackmap Table:
+  same_frame(@15)
+
+  java version : 1.7.0_67
+  jrebel version : 6.0.0
+</code></pre>
+
+<p>Google 发现Jrebel官网已经有人提出了这个问题: <a href="http://zeroturnaround.com/forums/topic/verifyerror-bad-method-call-from-inside-of-a-branch/">VerifyError</a></p>
+
+<!-- more -->
+
+
+<p>根据帖子中提到的<a href="https://bugs.openjdk.java.net/browse/JDK-8051012">JDK Bug</a> 1.7版本最早修复该bug 的版本是 7u72.</p>
+
+<p>根据帖子中提供的方案在JVM参数中添加 <code>-noverify</code> 解决问题。</p>
+
+<h5>Tip</h5>
+
+<p>我其实用 jdk7 和 jrebel 6 已经好久了，为什么今天就碰到这个问题了呢。 通过对比发现是: 之前我都是将 Java 的编译版本设置为了 1.6, 而今天出问题的时候我将编译版本设置成了 1.7, 而jdk7 相比 jdk6 生成的字节码引入了一些功能, 导致 jrebel 修改字节码后会出现一些验证的问题。</p>
+
+<p>原本打算直接升级到 jdk8 的， 但是受限于公司规定的框架只能先升级到 jdk7. 看来还要等会才能在线上使用 lambda 了</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="http://chrononsystems.com/blog/java-7-design-flaw-leads-to-huge-backward-step-for-the-jvm">Java 7 Bytecode Verifier: Huge backward step for the JVM</a></li>
+<li><a href="http://stackoverflow.com/questions/300639/use-of-noverify-when-launching-java-apps">Use of -noverify when launching java apps</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

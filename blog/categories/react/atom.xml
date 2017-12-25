@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: React | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/react/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2017-12-25T11:19:14+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[React 实战Part 1]]></title>
+    <link href="http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1/"/>
+    <updated>2016-08-25T21:00:08+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1</id>
+    <content type="html"><![CDATA[<p>React 是由FB开发的一款高性能的前端渲染框架。我们在公司的内部项目中也开始采用React 来替换原有的开发框架。由于前端资源不足，所以自告奋勇提出由自己来完成一部分的前端工作，从此开始接触到React.</p>
+
+<!-- more -->
+
+
+<p>由于我也是刚接触到React, 所以这一篇不讲(其实是讲不出来)什么原理性的东西，只是把我这几天用React 碰到的一些问题给记录下。</p>
+
+<p>首先是推荐一款优秀的前端组件库: <code>antd</code>。是由蚂蚁金服的同学发起并维护的。<a href="http://ant.design/">官网地址</a>。整体设计非常简洁，模块化，用起来非常容易上手。</p>
+
+<p>碰到的第一个问题其实也跟 <code>antd</code> 相关，在表单中使用了表单的 <code>getFieldProps</code> 属性。刚开始也是瞎蒙的，看着示例代码就开搞。在使用了这个属性的同时又设置了 onChange 属性。 如下:</p>
+
+<pre><code>&lt;Select {...getFieldProps('componentId', {
+    initialValue: (PageData.create &amp;&amp; PageData.create.id) ? PageData.create.componentId : '',
+    rules: [
+        {required: true, message: '请选择组件实例分类'},
+        ],
+          )} onChange={this.handleComponentChange}&gt;
+            {
+              this.props.componentDatas.map((o, n)=&gt;{return (
+                &lt;Option value={'' + o.id} key={n}&gt;{o.name}&lt;/Option&gt;
+              )})
+            }
+&lt;/Select&gt;
+</code></pre>
+
+<p>测试过程中碰到的问题就是死活无法选中下拉框中的选项，但是事件又触发了。去掉<code>onChange</code> 属性能够选中选项，但没法处理事件。检查文档发现 <code>getFieldProps</code> 已经包含了<code>id</code> <code>value</code> <code>ref</code> <code>onChange</code> 属性，不能重复设置属性。 所以正确的做法是在 <code>getFieldProps</code> 中指定时间处理函数。</p>
+
+<p>第二个问题跟CodeMirror相关。项目中需要编辑代码，自然想到就是将CodeMirror引入到项目中来。搜索后发现<a href="https://github.com/JedWatson/react-codemirror">react-codemirror</a> 还不错，就引入到项目中。第一次尝试很成功一次就过，但是当同一个页面中出现多个CodeMirror 的实例时会出现 <strong>状态变化后, 只有最底下的一个实例能够响应状态的变更</strong>。这个显然不是我想要的结果。GitHub 项目中的 issue 是个好东西，你碰到过的问题肯定有其他人也碰到过。该项目的
+ <a href="https://github.com/JedWatson/react-codemirror/issues/46">issue #46</a> <a href="https://github.com/JedWatson/react-codemirror/issues/47">issue #47</a> <a href="https://github.com/JedWatson/react-codemirror/issues/49">issue #49</a>都提到了这个问题。 这个问题的原因就是 <code>componentWillReceiveProps</code> 这个方法被 <code>debounce</code> 后变成异步执行的了，所有只会有最后一个实例才会收到状态变更的消息。</p>
+
+<p> 解决办法就是将 <code>componentWillReceiveProps</code> 改为同步执行的。目前作者还没有修复这个问题，只能在代码中通过重写这个方法来完成。具体的实现参见 <a href="https://github.com/mozilla-services/react-jsonschema-form/pull/175">解决方案</a></p>
+
+<p>两个问题都不是什么大问题，但是从发现问题到解决问题还是花费了我不少的时间。三个解决问题的经验:</p>
+
+<ul>
+<li>查看文档。文档中通常都会详细的说明一些需要特殊注意的场景，而这些场景往往就是出问题的地方。</li>
+<li>如果是开源项目，那就先检查 issues 中是否已经有过类似的问题了。看是不是可以通过升级版本解决问题。</li>
+<li>再不行的话只能通过万能的 Google 了，前提是要能科学上网。</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

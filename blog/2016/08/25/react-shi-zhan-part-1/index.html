@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>React 实战Part 1 - 平凡的世界</title>
+  <meta name="author" content="linuxlsx">
+
+  
+  <meta name="description" content="React 是由FB开发的一款高性能的前端渲染框架。我们在公司的内部项目中也开始采用React 来替换原有的开发框架。由于前端资源不足，所以自告奋勇提出由自己来完成一部分的前端工作，从此开始接触到React. 由于我也是刚接触到React, 所以这一篇不讲(其实是讲不出来)什么原理性的东西， &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-111612120-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      .lsx
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">平凡的世界</a></h1>
+  
+    <h2>Hello Little Cat</h2>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:linuxlsx.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/">macOS Docker 容器网络代理设置</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/08/25/react-shi-zhan-part-1/">React 实战Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/03/02/huan-cun-she-ji-si-lu/">缓存设计思路</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/">requireJs 配置可重用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/">SpringMVC 使用AOP拦截Controller</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/linuxlsx">@linuxlsx</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">React 实战Part 1</h1>
+    </header>
+  
+  <div class="entry-content"><p>React 是由FB开发的一款高性能的前端渲染框架。我们在公司的内部项目中也开始采用React 来替换原有的开发框架。由于前端资源不足，所以自告奋勇提出由自己来完成一部分的前端工作，从此开始接触到React.</p>
+
+<!-- more -->
+
+
+<p>由于我也是刚接触到React, 所以这一篇不讲(其实是讲不出来)什么原理性的东西，只是把我这几天用React 碰到的一些问题给记录下。</p>
+
+<p>首先是推荐一款优秀的前端组件库: <code>antd</code>。是由蚂蚁金服的同学发起并维护的。<a href="http://ant.design/">官网地址</a>。整体设计非常简洁，模块化，用起来非常容易上手。</p>
+
+<p>碰到的第一个问题其实也跟 <code>antd</code> 相关，在表单中使用了表单的 <code>getFieldProps</code> 属性。刚开始也是瞎蒙的，看着示例代码就开搞。在使用了这个属性的同时又设置了 onChange 属性。 如下:</p>
+
+<pre><code>&lt;Select {...getFieldProps('componentId', {
+    initialValue: (PageData.create &amp;&amp; PageData.create.id) ? PageData.create.componentId : '',
+    rules: [
+        {required: true, message: '请选择组件实例分类'},
+        ],
+          )} onChange={this.handleComponentChange}&gt;
+            {
+              this.props.componentDatas.map((o, n)=&gt;{return (
+                &lt;Option value={'' + o.id} key={n}&gt;{o.name}&lt;/Option&gt;
+              )})
+            }
+&lt;/Select&gt;
+</code></pre>
+
+<p>测试过程中碰到的问题就是死活无法选中下拉框中的选项，但是事件又触发了。去掉<code>onChange</code> 属性能够选中选项，但没法处理事件。检查文档发现 <code>getFieldProps</code> 已经包含了<code>id</code> <code>value</code> <code>ref</code> <code>onChange</code> 属性，不能重复设置属性。 所以正确的做法是在 <code>getFieldProps</code> 中指定时间处理函数。</p>
+
+<p>第二个问题跟CodeMirror相关。项目中需要编辑代码，自然想到就是将CodeMirror引入到项目中来。搜索后发现<a href="https://github.com/JedWatson/react-codemirror">react-codemirror</a> 还不错，就引入到项目中。第一次尝试很成功一次就过，但是当同一个页面中出现多个CodeMirror 的实例时会出现 <strong>状态变化后, 只有最底下的一个实例能够响应状态的变更</strong>。这个显然不是我想要的结果。GitHub 项目中的 issue 是个好东西，你碰到过的问题肯定有其他人也碰到过。该项目的
+ <a href="https://github.com/JedWatson/react-codemirror/issues/46">issue #46</a> <a href="https://github.com/JedWatson/react-codemirror/issues/47">issue #47</a> <a href="https://github.com/JedWatson/react-codemirror/issues/49">issue #49</a>都提到了这个问题。 这个问题的原因就是 <code>componentWillReceiveProps</code> 这个方法被 <code>debounce</code> 后变成异步执行的了，所有只会有最后一个实例才会收到状态变更的消息。</p>
+
+<p> 解决办法就是将 <code>componentWillReceiveProps</code> 改为同步执行的。目前作者还没有修复这个问题，只能在代码中通过重写这个方法来完成。具体的实现参见 <a href="https://github.com/mozilla-services/react-jsonschema-form/pull/175">解决方案</a></p>
+
+<p>两个问题都不是什么大问题，但是从发现问题到解决问题还是花费了我不少的时间。三个解决问题的经验:</p>
+
+<ul>
+<li>查看文档。文档中通常都会详细的说明一些需要特殊注意的场景，而这些场景往往就是出问题的地方。</li>
+<li>如果是开源项目，那就先检查 issues 中是否已经有过类似的问题了。看是不是可以通过升级版本解决问题。</li>
+<li>再不行的话只能通过万能的 Google 了，前提是要能科学上网。</li>
+</ul>
+
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/react/'>react</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-08-25T21:00:08+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/03/02/huan-cun-she-ji-si-lu/" title="Previous Post: 缓存设计思路">&laquo; 缓存设计思路</a>
+      &nbsp;&nbsp;
+      
+        <a class="basic-alignment right" href="/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/" title="Next Post: macOS Docker 容器网络代理设置"> macOS Docker 容器网络代理设置 &raquo;</a>
+      
+    </div>
+  </footer>
+
+
+</article>
+
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2017 linuxlsx
+  </p>
+</div>
+
+</footer>
+    
+
+<script type="text/javascript">
+  disqus_shortname = 'linuxlsx';
+  
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'linuxlsx',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>

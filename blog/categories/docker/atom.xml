@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Docker | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/docker/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2017-12-25T11:19:14+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[macOS Docker 容器网络代理设置]]></title>
+    <link href="http://linuxlsx.github.io/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/"/>
+    <updated>2017-12-25T10:47:46+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi</id>
+    <content type="html"><![CDATA[<p>最近公司中绝大部分的容器都已经切换到Docker中了，所以准备深入学习下Docker 相关的内容。</p>
+
+<p>在<a href="https://www.docker.com/community-edition">Docker官网</a>下载了最新的Mac版本，然后按照<a href="https://www.amazon.cn/dp/B015QSNIY0/ref=sr_1_2?s=books&amp;ie=UTF8&amp;qid=1514114219&amp;sr=1-2&amp;keywords=%E7%AC%AC%E4%B8%80%E6%9C%ACdocker%E4%B9%A6">第一本Docker书</a> 中逐步学习。不过这本书是基于Docker 1.9 版本编写，最新的Docker Mac 版本已经有了不少的变化, 不过基本的命令还是没有变化的。</p>
+
+<!-- more -->
+
+
+<p>按照书本上的例子，我下载了 ubuntu 的 docker镜像。按照 <code>docker run -i -t ubuntu /bin/bash</code> 的命令进入到容器中。按照示例接下来需要执行<code>apt-get -yqq update</code> 来更新元数据。但是在默认的配置下出现了意外的网络问题。</p>
+
+<pre><code>root@3511c8b519ea:/# apt-get -yqq update
+W: The repository 'http://security.ubuntu.com/ubuntu xenial-security Release' does not have a Release file.
+W: The repository 'http://archive.ubuntu.com/ubuntu xenial Release' does not have a Release file.
+W: The repository 'http://archive.ubuntu.com/ubuntu xenial-updates Release' does not have a Release file.
+W: The repository 'http://archive.ubuntu.com/ubuntu xenial-backports Release' does not have a Release file.
+E: Failed to fetch http://security.ubuntu.com/ubuntu/dists/xenial-security/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-updates/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-backports/main/binary-amd64/Packages  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
+E: Some index files failed to download. They have been ignored, or old ones used instead.
+</code></pre>
+
+<p>在网上搜索了相关资料后，发现是网络代理设置的问题：</p>
+
+<pre><code>root@3511c8b519ea:/# set | grep proxy
+http_proxy=docker.for.mac.localhost:6152
+https_proxy=docker.for.mac.localhost:6152
+</code></pre>
+
+<p><code>docker.for.mac.localhost</code> 是从 <strong>17.06</strong> 版本开始引入的一个Mac DNS 名称，会被解析成外部主机的IP。6152 是我设置的代理端口。</p>
+
+<p>要想代理能够生效需要增加一个 <strong>http</strong> 的前缀：</p>
+
+<pre><code>root@1e9af09f86a4:/# set | grep proxy
+http_proxy=http://docker.for.mac.localhost:6152
+https_proxy=http://docker.for.mac.localhost:6152
+</code></pre>
+
+<p>或者直接设置不需要使用代理：</p>
+
+<pre><code>root@1e9af09f86a4:/# set | grep proxy
+http_proxy=no_proxy
+https_proxy=no_proxy
+</code></pre>
+
+<p>这样设置完了以后，就可以更新 <strong>apt-get</strong> 的元数据，然后就可以安装想要的工具了。</p>
+
+<h4>参考资料</h4>
+
+<ol>
+<li><a href="https://stackoverflow.com/questions/46632967/docker-apt-get-got-cannot-inititate-the-connection-to-800080-connect">docker apt-get got <code>Cannot inititate the connection to 8000:80 (…) - connect (22: Invalid Argument)</code></a></li>
+<li><a href="https://docs.docker.com/docker-for-mac/networking/#i-cannot-ping-my-containers">Networking features in Docker for Mac</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>
