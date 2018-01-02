@@ -4,7 +4,7 @@
   <title><![CDATA[平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2017-12-25T11:19:14+08:00</updated>
+  <updated>2018-01-02T20:25:38+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -12,6 +12,586 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[垃圾回收的算法与实现读书笔记-标记清除算法]]></title>
+    <link href="http://linuxlsx.github.io/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/"/>
+    <updated>2017-12-28T17:34:51+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa</id>
+    <content type="html"><![CDATA[<p>作为一个Java 程序员，得益于它的自动垃圾回收机制，极大的降低了因为编程导致的内存问题的发生几率。但是作为一个有追求的程序员，了解垃圾回收的内部实现对工作以及个人发展都是极其有帮助的。</p>
+
+<p>在之前的工作中已经对Java 常用的GC算法有了一些浅显的理解，但是对于算法本身的实现并无深入的了解。后来在网上淘书是发现了这版本《垃圾回收的算法与实现》，试读后发现很不错。于是购买了一本打算深入的学习下。这里就是记录我学习过程中的一些记录以及根据书中伪代码实现完成简单的Java实现。</p>
+
+<h2>GC 算法的分类</h2>
+
+<p>GC 算法的分类主要有一下的几种：</p>
+
+<pre><code>* 标记-清除算法  1960年 John McCarthy 发布了第一个GC算法 标记-清除算法
+* 引用计数算法  1960年 George E. Collins 发布了引用计数算法。
+* 复制算法  1963年 Marvin L.Minsky 发布了复制算法
+* 标记-压缩算法
+</code></pre>
+
+<p>后续会按照顺序都会做一个简单的实现。</p>
+
+<!--more-->
+
+
+<h2>基本数据结构</h2>
+
+<p>首先看下实现过程中使用的数据结构:</p>
+
+<pre><code>* 堆。 堆是存放对象的地方。主要完成两个动作：申请指定大小的内存；释放指定大小的内存
+
+        public class Heap {
+
+            /**
+            * 整个堆得大小
+            */
+            protected int size;
+
+            /**
+            * 整个堆已经分配的大小
+            */
+            protected int allocatedSize;
+
+            /**
+            * 堆的分配策略
+            */
+            protected int fitStrategy;
+
+            public static final int FIRST_FIT_STRATEGY = 1;
+            public static final int BEST_FIT_STRATEGY = 2;
+            public static final int WORST_FIT_STRATEGY = 3;
+
+            /**
+            * 空闲Slot的列表
+            */
+            protected LinkedList&lt;Slot&gt; emptyList = new LinkedList&lt;Slot&gt;();
+
+            /**
+             * 从堆中申请一个指定大小的可用区块
+            */
+            public Slot applySlot(int size);
+
+            /**
+             * 释放指定大小的区块
+            */
+            public void release(Slot releaseSlot);
+        }    
+
+* 对象。表示一个基本的对象，可以知道该对象在内存中的起始位置、大小以及引用的对象
+
+        public class Obj {
+
+            /**
+            * 表示对象的大小
+            */
+            public int size;
+
+            /**
+            * 表示对象在中的起始位置
+            */
+            public int start;
+
+            /**
+            * 用来表示对象之间的引用关系
+            */
+            public LinkedList&lt;MarkSweepObj&gt; children = new LinkedList&lt;MarkSweepObj&gt;();
+        }
+
+* GC 算法接口。目前只定义了一个创建对象的接口
+        public interface GcAlgo {
+
+            /**
+            * 创建一个指定大小的对象
+            * @param size
+            * @return
+            */
+            Obj newObj(int size);
+        }
+</code></pre>
+
+<h2>标记-清除算法</h2>
+
+<p>标记-清除算法理解起来还是比较简单的。主要分为两个阶段：</p>
+
+<pre><code>* 标记阶段
+    * 首先标记通过根直接可以引用到的对象
+    * 然后在标记所有能够访问到的对象
+        * 可以通过递归做深度优先访问
+        * 可以通过辅助队列做广度优先访问
+* 清除阶段
+    * 遍历整个堆，回收没有打上标记的对象
+</code></pre>
+
+<h3>算法实现</h3>
+
+<p>标记-清除算法需要在对象中增加一个字段来标识对象是否已经被标记。所以我新定义了一个 <strong>MarkSweepObj</strong> 对象</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class MarkSweepObj extends Obj{
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * 表示对象的标记状态  true : 表示不需要清理，false : 表示需要清理
+</span><span class='line'>     */
+</span><span class='line'>    public boolean marked;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>基本的代码实现</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public void markSweep() {
+</span><span class='line'>    //标记阶段
+</span><span class='line'>    markPhase();
+</span><span class='line'>    //清除阶段
+</span><span class='line'>    sweepPhase();
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>private void markPhase() {
+</span><span class='line'>    //从根节点开始标记对象
+</span><span class='line'>    for (MarkSweepObj obj : roots) {
+</span><span class='line'>        mark(obj);
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>private void mark(MarkSweepObj obj) {
+</span><span class='line'>    if (!obj.marked) {
+</span><span class='line'>        obj.marked = true;
+</span><span class='line'>        //如果有引用对象，则递归标记引用对象
+</span><span class='line'>        if (!obj.children.isEmpty()) {
+</span><span class='line'>            for (MarkSweepObj child : obj.children) {
+</span><span class='line'>                mark(child);
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>private void sweepPhase() {
+</span><span class='line'>    // allocatedObjList 记录了所有分配过的对象
+</span><span class='line'>    Iterator&lt;MarkSweepObj&gt; iterator = allocatedObjList.iterator();
+</span><span class='line'>    while (iterator.hasNext()) {
+</span><span class='line'>        MarkSweepObj obj = iterator.next();
+</span><span class='line'>        //如果对象没有标记，则说明该对象从根节点不可达，需要清理掉
+</span><span class='line'>        if (!obj.marked) {
+</span><span class='line'>            //release 之后会将Slot 添加到空闲列表中
+</span><span class='line'>            heap.release(new Slot(obj.start, obj.size));
+</span><span class='line'>            iterator.remove();
+</span><span class='line'>        } else {
+</span><span class='line'>            //将对象的标记归位，供下次GC使用
+</span><span class='line'>            obj.marked = false;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>代码看起来可能还有些不那么直观，有图的话就会好很多了。假设下图是GC执行之前的初始状态。</p>
+
+<p><img src="https://s1.ax1x.com/2018/01/02/ppslIe.md.png" alt="标记清除init.png" /></p>
+
+<p>图中绿色的分块表示已经分配的对象，白色的表示空闲的内存。可以看到从根节点直接引用了两个对象，其中一个对象又引用了另外的两个对象。还有几个对象无法从根节点开始访问得到。空闲列表中包含了可用来分配的内存区块。</p>
+
+<p>当标记阶段执行完成以后，整个堆得情况如下：</p>
+
+<p><img src="https://s1.ax1x.com/2018/01/02/ppsuqK.md.png" alt="标记清除marked.png" /></p>
+
+<p>可以看到从根节点开始可以访问到的对象都已经打上了对象存货的标记了。接下来就是执行清除的步骤了。</p>
+
+<p><img src="https://s1.ax1x.com/2018/01/02/ppsMVO.md.png" alt="标记清除sweeped.png" /></p>
+
+<p>可以看到清除之前从根节点不可达的对象都已经被清理，加入到了空闲列表中。其他存活的对象的标记也都重置了。现在空闲列表中总共有3块可供分配的内存区块，大小分别是3，2，6。</p>
+
+<p>以上就是整个标记-清除算法的基本实现，在之前的基本结构中有个 <strong>GcAlgo</strong>，这个接口中定义的 <strong>newOb</strong> 方法又是怎么实现的呢。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/**
+</span><span class='line'> * 创建一个新的对象
+</span><span class='line'> *
+</span><span class='line'> * @param size 对象的大小
+</span><span class='line'> * @return 创建好的对象
+</span><span class='line'> * @throws OutOfMemoryError 当内存无法满足分配要求时抛出
+</span><span class='line'> */
+</span><span class='line'>public MarkSweepObj newObj(int size) {
+</span><span class='line'>
+</span><span class='line'>    Slot slot = heap.applySlot(size);
+</span><span class='line'>
+</span><span class='line'>    //如果申请到的内存空间为null, 则执行一次GC
+</span><span class='line'>    if (slot == null) {
+</span><span class='line'>
+</span><span class='line'>        markSweep();
+</span><span class='line'>
+</span><span class='line'>        slot = heap.applySlot(size);
+</span><span class='line'>        //到这里还没有分配成功，说明内存已经不能满足分配的需求
+</span><span class='line'>        //直接抛出 OOM 的错误
+</span><span class='line'>        if (slot == null) {
+</span><span class='line'>            throw new OutOfMemoryError("oh, out of memory!");
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    //初始化对象
+</span><span class='line'>    MarkSweepObj obj = initObj(slot);
+</span><span class='line'>    //将分配好的对象添加到列表中
+</span><span class='line'>    allocatedObjList.add(obj);
+</span><span class='line'>
+</span><span class='line'>    return obj;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>//简单的对象初始化，只是记录了对象的开始位置和大小
+</span><span class='line'>private MarkSweepObj initObj(Slot slot) {
+</span><span class='line'>    MarkSweepObj obj = new MarkSweepObj();
+</span><span class='line'>
+</span><span class='line'>    obj.start = slot.start;
+</span><span class='line'>    obj.size = slot.size;
+</span><span class='line'>
+</span><span class='line'>    return obj;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>逻辑比较简单清晰。首选就是尝试从堆中获取指定大小的内存；如果没有获取得到，就执行一次GC；完了以后再尝试一次内存分配，如果再不成功说明当前内存已经不能满足分配需求了（并不是空间就一定比需求小了），所以抛出OOM的错误。</p>
+
+<p>以上就是这个标记-清理算法的实现逻辑了。具体的代码请查看：<a href="https://github.com/linuxlsx/Algo/tree/master/src/main/java/org/linuxlsx/gc/marksweep">标记-清理算法实现。</a></p>
+
+<h3>执行</h3>
+
+<p>接下来我们执行下，执行的示例代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//构建一个容量为20，采用BestFit分配策略的堆
+</span><span class='line'>MarkSweepAlgo algo = new MarkSweepAlgo(20, Heap.FIRST_FIT_STRATEGY);
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>try {
+</span><span class='line'>    MarkSweepObj obj1 = algo.newObj(4);
+</span><span class='line'>    MarkSweepObj obj2 = algo.newObj(3);
+</span><span class='line'>    obj1.children.add(obj2);
+</span><span class='line'>
+</span><span class='line'>    MarkSweepObj obj3 = algo.newObj(3);
+</span><span class='line'>    algo.makeItToRoot(obj3);
+</span><span class='line'>
+</span><span class='line'>    MarkSweepObj obj4 = algo.newObj(4);
+</span><span class='line'>    algo.makeItToRoot(obj4);
+</span><span class='line'>    MarkSweepObj obj5 = algo.newObj(2);
+</span><span class='line'>    MarkSweepObj obj6 = algo.newObj(3);
+</span><span class='line'>    obj4.children.add(obj5);
+</span><span class='line'>    obj4.children.add(obj6);
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    MarkSweepObj obj7 = algo.newObj(2);
+</span><span class='line'>
+</span><span class='line'>    MarkSweepObj obj8 = algo.newObj(7);
+</span><span class='line'>    obj3.children.add(obj8);
+</span><span class='line'>    MarkSweepObj obj9 = algo.newObj(4);
+</span><span class='line'>
+</span><span class='line'>    }catch (Throwable e){
+</span><span class='line'>        System.out.println(e.getMessage());
+</span><span class='line'>    }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过以上的代码，模拟创建了如下图所示的对象结构：</p>
+
+<p><img src="https://s1.ax1x.com/2018/01/02/ppsQaD.md.png" alt="标记清除示例初始化.png" /></p>
+
+<p>接下来执行结果：</p>
+
+<p><img src="https://s1.ax1x.com/2018/01/02/pps8Gd.md.jpg" alt="标记清除-算法执行结果1.png" /></p>
+
+<p>可以看到整个过程分配了7个对象，执行了两次GC。最后一次GC执行后堆可用空间是8，这时候我们要分配的<code>obj8</code> 的大小为7，但是却抛出了oom的异常，从最后的日志可以看到，虽然可用空间有8，但是没有单个Slot 能够满足要求。</p>
+
+<p>接下来我们对标记-清理算法做一个总结。</p>
+
+<h3>优点</h3>
+
+<p><code>实现简单</code>是标记-清除算法最大的优点。整个模拟的实现也就200多行代码，真正核心的更少。</p>
+
+<h3>缺点</h3>
+
+<p>相较于优点，标记-清除的缺点就比较多了。</p>
+
+<pre><code>* 碎片化。这个在实际运行的时候已经看到了，在使用过程中会逐渐产生被细化的分块，尽管在总量上内存是够用的，但是实际上却因为碎片化导致对象无法分配。
+* 分配速度。每次分配都需要遍历空闲列表
+* 与COW(copy-on-write)技术不兼容。现代操作系统会使用COW技术来减少对象的移动，但是标记-清除算法每次都需要修改标记，就会引起不必要的对象移动。
+</code></pre>
+
+<h3>优化方案</h3>
+
+<h4>碎片化</h4>
+
+<p>通过适时对空闲列表进行压缩，能够比较有效的解决碎片化的问题。这个在Java 常用的 CMS GC 算法中也有体现，可以通过参数 <code>UseCMSCompactAtFullCollection</code> 和 <code>CMSFullGCsBeforeCompaction=N</code> 来设置压缩策略。</p>
+
+<p>在我们简单的实现中，将空闲列表按照地址排序后，遍历列表将相邻的Slot 合并为一个大的Slot。以下是增加了合并功能之后的执行结果，可以看到压缩 <code>obj8</code> 分配成功了。</p>
+
+<p><img src="https://s1.ax1x.com/2018/01/02/pps3PH.md.jpg" alt="标记清除示例压缩.png" /></p>
+
+<h4>分配速度</h4>
+
+<p>现在我们只使用了一个空闲列表，为了加快速度可以使用多个空闲列表。将相同大小的 Slot 放在一个列表中，这样分配的时候就直接去对应列表的第一个元素就可以了。当然空闲列表也不越多越好，对于大小超过一定限制的可以放到一个列表中。</p>
+
+<h4>兼容COW</h4>
+
+<p>为了能够兼容COW，所以需要将对象的标记存储其他的地方。可以使用位图标记的方式来解决。主要思路是：将堆按照指定大小划分为多个区块，然后每个区块对应到位图中的1位。这样对内存中的对象是存活的对象，就将对应的位图标记置为<code>1</code>，清理的时候就将所有标记为<code>0</code>的对象清理掉就可以了。</p>
+
+<p>以下是简单的代码实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>public class MarkSweepWithBitMapAlgo extends MarkSweepAlgo {
+</span><span class='line'>    /**
+</span><span class='line'>     * 定义一个字的长度
+</span><span class='line'>     */
+</span><span class='line'>    public static final int WORD_LENGTH = 32;
+</span><span class='line'>
+</span><span class='line'>    private int[] bitmapTable;
+</span><span class='line'>    private int bitmapTableSize;
+</span><span class='line'>
+</span><span class='line'>    public MarkSweepWithBitMapAlgo(int size, int fitStrategy) {
+</span><span class='line'>        super(size, fitStrategy);
+</span><span class='line'>        this.bitmapTableSize = size / WORD_LENGTH + 1;
+</span><span class='line'>        //初始化位图标记
+</span><span class='line'>        bitmapTable = new int[bitmapTableSize];
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    @Override
+</span><span class='line'>    public void markSweep() {
+</span><span class='line'>        markPhase();
+</span><span class='line'>        sweepPhase();
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    private void markPhase() {
+</span><span class='line'>        for (MarkSweepObj obj : roots) {
+</span><span class='line'>            mark(obj);
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    private void mark(MarkSweepObj obj) {
+</span><span class='line'>
+</span><span class='line'>        int index = obj.start / WORD_LENGTH;
+</span><span class='line'>        int offset = obj.start % WORD_LENGTH;
+</span><span class='line'>
+</span><span class='line'>        if ((bitmapTable[index] & (1 &lt;&lt; offset)) == 0) {
+</span><span class='line'>            //将对象对应的标志位置为 1
+</span><span class='line'>            bitmapTable[index] |= (1 &lt;&lt; offset);
+</span><span class='line'>            for (MarkSweepObj child : obj.children) {
+</span><span class='line'>                mark(child);
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    private void sweepPhase() {
+</span><span class='line'>        int index, offset;
+</span><span class='line'>
+</span><span class='line'>        Iterator&lt;MarkSweepObj&gt; iterator = allocatedObjList.iterator();
+</span><span class='line'>        while (iterator.hasNext()) {
+</span><span class='line'>
+</span><span class='line'>            MarkSweepObj obj = iterator.next();
+</span><span class='line'>            index = obj.start / WORD_LENGTH;
+</span><span class='line'>            offset = obj.start % WORD_LENGTH;
+</span><span class='line'>
+</span><span class='line'>            //标记完成之后标志位为0，说明该对象是需要回收的对象
+</span><span class='line'>            if ((bitmapTable[index] & (1 &lt;&lt; offset)) == 0) {
+</span><span class='line'>                heap.release(new Slot(obj.start, obj.size));
+</span><span class='line'>                iterator.remove();
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        //重置标志位
+</span><span class='line'>        for (int i = 0; i &lt; bitmapTableSize; i++) {
+</span><span class='line'>            bitmapTable[i] = 0;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[macOS Docker 容器网络代理设置]]></title>

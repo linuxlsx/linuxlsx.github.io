@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>SpringMVC 使用AOP拦截Controller - 平凡的世界</title>
+  <title>Category: 垃圾回收 - 平凡的世界</title>
   <meta name="author" content="linuxlsx">
 
   
-  <meta name="description" content="最近使用SpringMVC开发一个后台应用, 要求对操作进行权限控制并记录操作日志。这是典型的AOP应用场景, 所以自然而然的想通过 AOP 拦截 SpringMVC 的 Controller 执行来达到想要的效果. 但是在按照之前的配置调试的时候, AOP的拦截代码并没有得到执行。 &hellip;">
+  <meta name="description" content="Category: 垃圾回收">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -17,7 +17,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
   
-  <link rel="canonical" href="http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller">
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/categories/la-ji-hui-shou">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
@@ -117,89 +117,29 @@
   </div>
   <div id="main">
     <div class="content">
-      <article class="hentry" role="article">
+      <article role="article">
   
+  <header>
+    <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+    <h1 class="entry-title">Category: 垃圾回收</h1>
+  </header>
   
-    <header>
-      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
-      <h1 class="entry-title">SpringMVC 使用AOP拦截Controller</h1>
-    </header>
-  
-  <div class="entry-content"><p>最近使用SpringMVC开发一个后台应用, 要求对操作进行权限控制并记录操作日志。这是典型的AOP应用场景, 所以自然而然的想通过 AOP 拦截 SpringMVC 的 Controller 执行来达到想要的效果. 但是在按照之前的配置调试的时候, AOP的拦截代码并没有得到执行。经过几番研究后找到了答案。</p>
-
-<!-- more -->
-
-
-<p>首先因为 SpringMVC 的 Controller 是没有接口的, 但是Spring 默认使用的JDK的动态代理。动态代理会限制必须有接口才行，所以在配置上要指定使用cglib代理。通过以下的配置可以指定 Spring 使用 cglib:</p>
-
-<pre><code>&lt;aop:aspectj-autoproxy proxy-target-class="true"/&gt;
-</code></pre>
-
-<p>但是要想达到想要的效果, 这个配置的声明位置还有讲究。这个主要是 Spring 的父子容器访问规则导致的。子容器可以访问父容器中配置的bean, 但是父容器不能访问子容器中的bean .</p>
-
-<p>SpringMVC 实现的时候就是这样一个父子结构。通过 <code>ContextLoaderListener</code> 创建的容器作为父容器。 每个 <code>DispatcherServlet</code> 创建的容器作为子容器。</p>
-
-<p>所以当把上面的申明放到父容器相关的配置文件中的时候, 父容器会尝试寻找切入点, 但是这个时候切入点其实在子容器, 父容器访问不到子容器中的bean, 达不到拦截的效果。</p>
-
-<p>将配置迁移到 子容器相关的配置文件中就能达到拦截的效果。至于 Aspect 的bean 可以配置在父容器中 也可以配置在子容器中。</p>
-</div>
-  <footer>
-    <div class="articlemeta">
-      <span class="hide">
-        
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/aop/'>aop</a>, <a class='category' href='/blog/categories/springmvc/'>springmvc</a>
-  
-</span>
-
- @
-        
-
-
-
-
-
+  <div class="entry-content"><div id="blog-archives" class="category">
 
 
 
   
+  <h1>2017</h1>
 
-
-<time datetime="2016-01-14T19:44:22+08:00" pubdate data-updated="true"></time>
-      </span>
-      <span class="plus">
-        
-          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/">+</a>
-        
-      </span>
-    </div>
-    
-      <div class="sharing">
-  
-  
-  
-</div>
-
-    
-    <div class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2015/12/10/synchronized-local-variable-string/" title="Previous Post: synchronized 作用于局部变量">&laquo; synchronized 作用于局部变量</a>
-      &nbsp;&nbsp;
-      
-        <a class="basic-alignment right" href="/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/" title="Next Post: requireJs 配置可重用"> requireJs 配置可重用 &raquo;</a>
-      
-    </div>
-  </footer>
-
+<article>
+  <h2 class="entry-title"><a href="/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">垃圾回收的算法与实现读书笔记-标记清除算法</a></h2>
 
 </article>
 
-  <section>
-    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
+</div>
+  
+</article>
 
 
     </div>
@@ -214,19 +154,6 @@
 
 <script type="text/javascript">
   disqus_shortname = 'linuxlsx';
-  
-    disqus_identifier = 'http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/';
-    disqus_url = 'http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/';
-    function loadDisqus() {
-      
-      // var disqus_developer = 1;
-      var disqus_script = 'embed.js';
-      (function () {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }());
-    }
   
   (function () {
     var disqus_script = 'count.js';
