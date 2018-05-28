@@ -4,7 +4,7 @@
   <title><![CDATA[平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2018-01-02T20:25:38+08:00</updated>
+  <updated>2018-05-28T09:55:21+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -97,7 +97,7 @@
             /**
             * 用来表示对象之间的引用关系
             */
-            public LinkedList&lt;MarkSweepObj&gt; children = new LinkedList&lt;MarkSweepObj&gt;();
+            public LinkedList&lt;Obj&gt; children = new LinkedList&lt;Obj&gt;();
         }
 
 * GC 算法接口。目前只定义了一个创建对象的接口
@@ -208,8 +208,8 @@
 </span><span class='line'>        obj.marked = true;
 </span><span class='line'>        //如果有引用对象，则递归标记引用对象
 </span><span class='line'>        if (!obj.children.isEmpty()) {
-</span><span class='line'>            for (MarkSweepObj child : obj.children) {
-</span><span class='line'>                mark(child);
+</span><span class='line'>            for (Obj child : obj.children) {
+</span><span class='line'>                mark((MarkSweepObj) child);
 </span><span class='line'>            }
 </span><span class='line'>        }
 </span><span class='line'>    }
