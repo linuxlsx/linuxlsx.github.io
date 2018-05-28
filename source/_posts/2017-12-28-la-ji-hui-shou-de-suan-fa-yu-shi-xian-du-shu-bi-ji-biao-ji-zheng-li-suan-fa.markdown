@@ -83,7 +83,7 @@ GC 算法的分类主要有一下的几种：
                 /**
                 * 用来表示对象之间的引用关系
                 */
-                public LinkedList<MarkSweepObj> children = new LinkedList<MarkSweepObj>();
+                public LinkedList<Obj> children = new LinkedList<Obj>();
             }
 
     * GC 算法接口。目前只定义了一个创建对象的接口
@@ -146,8 +146,8 @@ public class MarkSweepObj extends Obj{
             obj.marked = true;
             //如果有引用对象，则递归标记引用对象
             if (!obj.children.isEmpty()) {
-                for (MarkSweepObj child : obj.children) {
-                    mark(child);
+                for (Obj child : obj.children) {
+                    mark((MarkSweepObj) child);
                 }
             }
         }
