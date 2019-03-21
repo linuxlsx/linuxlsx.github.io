@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://linuxlsx.github.io/blog/2019/03/21/arts-first-week/</loc>
+<lastmod>2019-03-21T23:09:03+08:00</lastmod>
+</url>
+<url>
 <loc>http://linuxlsx.github.io/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/</loc>
 <lastmod>2019-03-21T22:36:03+08:00</lastmod>
 </url>
@@ -92,5 +96,8 @@
 </url>
 <url>
 <loc>http://linuxlsx.github.io/blog/categories/acsuan-fa/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/blog/categories/arts/</loc>
 </url>
 </urlset>

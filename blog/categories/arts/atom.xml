@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Arts | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/arts/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2019-03-21T23:09:58+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ARTS First Week]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/03/21/arts-first-week/"/>
+    <updated>2019-03-21T23:09:03+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/03/21/arts-first-week</id>
+    <content type="html"><![CDATA[<h1>ARTS 第1周</h1>
+
+<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/">Find First and Last Position of Element in Sorted Array</a></p>
+
+<p>题目要求:</p>
+
+<pre><code>Given an array of integers nums sorted in ascending order, find the starting and ending position of a given target value.
+
+Your algorithm's runtime complexity must be in the order of O(log n).
+
+If the target is not found in the array, return [-1, -1].
+</code></pre>
+
+<p><strong>分析:</strong></p>
+
+<p>在<code>O(log n)</code> 时间复杂度的限制下，肯定是要用二分查找的。但是与普通的查找不同，这个题目实际的要求是查找目标的<code>左边界</code>和<code>右边界</code>。这样我们通过二分法查找到目标值以后，<strong>不能立刻返回</strong>，而是要继续向左或者向右查看是否有更左或者更右的目标。所以通过两次二分查找即可得到想要的结果。时间复杂度为 <code>2 * O(log n)</code></p>
+
+<p>代码实际比较简单，就不贴代码了。</p>
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://medium.com/s/the-nuance/why-your-brain-needs-idle-time-e5d90b0ef1df">Why Your Brain Needs Idle Time</a></p>
+
+<p><code>适当的休息更有助于学习和消化知识</code></p>
+
+<p>每个人的精力是有限的，每天的工作和社交活动占用了很大的一部分，很多人只有在晚上淋浴和准备睡觉的时候才能让放松下来。</p>
+
+<p>文中研究了<code>适当休息</code>是否会对老鼠过迷宫速度有影响。两只老鼠，一只通过迷宫后会休息下然后再重走一次迷宫，而另一只不休息直接重走。结果表明：休息过的老鼠第二次走迷宫的速度会比不休息的要<strong>快</strong>。</p>
+
+<p>所以，不是总是让自己的大脑处于负荷运行的情况，适当的休息并不会降低效率，相反会提高效率。</p>
+
+<h2>Tip</h2>
+
+<p>在写代码过程中经常会碰到用一个Map来保存(K,V)结构，如果一个K有多个V的时候，我们需要指定<code>List&lt;V&gt;</code>来保存。最近我碰到了一个新的用法，使用<code>apache-commons 4</code>中的 <code>MultiValuedMap</code>可以帮助我们简化代码。</p>
+
+<p>MultiValuedMap 的类结构如下图:</p>
+
+<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/multihashmap.jpg?x-oss-process=style/origin" alt="类结构" /></p>
+
+<p>主要提供了两种实现：基于ArrayList的实现和基于HashSet的实现。主要区别就是在于对于<code>Key</code>是否允许重复的<code>V</code>存在。</p>
+
+<h2>Share</h2>
+
+<p><a href="http://linuxlsx.top/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/">关键词匹配算法调研</a></p>
+]]></content>
+  </entry>
+  
+</feed>
