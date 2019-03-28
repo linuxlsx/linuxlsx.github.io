@@ -1,24 +1,132 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[平凡的世界]]></title>
-  <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
-  <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-03-28T22:35:10+08:00</updated>
-  <id>http://linuxlsx.github.io/</id>
-  <author>
-    <name><![CDATA[linuxlsx]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>垃圾回收的算法与实现读书笔记-引用计数法 - 平凡的世界</title>
+  <meta name="author" content="linuxlsx">
 
   
-  <entry>
-    <title type="html"><![CDATA[垃圾回收的算法与实现读书笔记-引用计数法]]></title>
-    <link href="http://linuxlsx.github.io/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/"/>
-    <updated>2019-03-26T17:19:43+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa</id>
-    <content type="html"><![CDATA[<p>在<a href="http://linuxlsx.top/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">上一篇文章</a>中介绍了<code>标记-清除法</code>的实现，这边接着来讲<code>引用计数法</code>的实现</p>
+  <meta name="description" content="在上一篇文章中介绍了标记-清除法的实现，这边接着来讲引用计数法的实现 文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。 引用计数法 引用计数法是George E.Colins 在1960年提出来的。主要思想是: 1
+让每个对象都记录下被多个其他对象引用的数量， &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-111612120-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      .lsx
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">平凡的世界</a></h1>
+  
+    <h2>Hello Little Cat</h2>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:linuxlsx.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">垃圾回收的算法与实现读书笔记-引用计数法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/03/21/arts-first-week/">ARTS First Week</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/">关键词匹配算法调研</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">垃圾回收的算法与实现读书笔记-标记清除算法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/">macOS Docker 容器网络代理设置</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/linuxlsx">@linuxlsx</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">垃圾回收的算法与实现读书笔记-引用计数法</h1>
+    </header>
+  
+  <div class="entry-content"><p>在<a href="http://linuxlsx.top/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">上一篇文章</a>中介绍了<code>标记-清除法</code>的实现，这边接着来讲<code>引用计数法</code>的实现</p>
 
 <p>文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。</p>
 
@@ -956,1269 +1064,151 @@
 <h2>总结</h2>
 
 <p>引用计数法虽然思想比较简单，但是工程实现上比较困难。在大型系统上基本上没有用武之地，但是在大多数对象的生命周期简单到直接进行管理的混合场景会比较有效。</p>
-]]></content>
-  </entry>
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
   
-  <entry>
-    <title type="html"><![CDATA[ARTS First Week]]></title>
-    <link href="http://linuxlsx.github.io/blog/2019/03/21/arts-first-week/"/>
-    <updated>2019-03-21T23:09:03+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2019/03/21/arts-first-week</id>
-    <content type="html"><![CDATA[<h1>ARTS 第1周</h1>
-
-<h2>Algorithm</h2>
-
-<p>本周完成的算法题: <a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/">Find First and Last Position of Element in Sorted Array</a></p>
-
-<p>题目要求:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Given an array of integers nums sorted in ascending order, find the starting and ending position of a given target value.
-</span><span class='line'>
-</span><span class='line'>Your algorithm's runtime complexity must be in the order of O(log n).
-</span><span class='line'>
-</span><span class='line'>If the target is not found in the array, return [-1, -1].</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>分析:</strong></p>
-
-<p>在<code>O(log n)</code> 时间复杂度的限制下，肯定是要用二分查找的。但是与普通的查找不同，这个题目实际的要求是查找目标的<code>左边界</code>和<code>右边界</code>。这样我们通过二分法查找到目标值以后，<strong>不能立刻返回</strong>，而是要继续向左或者向右查看是否有更左或者更右的目标。所以通过两次二分查找即可得到想要的结果。时间复杂度为 <code>2 * O(log n)</code></p>
-
-<p>代码实际比较简单，就不贴代码了。</p>
-
-<h2>Review</h2>
-
-<p>本周Review <a href="https://medium.com/s/the-nuance/why-your-brain-needs-idle-time-e5d90b0ef1df">Why Your Brain Needs Idle Time</a></p>
-
-<p><code>适当的休息更有助于学习和消化知识</code></p>
-
-<p>每个人的精力是有限的，每天的工作和社交活动占用了很大的一部分，很多人只有在晚上淋浴和准备睡觉的时候才能让放松下来。</p>
-
-<p>文中研究了<code>适当休息</code>是否会对老鼠过迷宫速度有影响。两只老鼠，一只通过迷宫后会休息下然后再重走一次迷宫，而另一只不休息直接重走。结果表明：休息过的老鼠第二次走迷宫的速度会比不休息的要<strong>快</strong>。</p>
-
-<p>所以，不是总是让自己的大脑处于负荷运行的情况，适当的休息并不会降低效率，相反会提高效率。</p>
-
-<h2>Tip</h2>
-
-<p>在写代码过程中经常会碰到用一个Map来保存(K,V)结构，如果一个K有多个V的时候，我们需要指定<code>List&lt;V&gt;</code>来保存。最近我碰到了一个新的用法，使用<code>apache-commons 4</code>中的 <code>MultiValuedMap</code>可以帮助我们简化代码。</p>
-
-<p>MultiValuedMap 的类结构如下图:</p>
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/multihashmap.jpg?x-oss-process=style/origin" alt="类结构" /></p>
-
-<p>主要提供了两种实现：基于ArrayList的实现和基于HashSet的实现。主要区别就是在于对于<code>Key</code>是否允许重复的<code>V</code>存在。</p>
-
-<h2>Share</h2>
-
-<p><a href="http://linuxlsx.top/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/">关键词匹配算法调研</a></p>
-]]></content>
-  </entry>
+    <a class='category' href='/blog/categories/gc/'>gc</a>, <a class='category' href='/blog/categories/la-ji-hui-shou/'>垃圾回收</a>, <a class='category' href='/blog/categories/yin-yong-ji-shu-fa/'>引用计数法</a>
   
-  <entry>
-    <title type="html"><![CDATA[关键词匹配算法调研]]></title>
-    <link href="http://linuxlsx.github.io/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/"/>
-    <updated>2019-03-21T22:36:03+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan</id>
-    <content type="html"><![CDATA[<p>在负责的规则系统中有很大一部分的规则是对用户输入的文本做关键词的匹配。整个关键词功能中有几个概念:</p>
+</span>
 
-<ul>
-<li>匹配词：如果目标文本中存在<code>匹配词</code>，就认为规则是命中的。</li>
-<li>排除词：如果目标文本中存在<code>排除词</code>，就认为规则是不命中的。</li>
-</ul>
+ @
+        
 
 
-<p>其中<code>排除词</code>的优先于<code>匹配词</code>的。另外还有一个组合概念，就是只有两个或者以上的关键词命中的时候才算命中，这个在<code>排除词</code>和<code>匹配词</code>中都会有。</p>
 
-<p>原本的实现是通过正则表达式的方式实现的。针对每个词都创建一个<code>java.regex.Pattern</code>，再对目标字符串进行匹配。</p>
 
-<p>最新一个新业务提出了需要支持一个规则中最多包含<code>500</code>个关键词，这个长度比我们目前现有规则中最长的关键长了至少<code>10倍</code>。所以现有的实现能否满足整体的性能要求存在疑虑。</p>
 
-<p>调研了现在常用的字符串匹配算法，发现<a href="http://cr.yp.to/bib/1975/aho.pdf">AC多模匹配算法</a>比较适合我们的场景。</p>
 
-<h2>AC多模式匹配算法</h2>
 
-<p>AC多模算法通过将多个关键词构造成一个有限状态机，然后再用状态机来处理输入文本。通过AC算法可以在<code>O(n)</code>时间内完成匹配，而且与关键词的长度无关。</p>
 
-<p>AC算法的主要步骤有:</p>
-
-<ul>
-<li>为所有的关键词构造一个前缀树结构</li>
-<li>针对前缀树中的每个节点计算出匹配失败后的跳转以及节点的输出</li>
-<li>对目标串进行模式匹配</li>
-</ul>
-
-
-<p>其中在完成前两步的过程需要用到三个函数：</p>
-
-<ul>
-<li>goto  : 根据当前状态<code>s</code>以及输入字符<code>a</code> 计算出下一个状态<code>s' = goto(s, a)</code></li>
-<li>fail  : 当前上一步goto函数的结果为<code>fail</code>时，需要使用该函数计算出下一个状态</li>
-<li>output : 当goto函数达到某个状态时，该状态的输出内容</li>
-</ul>
-
-
-<h3>构造Goto Function</h3>
-
-<p>假设现在有一组关键词{he, she, his, hers}，那么通过AC算法构造出来的步骤为:</p>
-
-<ol>
-<li><p>树的根节点为<code>0</code>。</p></li>
-<li><p>输入 <code>he</code> 的到如下图。其中：<code>goto(0, h)=1 goto(1,e) = 2</code>，同时状态0到状态2得到了关键词<code>he</code>，记录<code>output(2) = [he]</code></p></li>
-</ol>
-
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/AC%E7%AE%97%E6%B3%95-GOTO1.png?x-oss-process=style/black" alt="AC算法-GOTO1.png" /></p>
-
-<ol>
-<li>输入 <code>she</code>。</li>
-</ol>
-
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/AC%E7%AE%97%E6%B3%95-GOTO2.png?x-oss-process=style/black" alt="AC算法-GOTO2.png" /></p>
-
-<ol>
-<li>输入 <code>his</code>。因为已经存在了<code>h</code>的状态转移，所以不需要从根节点开始，直接从节点1开始。</li>
-</ol>
-
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/AC%E7%AE%97%E6%B3%95-GOTO3.png?x-oss-process=style/black" alt="AC算法-GOTO3.png" /></p>
-
-<ol>
-<li>输入 <code>hers</code>。得到最终的树。</li>
-</ol>
-
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/AC%E7%AE%97%E6%B3%95-GOTO.png?x-oss-process=style/black" alt="AC算法-GOTO.png" /></p>
-
-<h3>构造Fail Function</h3>
-
-<p>在<code>Goto function</code>构建完成以后，就需要构建<code>Fail Function</code>。首先要引入<code>depth</code>的概念: <code>depth</code>表示在goto树中从根节点到节点<code>s</code>的最短路径。针对上述的例子来说：节点1，3的depth为1, 节点2，4，6的depth为2，节点5，7，8的depth为3，节点9的depth为4。</p>
-
-<p>计算失效函数的思路是这样的：首先计算深度为1 的状态的失效函数值，然后是深度为2的，以此类推，直到所有状态的失效函数值都被计算出。同时，算法规定所有深度为1的状态的fail值为0，假设所有深度小于d的状态的fail值都已经计算出，考虑每个深度为d-1的状态r，基于这些已经被计算出的深度为d-1的fail值，是可以得到深度为d的fail值的。</p>
-
-<p>假设正在计算<code>depth=d</code>的节点<code>s</code>的<code>f(s)</code>，那么需要对<code>depth=(d-1)</code>的节点<code>r</code>执行以下的流程:</p>
-
-<ul>
-<li>对于所有的字符a，如果goto(r,a) = fail，那么什么也不做</li>
-<li>如果goto(r,a) == s，我们记state = <code>f(r)</code>，执行state = f(state)零次或者若干次，直到使得goto(state,a) != fail，因为goto(0,a) != fail，所以这个状态是一定存在的。</li>
-<li>记fail(s) = goto(state,a)。</li>
-</ul>
-
-
-<p>那么针对该案例的来讲，计算过程如下:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>1. f(1),f(3)=0，因为这两个点depth=1
-</span><span class='line'>2. 第二层：
-</span><span class='line'>    2.1 节点2：state = f(1) = 0 =&gt; g(0, e) = 0 =&gt; f(2) = 0
-</span><span class='line'>    2.2 节点6：state = f(1) = 0 =&gt; g(0, i) = 0 =&gt; f(6) = 0       
-</span><span class='line'>    2.3 节点4：state = f(3) = 0 =&gt; g(0, h) = 1 =&gt; f(4) = 1
-</span><span class='line'>3. 第三层：
-</span><span class='line'>    3.1 节点8：state = f(2) = 0 =&gt; g(0, r) = 0 =&gt; f(8) = 0       
-</span><span class='line'>    3.2 节点7：state = f(6) = 0 =&gt; g(0, s) = 3 =&gt; f(7) = 3
-</span><span class='line'>    3.3 节点5：state = f(4) = 1 =&gt; g(1, e) = 2 =&gt; f(5) = 2
-</span><span class='line'>4. 第四层：
-</span><span class='line'>    4.1 节点9：state = f(8) = 0 =&gt; g(0, s) = 3 =&gt; f(9) = 3</span></code></pre></td></tr></table></div></figure>
-
-
-<p>整体的<code>Fail Function</code>结果表为:</p>
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/tmp_table.jpg?x-oss-process=style/black" alt="结构表" /></p>
-
-<p>增加了<code>Fail Function</code>的图为:</p>
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/AC%E7%AE%97%E6%B3%95-GOTO4.png?x-oss-process=style/black" alt="AC算法-GOTO4.png" /></p>
-
-<h3>构造Output函数</h3>
-
-<p><code>Output</code>函数结果的构造在以上两步中一起完成。首先在构造goto函数的时候，会把关键词增加到改关键词最后一个字符关联的节点的输出中。所以在第一步后：节点2，5，7，9的output中会有对应的关键词。</p>
-
-<p>然后在构造<code>Fail Function</code>中，如果output(f(s)) != null，则把output(f(s))的结果添加到output(s)中。</p>
-
-<p>以下是最终的结果表:</p>
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/tmp_table2.jpg?x-oss-process=style/black" alt="结果表" /></p>
-
-<h3>文本匹配</h3>
-
-<p>经过上述的步骤完成构建以后，就可以进行文本匹配了。只需要对文本从前到后进行一次遍历就可以，不需要进行回溯。</p>
-
-<p>该过程的伪代码如下：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="n">begin</span>
-</span><span class='line'>    <span class="n">state</span> <span class="o">&lt;-</span> <span class="mi">0</span>
-</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="o">&lt;-</span> <span class="n">until</span> <span class="n">n</span> <span class="k">do</span>
-</span><span class='line'>        <span class="n">begin</span>
-</span><span class='line'>            <span class="k">while</span> <span class="n">g</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ai</span><span class="p">)</span> <span class="o">==</span> <span class="n">fail</span> <span class="k">do</span> <span class="n">state</span> <span class="o">&lt;-</span> <span class="n">f</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-</span><span class='line'>            <span class="n">state</span> <span class="o">&lt;-</span> <span class="n">g</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ai</span><span class="p">)</span>
-</span><span class='line'>            <span class="k">if</span> <span class="n">output</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">!=</span> <span class="n">empty</span> <span class="n">then</span>
-</span><span class='line'>                <span class="n">begin</span>
-</span><span class='line'>                    <span class="n">print</span> <span class="n">output</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-</span><span class='line'>                <span class="n">end</span>
-</span><span class='line'>        <span class="n">end</span>
-</span><span class='line'><span class="n">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>性能比对</h2>
-
-<p>待匹配文本有三种长度: 50个字符，9Kb，36Kb
-关键词数量(不存在匹配词): 1个，10个，50个(存在多分组)
-关键词数量(存在一个匹配词，在最前): 1个，10个，50个(存在多分组)
-关键词数量(存在一个匹配词，在中间): 1个，10个，50个(存在多分组)
-关键词数量(存在一个匹配词，在最后): 1个，10个，50个(存在多分组)
-关键词数量500。</p>
-
-<p>测试通过JMH框架，单线程执行，预热3次，迭代6次，取平均值，单位为opt/s。</p>
-
-<p>如下图可以看到:</p>
-
-<ul>
-<li>1个关键词的时候，原实现性能比AC性能要好。但是AC算法和原实现也没有数量级的差异。</li>
-<li>当关键词数量超过10个的时候，AC算法的性能要比原实现好。命中词在最前面算是一个特例，对于原实现来说相当于只有一个词的情况。 当然在短文本的情况下，原实现的绝对数量还是可以的，50个关键词短文本可以达到 18w次/每秒。</li>
-<li>500词的情况下，AC算法有绝对的优势。</li>
-</ul>
-
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/AC%E7%AE%97%E6%B3%95-%E6%95%88%E6%9E%9C.png?x-oss-process=style/black" alt="AC算法-效果.png" /></p>
-
-<p>500个关键词性能表(AC的长串性能比较高，可能是内容中的命中词比较靠前)，可以看到即使在500词的情况下，性能仍然保持在高水平。:</p>
-
-<p><img src="http://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/tmp_table3.jpg?x-oss-process=style/black" alt="结果表" /></p>
-
-<h2>总结</h2>
-
-<p>AC算法在关键词比较多的情况下性能比原实现有非常明显的优势，特别是在中长文本的情况下。所以对于新需求可以通过AC算法实现，通用情况下也可以考虑使用AC算法实现替换掉。</p>
-
-<h2>参考</h2>
-
-<p><a href="http://cr.yp.to/bib/1975/aho.pdf">AC算法论文</a></p>
-
-<p><a href="https://tech.meituan.com/2014/06/09/ac-algorithm-in-meituan-order-system-practice.html">AC算法在美团上单系统的应用</a></p>
-]]></content>
-  </entry>
   
-  <entry>
-    <title type="html"><![CDATA[垃圾回收的算法与实现读书笔记-标记清除算法]]></title>
-    <link href="http://linuxlsx.github.io/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/"/>
-    <updated>2017-12-28T17:34:51+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa</id>
-    <content type="html"><![CDATA[<p>作为一个Java 程序员，得益于它的自动垃圾回收机制，极大的降低了因为编程导致的内存问题的发生几率。但是作为一个有追求的程序员，了解垃圾回收的内部实现对工作以及个人发展都是极其有帮助的。</p>
 
-<p>在之前的工作中已经对Java 常用的GC算法有了一些浅显的理解，但是对于算法本身的实现并无深入的了解。后来在网上淘书是发现了这版本《垃圾回收的算法与实现》，试读后发现很不错。于是购买了一本打算深入的学习下。这里就是记录我学习过程中的一些记录以及根据书中伪代码实现完成简单的Java实现。</p>
 
-<h2>GC 算法的分类</h2>
-
-<p>GC 算法的分类主要有一下的几种：</p>
-
-<pre><code>* 标记-清除算法  1960年 John McCarthy 发布了第一个GC算法 标记-清除算法
-* 引用计数算法  1960年 George E. Collins 发布了引用计数算法。
-* 复制算法  1963年 Marvin L.Minsky 发布了复制算法
-* 标记-压缩算法
-</code></pre>
-
-<p>后续会按照顺序都会做一个简单的实现。</p>
-
-<!--more-->
-
-
-<h2>基本数据结构</h2>
-
-<p>首先看下实现过程中使用的数据结构:</p>
-
-<pre><code>* 堆。 堆是存放对象的地方。主要完成两个动作：申请指定大小的内存；释放指定大小的内存
-
-        public class Heap {
-
-            /**
-            * 整个堆得大小
-            */
-            protected int size;
-
-            /**
-            * 整个堆已经分配的大小
-            */
-            protected int allocatedSize;
-
-            /**
-            * 堆的分配策略
-            */
-            protected int fitStrategy;
-
-            public static final int FIRST_FIT_STRATEGY = 1;
-            public static final int BEST_FIT_STRATEGY = 2;
-            public static final int WORST_FIT_STRATEGY = 3;
-
-            /**
-            * 空闲Slot的列表
-            */
-            protected LinkedList&lt;Slot&gt; emptyList = new LinkedList&lt;Slot&gt;();
-
-            /**
-             * 从堆中申请一个指定大小的可用区块
-            */
-            public Slot applySlot(int size);
-
-            /**
-             * 释放指定大小的区块
-            */
-            public void release(Slot releaseSlot);
-        }    
-
-* 对象。表示一个基本的对象，可以知道该对象在内存中的起始位置、大小以及引用的对象
-
-        public class Obj {
-
-            /**
-            * 表示对象的大小
-            */
-            public int size;
-
-            /**
-            * 表示对象在中的起始位置
-            */
-            public int start;
-
-            /**
-            * 用来表示对象之间的引用关系
-            */
-            public LinkedList&lt;Obj&gt; children = new LinkedList&lt;Obj&gt;();
-        }
-
-* GC 算法接口。目前只定义了一个创建对象的接口
-        public interface GcAlgo {
-
-            /**
-            * 创建一个指定大小的对象
-            * @param size
-            * @return
-            */
-            Obj newObj(int size);
-        }
-</code></pre>
-
-<h2>标记-清除算法</h2>
-
-<p>标记-清除算法理解起来还是比较简单的。主要分为两个阶段：</p>
-
-<pre><code>* 标记阶段
-    * 首先标记通过根直接可以引用到的对象
-    * 然后在标记所有能够访问到的对象
-        * 可以通过递归做深度优先访问
-        * 可以通过辅助队列做广度优先访问
-* 清除阶段
-    * 遍历整个堆，回收没有打上标记的对象
-</code></pre>
-
-<h3>算法实现</h3>
-
-<p>标记-清除算法需要在对象中增加一个字段来标识对象是否已经被标记。所以我新定义了一个 <strong>MarkSweepObj</strong> 对象</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>public class MarkSweepObj extends Obj{
-</span><span class='line'>
-</span><span class='line'>    /**
-</span><span class='line'>     * 表示对象的标记状态  true : 表示不需要清理，false : 表示需要清理
-</span><span class='line'>     */
-</span><span class='line'>    public boolean marked;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>基本的代码实现</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>public void markSweep() {
-</span><span class='line'>    //标记阶段
-</span><span class='line'>    markPhase();
-</span><span class='line'>    //清除阶段
-</span><span class='line'>    sweepPhase();
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>private void markPhase() {
-</span><span class='line'>    //从根节点开始标记对象
-</span><span class='line'>    for (MarkSweepObj obj : roots) {
-</span><span class='line'>        mark(obj);
-</span><span class='line'>    }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>private void mark(MarkSweepObj obj) {
-</span><span class='line'>    if (!obj.marked) {
-</span><span class='line'>        obj.marked = true;
-</span><span class='line'>        //如果有引用对象，则递归标记引用对象
-</span><span class='line'>        if (!obj.children.isEmpty()) {
-</span><span class='line'>            for (Obj child : obj.children) {
-</span><span class='line'>                mark((MarkSweepObj) child);
-</span><span class='line'>            }
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>private void sweepPhase() {
-</span><span class='line'>    // allocatedObjList 记录了所有分配过的对象
-</span><span class='line'>    Iterator&lt;MarkSweepObj&gt; iterator = allocatedObjList.iterator();
-</span><span class='line'>    while (iterator.hasNext()) {
-</span><span class='line'>        MarkSweepObj obj = iterator.next();
-</span><span class='line'>        //如果对象没有标记，则说明该对象从根节点不可达，需要清理掉
-</span><span class='line'>        if (!obj.marked) {
-</span><span class='line'>            //release 之后会将Slot 添加到空闲列表中
-</span><span class='line'>            heap.release(new Slot(obj.start, obj.size));
-</span><span class='line'>            iterator.remove();
-</span><span class='line'>        } else {
-</span><span class='line'>            //将对象的标记归位，供下次GC使用
-</span><span class='line'>            obj.marked = false;
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>代码看起来可能还有些不那么直观，有图的话就会好很多了。假设下图是GC执行之前的初始状态。</p>
-
-<p><img src="https://s1.ax1x.com/2018/01/02/ppslIe.md.png" alt="标记清除init.png" /></p>
-
-<p>图中绿色的分块表示已经分配的对象，白色的表示空闲的内存。可以看到从根节点直接引用了两个对象，其中一个对象又引用了另外的两个对象。还有几个对象无法从根节点开始访问得到。空闲列表中包含了可用来分配的内存区块。</p>
-
-<p>当标记阶段执行完成以后，整个堆得情况如下：</p>
-
-<p><img src="https://s1.ax1x.com/2018/01/02/ppsuqK.md.png" alt="标记清除marked.png" /></p>
-
-<p>可以看到从根节点开始可以访问到的对象都已经打上了对象存货的标记了。接下来就是执行清除的步骤了。</p>
-
-<p><img src="https://s1.ax1x.com/2018/01/02/ppsMVO.md.png" alt="标记清除sweeped.png" /></p>
-
-<p>可以看到清除之前从根节点不可达的对象都已经被清理，加入到了空闲列表中。其他存活的对象的标记也都重置了。现在空闲列表中总共有3块可供分配的内存区块，大小分别是3，2，6。</p>
-
-<p>以上就是整个标记-清除算法的基本实现，在之前的基本结构中有个 <strong>GcAlgo</strong>，这个接口中定义的 <strong>newOb</strong> 方法又是怎么实现的呢。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/**
-</span><span class='line'> * 创建一个新的对象
-</span><span class='line'> *
-</span><span class='line'> * @param size 对象的大小
-</span><span class='line'> * @return 创建好的对象
-</span><span class='line'> * @throws OutOfMemoryError 当内存无法满足分配要求时抛出
-</span><span class='line'> */
-</span><span class='line'>public MarkSweepObj newObj(int size) {
-</span><span class='line'>
-</span><span class='line'>    Slot slot = heap.applySlot(size);
-</span><span class='line'>
-</span><span class='line'>    //如果申请到的内存空间为null, 则执行一次GC
-</span><span class='line'>    if (slot == null) {
-</span><span class='line'>
-</span><span class='line'>        markSweep();
-</span><span class='line'>
-</span><span class='line'>        slot = heap.applySlot(size);
-</span><span class='line'>        //到这里还没有分配成功，说明内存已经不能满足分配的需求
-</span><span class='line'>        //直接抛出 OOM 的错误
-</span><span class='line'>        if (slot == null) {
-</span><span class='line'>            throw new OutOfMemoryError("oh, out of memory!");
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    //初始化对象
-</span><span class='line'>    MarkSweepObj obj = initObj(slot);
-</span><span class='line'>    //将分配好的对象添加到列表中
-</span><span class='line'>    allocatedObjList.add(obj);
-</span><span class='line'>
-</span><span class='line'>    return obj;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>//简单的对象初始化，只是记录了对象的开始位置和大小
-</span><span class='line'>private MarkSweepObj initObj(Slot slot) {
-</span><span class='line'>    MarkSweepObj obj = new MarkSweepObj();
-</span><span class='line'>
-</span><span class='line'>    obj.start = slot.start;
-</span><span class='line'>    obj.size = slot.size;
-</span><span class='line'>
-</span><span class='line'>    return obj;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>逻辑比较简单清晰。首选就是尝试从堆中获取指定大小的内存；如果没有获取得到，就执行一次GC；完了以后再尝试一次内存分配，如果再不成功说明当前内存已经不能满足分配需求了（并不是空间就一定比需求小了），所以抛出OOM的错误。</p>
-
-<p>以上就是这个标记-清理算法的实现逻辑了。具体的代码请查看：<a href="https://github.com/linuxlsx/Algo/tree/master/src/main/java/org/linuxlsx/gc/marksweep">标记-清理算法实现。</a></p>
-
-<h3>执行</h3>
-
-<p>接下来我们执行下，执行的示例代码如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//构建一个容量为20，采用BestFit分配策略的堆
-</span><span class='line'>MarkSweepAlgo algo = new MarkSweepAlgo(20, Heap.FIRST_FIT_STRATEGY);
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>try {
-</span><span class='line'>    MarkSweepObj obj1 = algo.newObj(4);
-</span><span class='line'>    MarkSweepObj obj2 = algo.newObj(3);
-</span><span class='line'>    obj1.children.add(obj2);
-</span><span class='line'>
-</span><span class='line'>    MarkSweepObj obj3 = algo.newObj(3);
-</span><span class='line'>    algo.makeItToRoot(obj3);
-</span><span class='line'>
-</span><span class='line'>    MarkSweepObj obj4 = algo.newObj(4);
-</span><span class='line'>    algo.makeItToRoot(obj4);
-</span><span class='line'>    MarkSweepObj obj5 = algo.newObj(2);
-</span><span class='line'>    MarkSweepObj obj6 = algo.newObj(3);
-</span><span class='line'>    obj4.children.add(obj5);
-</span><span class='line'>    obj4.children.add(obj6);
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    MarkSweepObj obj7 = algo.newObj(2);
-</span><span class='line'>
-</span><span class='line'>    MarkSweepObj obj8 = algo.newObj(7);
-</span><span class='line'>    obj3.children.add(obj8);
-</span><span class='line'>    MarkSweepObj obj9 = algo.newObj(4);
-</span><span class='line'>
-</span><span class='line'>    }catch (Throwable e){
-</span><span class='line'>        System.out.println(e.getMessage());
-</span><span class='line'>    }</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过以上的代码，模拟创建了如下图所示的对象结构：</p>
-
-<p><img src="https://s1.ax1x.com/2018/01/02/ppsQaD.md.png" alt="标记清除示例初始化.png" /></p>
-
-<p>接下来执行结果：</p>
-
-<p><img src="https://s1.ax1x.com/2018/01/02/pps8Gd.md.jpg" alt="标记清除-算法执行结果1.png" /></p>
-
-<p>可以看到整个过程分配了7个对象，执行了两次GC。最后一次GC执行后堆可用空间是8，这时候我们要分配的<code>obj8</code> 的大小为7，但是却抛出了oom的异常，从最后的日志可以看到，虽然可用空间有8，但是没有单个Slot 能够满足要求。</p>
-
-<p>接下来我们对标记-清理算法做一个总结。</p>
-
-<h3>优点</h3>
-
-<p><code>实现简单</code>是标记-清除算法最大的优点。整个模拟的实现也就200多行代码，真正核心的更少。</p>
-
-<h3>缺点</h3>
-
-<p>相较于优点，标记-清除的缺点就比较多了。</p>
-
-<pre><code>* 碎片化。这个在实际运行的时候已经看到了，在使用过程中会逐渐产生被细化的分块，尽管在总量上内存是够用的，但是实际上却因为碎片化导致对象无法分配。
-* 分配速度。每次分配都需要遍历空闲列表
-* 与COW(copy-on-write)技术不兼容。现代操作系统会使用COW技术来减少对象的移动，但是标记-清除算法每次都需要修改标记，就会引起不必要的对象移动。
-</code></pre>
-
-<h3>优化方案</h3>
-
-<h4>碎片化</h4>
-
-<p>通过适时对空闲列表进行压缩，能够比较有效的解决碎片化的问题。这个在Java 常用的 CMS GC 算法中也有体现，可以通过参数 <code>UseCMSCompactAtFullCollection</code> 和 <code>CMSFullGCsBeforeCompaction=N</code> 来设置压缩策略。</p>
-
-<p>在我们简单的实现中，将空闲列表按照地址排序后，遍历列表将相邻的Slot 合并为一个大的Slot。以下是增加了合并功能之后的执行结果，可以看到压缩 <code>obj8</code> 分配成功了。</p>
-
-<p><img src="https://s1.ax1x.com/2018/01/02/pps3PH.md.jpg" alt="标记清除示例压缩.png" /></p>
-
-<h4>分配速度</h4>
-
-<p>现在我们只使用了一个空闲列表，为了加快速度可以使用多个空闲列表。将相同大小的 Slot 放在一个列表中，这样分配的时候就直接去对应列表的第一个元素就可以了。当然空闲列表也不越多越好，对于大小超过一定限制的可以放到一个列表中。</p>
-
-<h4>兼容COW</h4>
-
-<p>为了能够兼容COW，所以需要将对象的标记存储其他的地方。可以使用位图标记的方式来解决。主要思路是：将堆按照指定大小划分为多个区块，然后每个区块对应到位图中的1位。这样对内存中的对象是存活的对象，就将对应的位图标记置为<code>1</code>，清理的时候就将所有标记为<code>0</code>的对象清理掉就可以了。</p>
-
-<p>以下是简单的代码实现：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>public class MarkSweepWithBitMapAlgo extends MarkSweepAlgo {
-</span><span class='line'>    /**
-</span><span class='line'>     * 定义一个字的长度
-</span><span class='line'>     */
-</span><span class='line'>    public static final int WORD_LENGTH = 32;
-</span><span class='line'>
-</span><span class='line'>    private int[] bitmapTable;
-</span><span class='line'>    private int bitmapTableSize;
-</span><span class='line'>
-</span><span class='line'>    public MarkSweepWithBitMapAlgo(int size, int fitStrategy) {
-</span><span class='line'>        super(size, fitStrategy);
-</span><span class='line'>        this.bitmapTableSize = size / WORD_LENGTH + 1;
-</span><span class='line'>        //初始化位图标记
-</span><span class='line'>        bitmapTable = new int[bitmapTableSize];
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    @Override
-</span><span class='line'>    public void markSweep() {
-</span><span class='line'>        markPhase();
-</span><span class='line'>        sweepPhase();
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    private void markPhase() {
-</span><span class='line'>        for (MarkSweepObj obj : roots) {
-</span><span class='line'>            mark(obj);
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    private void mark(MarkSweepObj obj) {
-</span><span class='line'>
-</span><span class='line'>        int index = obj.start / WORD_LENGTH;
-</span><span class='line'>        int offset = obj.start % WORD_LENGTH;
-</span><span class='line'>
-</span><span class='line'>        if ((bitmapTable[index] & (1 &lt;&lt; offset)) == 0) {
-</span><span class='line'>            //将对象对应的标志位置为 1
-</span><span class='line'>            bitmapTable[index] |= (1 &lt;&lt; offset);
-</span><span class='line'>            for (MarkSweepObj child : obj.children) {
-</span><span class='line'>                mark(child);
-</span><span class='line'>            }
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    private void sweepPhase() {
-</span><span class='line'>        int index, offset;
-</span><span class='line'>
-</span><span class='line'>        Iterator&lt;MarkSweepObj&gt; iterator = allocatedObjList.iterator();
-</span><span class='line'>        while (iterator.hasNext()) {
-</span><span class='line'>
-</span><span class='line'>            MarkSweepObj obj = iterator.next();
-</span><span class='line'>            index = obj.start / WORD_LENGTH;
-</span><span class='line'>            offset = obj.start % WORD_LENGTH;
-</span><span class='line'>
-</span><span class='line'>            //标记完成之后标志位为0，说明该对象是需要回收的对象
-</span><span class='line'>            if ((bitmapTable[index] & (1 &lt;&lt; offset)) == 0) {
-</span><span class='line'>                heap.release(new Slot(obj.start, obj.size));
-</span><span class='line'>                iterator.remove();
-</span><span class='line'>            }
-</span><span class='line'>        }
-</span><span class='line'>
-</span><span class='line'>        //重置标志位
-</span><span class='line'>        for (int i = 0; i &lt; bitmapTableSize; i++) {
-</span><span class='line'>            bitmapTable[i] = 0;
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>}
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-]]></content>
-  </entry>
+<time datetime="2019-03-26T17:19:43+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
   
-  <entry>
-    <title type="html"><![CDATA[macOS Docker 容器网络代理设置]]></title>
-    <link href="http://linuxlsx.github.io/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/"/>
-    <updated>2017-12-25T10:47:46+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi</id>
-    <content type="html"><![CDATA[<p>最近公司中绝大部分的容器都已经切换到Docker中了，所以准备深入学习下Docker 相关的内容。</p>
-
-<p>在<a href="https://www.docker.com/community-edition">Docker官网</a>下载了最新的Mac版本，然后按照<a href="https://www.amazon.cn/dp/B015QSNIY0/ref=sr_1_2?s=books&amp;ie=UTF8&amp;qid=1514114219&amp;sr=1-2&amp;keywords=%E7%AC%AC%E4%B8%80%E6%9C%ACdocker%E4%B9%A6">第一本Docker书</a> 中逐步学习。不过这本书是基于Docker 1.9 版本编写，最新的Docker Mac 版本已经有了不少的变化, 不过基本的命令还是没有变化的。</p>
-
-<!-- more -->
-
-
-<p>按照书本上的例子，我下载了 ubuntu 的 docker镜像。按照 <code>docker run -i -t ubuntu /bin/bash</code> 的命令进入到容器中。按照示例接下来需要执行<code>apt-get -yqq update</code> 来更新元数据。但是在默认的配置下出现了意外的网络问题。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>root@3511c8b519ea:/# apt-get -yqq update
-</span><span class='line'>W: The repository 'http://security.ubuntu.com/ubuntu xenial-security Release' does not have a Release file.
-</span><span class='line'>W: The repository 'http://archive.ubuntu.com/ubuntu xenial Release' does not have a Release file.
-</span><span class='line'>W: The repository 'http://archive.ubuntu.com/ubuntu xenial-updates Release' does not have a Release file.
-</span><span class='line'>W: The repository 'http://archive.ubuntu.com/ubuntu xenial-backports Release' does not have a Release file.
-</span><span class='line'>E: Failed to fetch http://security.ubuntu.com/ubuntu/dists/xenial-security/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
-</span><span class='line'>E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
-</span><span class='line'>E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-updates/universe/source/Sources  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
-</span><span class='line'>E: Failed to fetch http://archive.ubuntu.com/ubuntu/dists/xenial-backports/main/binary-amd64/Packages  Cannot initiate the connection to 6152:80 (0.0.24.8). - connect (22: Invalid argument)
-</span><span class='line'>E: Some index files failed to download. They have been ignored, or old ones used instead.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在网上搜索了相关资料后，发现是网络代理设置的问题：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>root@3511c8b519ea:/# set | grep proxy
-</span><span class='line'>http_proxy=docker.for.mac.localhost:6152
-</span><span class='line'>https_proxy=docker.for.mac.localhost:6152</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>docker.for.mac.localhost</code> 是从 <strong>17.06</strong> 版本开始引入的一个Mac DNS 名称，会被解析成外部主机的IP。6152 是我设置的代理端口。</p>
-
-<p>要想代理能够生效需要增加一个 <strong>http</strong> 的前缀：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>root@1e9af09f86a4:/# set | grep proxy
-</span><span class='line'>http_proxy=http://docker.for.mac.localhost:6152
-</span><span class='line'>https_proxy=http://docker.for.mac.localhost:6152</span></code></pre></td></tr></table></div></figure>
-
-
-<p>或者直接设置不需要使用代理：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>root@1e9af09f86a4:/# set | grep proxy
-</span><span class='line'>http_proxy=no_proxy
-</span><span class='line'>https_proxy=no_proxy</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样设置完了以后，就可以更新 <strong>apt-get</strong> 的元数据，然后就可以安装想要的工具了。</p>
-
-<h4>参考资料</h4>
-
-<ol>
-<li><a href="https://stackoverflow.com/questions/46632967/docker-apt-get-got-cannot-inititate-the-connection-to-800080-connect">docker apt-get got <code>Cannot inititate the connection to 8000:80 (…) - connect (22: Invalid Argument)</code></a></li>
-<li><a href="https://docs.docker.com/docker-for-mac/networking/#i-cannot-ping-my-containers">Networking features in Docker for Mac</a></li>
-</ol>
-
-]]></content>
-  </entry>
   
-  <entry>
-    <title type="html"><![CDATA[React 实战Part 1]]></title>
-    <link href="http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1/"/>
-    <updated>2016-08-25T21:00:08+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2016/08/25/react-shi-zhan-part-1</id>
-    <content type="html"><![CDATA[<p>React 是由FB开发的一款高性能的前端渲染框架。我们在公司的内部项目中也开始采用React 来替换原有的开发框架。由于前端资源不足，所以自告奋勇提出由自己来完成一部分的前端工作，从此开始接触到React.</p>
-
-<!-- more -->
-
-
-<p>由于我也是刚接触到React, 所以这一篇不讲(其实是讲不出来)什么原理性的东西，只是把我这几天用React 碰到的一些问题给记录下。</p>
-
-<p>首先是推荐一款优秀的前端组件库: <code>antd</code>。是由蚂蚁金服的同学发起并维护的。<a href="http://ant.design/">官网地址</a>。整体设计非常简洁，模块化，用起来非常容易上手。</p>
-
-<p>碰到的第一个问题其实也跟 <code>antd</code> 相关，在表单中使用了表单的 <code>getFieldProps</code> 属性。刚开始也是瞎蒙的，看着示例代码就开搞。在使用了这个属性的同时又设置了 onChange 属性。 如下:</p>
-
-<pre><code>&lt;Select {...getFieldProps('componentId', {
-    initialValue: (PageData.create &amp;&amp; PageData.create.id) ? PageData.create.componentId : '',
-    rules: [
-        {required: true, message: '请选择组件实例分类'},
-        ],
-          )} onChange={this.handleComponentChange}&gt;
-            {
-              this.props.componentDatas.map((o, n)=&gt;{return (
-                &lt;Option value={'' + o.id} key={n}&gt;{o.name}&lt;/Option&gt;
-              )})
-            }
-&lt;/Select&gt;
-</code></pre>
-
-<p>测试过程中碰到的问题就是死活无法选中下拉框中的选项，但是事件又触发了。去掉<code>onChange</code> 属性能够选中选项，但没法处理事件。检查文档发现 <code>getFieldProps</code> 已经包含了<code>id</code> <code>value</code> <code>ref</code> <code>onChange</code> 属性，不能重复设置属性。 所以正确的做法是在 <code>getFieldProps</code> 中指定时间处理函数。</p>
-
-<p>第二个问题跟CodeMirror相关。项目中需要编辑代码，自然想到就是将CodeMirror引入到项目中来。搜索后发现<a href="https://github.com/JedWatson/react-codemirror">react-codemirror</a> 还不错，就引入到项目中。第一次尝试很成功一次就过，但是当同一个页面中出现多个CodeMirror 的实例时会出现 <strong>状态变化后, 只有最底下的一个实例能够响应状态的变更</strong>。这个显然不是我想要的结果。GitHub 项目中的 issue 是个好东西，你碰到过的问题肯定有其他人也碰到过。该项目的
- <a href="https://github.com/JedWatson/react-codemirror/issues/46">issue #46</a> <a href="https://github.com/JedWatson/react-codemirror/issues/47">issue #47</a> <a href="https://github.com/JedWatson/react-codemirror/issues/49">issue #49</a>都提到了这个问题。 这个问题的原因就是 <code>componentWillReceiveProps</code> 这个方法被 <code>debounce</code> 后变成异步执行的了，所有只会有最后一个实例才会收到状态变更的消息。</p>
-
-<p> 解决办法就是将 <code>componentWillReceiveProps</code> 改为同步执行的。目前作者还没有修复这个问题，只能在代码中通过重写这个方法来完成。具体的实现参见 <a href="https://github.com/mozilla-services/react-jsonschema-form/pull/175">解决方案</a></p>
-
-<p>两个问题都不是什么大问题，但是从发现问题到解决问题还是花费了我不少的时间。三个解决问题的经验:</p>
-
-<ul>
-<li>查看文档。文档中通常都会详细的说明一些需要特殊注意的场景，而这些场景往往就是出问题的地方。</li>
-<li>如果是开源项目，那就先检查 issues 中是否已经有过类似的问题了。看是不是可以通过升级版本解决问题。</li>
-<li>再不行的话只能通过万能的 Google 了，前提是要能科学上网。</li>
-</ul>
-
-]]></content>
-  </entry>
   
-  <entry>
-    <title type="html"><![CDATA[缓存设计思路]]></title>
-    <link href="http://linuxlsx.github.io/blog/2016/03/02/huan-cun-she-ji-si-lu/"/>
-    <updated>2016-03-02T22:04:57+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2016/03/02/huan-cun-she-ji-si-lu</id>
-    <content type="html"><![CDATA[<p>无意中读到陈天的<a href="http://mp.weixin.qq.com/s?__biz=MzA3NDM0ODQwMw==&amp;mid=401641618&amp;idx=1&amp;sn=3a6dbb475ceb85a4610e49910443a098&amp;scene=4#wechat_redirect">谈谈系统设计面试</a> 对于其中的一些思想深以为然。看待问题不能只看表象，需要深入的了解问题的背景、原因以及解决问题的预期目标，只有了解了这些以后才能给出一个完整、有效的解决方案。</p>
+</div>
 
-<!-- more -->
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2019/03/21/arts-first-week/" title="Previous Post: ARTS First Week">&laquo; ARTS First Week</a>
+      &nbsp;&nbsp;
+      
+    </div>
+  </footer>
 
 
-<p>以下是我读完后结合自己的实践写一个总结。
-问题: 某个系统出现性能瓶颈, 现在需要你给出一套缓存方案来解决性能问题。</p>
+</article>
 
-<p>步骤1: 了解问题的背景</p>
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
-<pre><code>1. 当前性能情况怎么样。QPS,TPS,RT多少, 数据量有多少.
-2. 当前系统架构如何。是否已经使用缓存
-3. 系能的瓶颈在哪里。是数据库压力大,还是应用服务器压力大
-</code></pre>
 
-<p>步骤2: 了解缓存的对象</p>
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2019 linuxlsx
+  </p>
+</div>
 
-<pre><code>1. 数据是什么类型, 占用多少空间(最小/平均/最大)。不同的空间占用有不同的缓存方案。
-2. 数据的读写比怎样。
-</code></pre>
+</footer>
+    
 
-<p>步骤3: 了解目标</p>
-
-<pre><code>1. 预期的性能是多少。QPS,TPS,RT等   
-2. 能够使用的资源有多少。
-</code></pre>
-
-<p>步骤4: 了解工具</p>
-
-<pre><code>1. 有哪些工具可用。
-2. 这些工具能达到的性能以及适合使用场景
-3. 公司内部是否对这些工具有成熟的运维工具, 否则需要在设计缓存管理的工具
-</code></pre>
-
-<p>步骤5: 提出方案</p>
-
-<pre><code>1. 方案review及修改
-2. 根据方案开始实施
-</code></pre>
-
-<p>步骤6: 方案成果分析</p>
-
-<pre><code>1. 收集方案实施前后的性能数据
-2. 对比性能数据判断方案是否达到预期目标
-</code></pre>
-
-<p>按照这6个步骤执行,一般来说会得到一个理想的结果。</p>
-]]></content>
-  </entry>
+<script type="text/javascript">
+  disqus_shortname = 'linuxlsx';
   
-  <entry>
-    <title type="html"><![CDATA[requireJs 配置可重用]]></title>
-    <link href="http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/"/>
-    <updated>2016-01-15T13:53:16+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong</id>
-    <content type="html"><![CDATA[<p>最近做项目的时候需要配套一个后台界面供运营人员查看相关数据。因为后台应用没有专职的前端, 所以一般的做法是找一套 bootstrap 的模板, 然后再实现具体的逻辑。一般的 javascript 逻辑都是写个每个页面里面的，没什么重用性。想通过模块的方式来实现重用, 需要有个东西来管理模块之间的依赖, 正好有其他的后台应用使用了require.js, 就照样使用了起来。</p>
-
-<!-- more -->
-
-
-<p>具体关于 require.js 的使用介绍网上有很多, 我也看了好几篇, 推荐几篇比较靠谱的:</p>
-
-<ol>
-<li>JavaScript模块化开发系列. <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-basics/">第一篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-commonjs/">第二篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-amd/">第三篇</a> <a href="http://www.feeldesignstudio.com/2013/09/javascript-module-pattern-requirejs/">第4篇</a></li>
-<li>阮一峰的<code>Javascript模块化编程</code>系列. <a href="http://www.ruanyifeng.com/blog/2012/10/javascript_module.html">第一篇</a> <a href="http://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html">第二篇</a> <a href="http://www.ruanyifeng.com/blog/2012/11/require_js.html">第三篇</a></li>
-</ol>
-
-
-<p>学习完了以后对 require.js 以及 AMD 相关的概念有了一定的了解。也达到了模块化开发的目标。这里主要想说明的一个问题是如何使 require.js 的全局配置能达到重用的效果。</p>
-
-<p>这个是我一个页面的JS模块:</p>
-
-<pre><code>requirejs.config({
-    baseUrl : "/assets",
-
-    shim : {
-        "bootstrap" : { "deps" :['jquery'] },
-        "dist" :{"deps" :['bootstrap']},
-        "paginator" : {"deps" : ['jquery']},
-        "menu" :{"deps": ['jquery']}
-    },
-
-    paths: {
-        jquery: 'plugins/jQuery/jQuery-2.1.4.min',
-        bootstrap : 'bootstrap/js/bootstrap.min',
-        dist: 'dist/js/app',
-        paginator : 'plugins/bootstrap-paginator/bootstrap-paginator',
-        menu : 'page/module/menu',
-        pager : 'page/module/simplepager',
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
     }
-});
-require(['jquery', 'bootstrap', 'dist', 'paginator' , 'menu', 'pager'],function($, bootstrap, dist, paginator ,menu, pager){
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
 
-    $(document).ready(function(){
 
-        var init = function(){
-            menu.initMenu();
-            pager.initPager();
-        }
 
-        init();
+
+
+
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'linuxlsx',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
     });
   });
-</code></pre>
-
-<p><code>requirejs.config()</code> 其实是一个全局的配置, 但是按照标准的 requireJs 的引入方法是无法重用这个配置的。 在开始阶段我不得不在每个页面中重复的拷贝这个配置。对于有节操的码农来说这是不可接受的。所以我开始寻找解决重复配置的方法, 终于在<code>stackoverflow</code>上找到了答案。<a href="http://stackoverflow.com/questions/16067042/requirejs-and-common-config">原始的问题链接</a></p>
-
-<p>解决的主要方法就是分开引入。先引入 require.js, 再引入你的全部配置 config.js, 然后在引入你要执行的模块。</p>
-
-<pre><code>//1. 首先引入 require.js
-&lt;script src="http://linuxlsx.github.io/assets/require.js"  type="text/javascript" &gt;&lt;/script&gt;
-//2. 引入全部的配置文件
-&lt;script src="http://linuxlsx.github.io/assets/config.js" type="text/javascript" &gt;&lt;/script&gt;
-
-&lt;script type="text/javascript"&gt;
-    //3. 引入你要执行的模块
-    require(['/assets/page/feedback.js'])
-&lt;/script&gt;
-</code></pre>
-
-<p>通过以上的配置就能减少代码重复了。另外有文章提到可以通过 require.js 的插件机制来达到效果，但是没有找到可行的解决方案。</p>
-
-<h5>参考资料</h5>
-
-<ol>
-<li><a href="http://requirejs.org/">require.js官网</a></li>
-<li><a href="https://github.com/togakangaroo/Blog/blob/master/setting-up-requirejs.md">setting-up-requirejs</a></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[SpringMVC 使用AOP拦截Controller]]></title>
-    <link href="http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/"/>
-    <updated>2016-01-14T19:44:22+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller</id>
-    <content type="html"><![CDATA[<p>最近使用SpringMVC开发一个后台应用, 要求对操作进行权限控制并记录操作日志。这是典型的AOP应用场景, 所以自然而然的想通过 AOP 拦截 SpringMVC 的 Controller 执行来达到想要的效果. 但是在按照之前的配置调试的时候, AOP的拦截代码并没有得到执行。经过几番研究后找到了答案。</p>
-
-<!-- more -->
+  </script>
 
 
-<p>首先因为 SpringMVC 的 Controller 是没有接口的, 但是Spring 默认使用的JDK的动态代理。动态代理会限制必须有接口才行，所以在配置上要指定使用cglib代理。通过以下的配置可以指定 Spring 使用 cglib:</p>
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
 
-<pre><code>&lt;aop:aspectj-autoproxy proxy-target-class="true"/&gt;
-</code></pre>
-
-<p>但是要想达到想要的效果, 这个配置的声明位置还有讲究。这个主要是 Spring 的父子容器访问规则导致的。子容器可以访问父容器中配置的bean, 但是父容器不能访问子容器中的bean .</p>
-
-<p>SpringMVC 实现的时候就是这样一个父子结构。通过 <code>ContextLoaderListener</code> 创建的容器作为父容器。 每个 <code>DispatcherServlet</code> 创建的容器作为子容器。</p>
-
-<p>所以当把上面的申明放到父容器相关的配置文件中的时候, 父容器会尝试寻找切入点, 但是这个时候切入点其实在子容器, 父容器访问不到子容器中的bean, 达不到拦截的效果。</p>
-
-<p>将配置迁移到 子容器相关的配置文件中就能达到拦截的效果。至于 Aspect 的bean 可以配置在父容器中 也可以配置在子容器中。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Synchronized 作用于局部变量]]></title>
-    <link href="http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string/"/>
-    <updated>2015-12-10T20:36:22+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string</id>
-    <content type="html"><![CDATA[<p><code>synchronized</code> 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 <code>synchronized</code> 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式:</p>
-
-<pre><code>1. 对于普通方法, 锁是当前对象的实例
-2. 对于静态同步方法, 锁是当前类的 Class 对象
-3. 对于同步方法块, 锁是 synchronized 括号里面配置的对象
-</code></pre>
-
-<!-- more -->
-
-
-<p>今天代码review 的时候, 发现一个新奇的写法，简化后的代码如下:</p>
-
-<pre><code>public static Object get(String key){
-
-  String syncKey = key + "something else";
-
-  synchronized (syncKey){
-      // 简化的逻辑
-      // obj = map.get(syncKey)
-      // if obj == null
-      //      obj = Provider.get()
-      //      map.put(obj)
-      // return obj
-  }
-}
-</code></pre>
-
-<p>咋一看这跟我们常规的写法不一样，常规的写法 一般是将 <code>syncKey</code> 定义为类的一个属性, 这样能够保证多线程确实是基于同一个对象实例来做同步的。对于这个写法作者的解释是 java 对于String 是做过特殊处理的，值一样的String 是会做缓存的。所以多线程访问的情况下仍然是作用在同一个对象上, 可以达到同步的效果。</p>
-
-<p>对于这个结论是一半对一半不对, 具体能不能达到想要的同步效果，就要看是不是作用在同一个对象实例上。那String 到底是不是同一个对象实例呢？ 那就要从 String 的内存模型说起了。具体详解可以参考<a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java：String</a></p>
-
-<p>所以针对这个示例，其实是不对的。 <code>String syncKey = key + "something else"</code> 每次都返回一个 <code>new String()</code> 对于 <code>synchronized</code> 来说肯定不是同一个对象实例, 所以就达不到同步的效果。但是如果修改成如下的就是可以的:</p>
-
-<pre><code>public static Object get(String key){
-
-  String syncKey = "something else";
-
-  synchronized (syncKey){
-      // 简化的逻辑
-      // obj = map.get(syncKey)
-      // if obj == null
-      //      obj = Provider.get()
-      //      map.put(obj)
-      // return obj
-  }
-}
-</code></pre>
-
-<p><code>String syncKey = "something else";</code> 这样的方式是将 <code>something else</code> 这个字符串保存到了JVM 的字符串常量池中, 并且可以共享。所以多线程访问的时候拿到的都是同一个对象, 就能达到同步的效果。</p>
-
-<p>Java 还有没有能够达到这种效果的对象吗？答案是肯定的, 以下的几种情况得到的都是同一个对象实例:</p>
-
-<pre><code>1. byte(Byte), short(Short), int(Integer), long(Long) 值在[-128,127] 之间
-2. boolean (true or false)
-3. char 值在 ['\u0000' - '\u007f']
-</code></pre>
-
-<p>这个是Java 语言规范中定义的。这些值会在JVM中缓存下来, 每次使用都会返回同一个实例。但是仅限<code>Integer i = 1</code> 这样的方式. 如果是 <code>Integer i = new Integer(1)</code> 的话， 那就是不同的对象了。</p>
-
-<h4>结论</h4>
-
-<p><code>synchronized</code> 将锁标记保存在对象头中, 所以只要对象是同一个就能够达到同步的效果，也不一定要是实例变量。而Java 语言中某些对象实例虽然是局部变量, 但是由于一些性能优化上的考虑, 会对String, Byte,Short,Boolean,Integer,Long 类型的数据做一些优化。</p>
-
-<h4>参考资料</h4>
-
-<ol>
-<li><a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java: String</a></li>
-<li><a href="http://java-performance.info/string-intern-in-java-6-7-8/">String.intern in Java 6, 7 and 8 – string pooling</a></li>
-<li><a href="http://codelog.me/2015/01/20/2015-01-20-string-intern/">深入理解Java String#intern() 内存模型</a></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Jrebel VerifyError]]></title>
-    <link href="http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror/"/>
-    <updated>2015-12-04T15:40:14+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2015/12/04/jrebel-verifyerror</id>
-    <content type="html"><![CDATA[<p>Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手.  但是今天启动应用的时候，报了如下的错误:</p>
-
-<pre><code>Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside of a branch
-Exception Details:
-Location:
-  com/taobao/healthcenter/web/servlet/StatusServlet.&lt;init&gt;(Lcom/zeroturnaround/javarebel/Ge;I[Ljava/lang/Object;)V @11: invokespecial
-Reason:
-  Error exists in the bytecode
-Bytecode:
-  0000000: 04b8 008e c600 0b2a 2b1c 2db7 0113 b112
-  0000010: 771c b800 7dbf                         
-Stackmap Table:
-  same_frame(@15)
-
-  java version : 1.7.0_67
-  jrebel version : 6.0.0
-</code></pre>
-
-<p>Google 发现Jrebel官网已经有人提出了这个问题: <a href="http://zeroturnaround.com/forums/topic/verifyerror-bad-method-call-from-inside-of-a-branch/">VerifyError</a></p>
-
-<!-- more -->
-
-
-<p>根据帖子中提到的<a href="https://bugs.openjdk.java.net/browse/JDK-8051012">JDK Bug</a> 1.7版本最早修复该bug 的版本是 7u72.</p>
-
-<p>根据帖子中提供的方案在JVM参数中添加 <code>-noverify</code> 解决问题。</p>
-
-<h5>Tip</h5>
-
-<p>我其实用 jdk7 和 jrebel 6 已经好久了，为什么今天就碰到这个问题了呢。 通过对比发现是: 之前我都是将 Java 的编译版本设置为了 1.6, 而今天出问题的时候我将编译版本设置成了 1.7, 而jdk7 相比 jdk6 生成的字节码引入了一些功能, 导致 jrebel 修改字节码后会出现一些验证的问题。</p>
-
-<p>原本打算直接升级到 jdk8 的， 但是受限于公司规定的框架只能先升级到 jdk7. 看来还要等会才能在线上使用 lambda 了</p>
-
-<h4>参考资料</h4>
-
-<ol>
-<li><a href="http://chrononsystems.com/blog/java-7-design-flaw-leads-to-huge-backward-step-for-the-jvm">Java 7 Bytecode Verifier: Huge backward step for the JVM</a></li>
-<li><a href="http://stackoverflow.com/questions/300639/use-of-noverify-when-launching-java-apps">Use of -noverify when launching java apps</a></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-</feed>
+</body>
+</html>

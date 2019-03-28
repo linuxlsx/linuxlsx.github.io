@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: 缓存 - 平凡的世界</title>
+  <title>平凡的世界</title>
   <meta name="author" content="linuxlsx">
 
   
-  <meta name="description" content="Category: 缓存">
+  <meta name="description" content="Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手. 但是今天启动应用的时候，报了如下的错误: Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -17,7 +17,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
   
-  <link rel="canonical" href="http://linuxlsx.github.io/blog/categories/huan-cun">
+  <link rel="canonical" href="http://linuxlsx.github.io/posts/2">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
@@ -117,30 +117,63 @@
   </div>
   <div id="main">
     <div class="content">
-      <article role="article">
+      
+<header>
+  <div class="back">　</div>
+  <h1 class="entry-title"><a href="/">平凡的世界</a></h1>
+</header>
+<ul class="blog-index">
   
-  <header>
-    <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
-    <h1 class="entry-title">Category: 缓存</h1>
-  </header>
+    
+    
+      
+      
+    
+    
   
-  <div class="entry-content"><div id="blog-archives" class="category">
+  <li class="entry first-entry">
+    <h2 class="entry-title"><a href="/blog/2015/12/04/jrebel-verifyerror/">Jrebel VerifyError</a></h2>
+    
+      <div class="entry-content"><p>Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手.  但是今天启动应用的时候，报了如下的错误:</p>
 
+<pre><code>Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside of a branch
+Exception Details:
+Location:
+  com/taobao/healthcenter/web/servlet/StatusServlet.&lt;init&gt;(Lcom/zeroturnaround/javarebel/Ge;I[Ljava/lang/Object;)V @11: invokespecial
+Reason:
+  Error exists in the bytecode
+Bytecode:
+  0000000: 04b8 008e c600 0b2a 2b1c 2db7 0113 b112
+  0000010: 771c b800 7dbf                         
+Stackmap Table:
+  same_frame(@15)
 
+  java version : 1.7.0_67
+  jrebel version : 6.0.0
+</code></pre>
 
-  
-  <h1>2016</h1>
-
-<article>
-  <h2 class="entry-title"><a href="/blog/2016/03/02/huan-cun-she-ji-si-lu/">缓存设计思路</a></h2>
-
-</article>
+<p>Google 发现Jrebel官网已经有人提出了这个问题: <a href="http://zeroturnaround.com/forums/topic/verifyerror-bad-method-call-from-inside-of-a-branch/">VerifyError</a></p>
 
 </div>
-</div>
+      
+      
+        <footer>
+          <a rel="full-article" href="/blog/2015/12/04/jrebel-verifyerror/">Read on &rarr;</a>
+        </footer>
+      
+    
+  </li>
   
-</article>
 
+
+  
+</ul>
+<div class="pagination">
+  
+  
+  <a class="next" href="1">Newer &rarr;</a>
+  
+</div>
 
     </div>
     <footer role="contentinfo"><div class="content">
