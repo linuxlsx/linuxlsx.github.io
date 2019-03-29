@@ -9,8 +9,12 @@
   <meta name="author" content="linuxlsx">
 
   
-  <meta name="description" content="在上一篇文章中介绍了标记-清除法的实现，这边接着来讲引用计数法的实现 文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。 引用计数法 引用计数法是George E.Colins 在1960年提出来的。主要思想是: 1
-让每个对象都记录下被多个其他对象引用的数量， &hellip;">
+  <meta name="description" content="ARTS 第2周 Algorithm 本周完成的算法题: Valid Sudoku 题目要求: 1
+2
+3
+4
+5
+通过二维数组定义了9x9的数独库，这个数独库的某些位置会被数字填充，其他地方填充'.'，现在需要你来验证这个数独库是否合法的。有效数独的规则如下: 1. 每一行都是1-9不重复的数字 &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -78,6 +82,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/03/29/arts-week-two/">Arts-week-two</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">垃圾回收的算法与实现读书笔记-引用计数法</a>
       </li>
     
@@ -91,10 +99,6 @@
     
       <li class="post">
         <a href="/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">垃圾回收的算法与实现读书笔记-标记清除算法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/">macOS Docker 容器网络代理设置</a>
       </li>
     
   </ul>
@@ -133,30 +137,49 @@
     
   
   <li class="entry first-entry">
-    <h2 class="entry-title"><a href="/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">垃圾回收的算法与实现读书笔记-引用计数法</a></h2>
+    <h2 class="entry-title"><a href="/blog/2019/03/29/arts-week-two/">Arts-week-two</a></h2>
     
-      <div class="entry-content"><p>在<a href="http://linuxlsx.top/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">上一篇文章</a>中介绍了<code>标记-清除法</code>的实现，这边接着来讲<code>引用计数法</code>的实现</p>
+      <div class="entry-content"><h1>ARTS 第2周</h1>
 
-<p>文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。</p>
+<h2>Algorithm</h2>
 
-<h1>引用计数法</h1>
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/valid-sudoku/">Valid Sudoku</a></p>
 
-<p><code>引用计数法</code>是George E.Colins 在1960年提出来的。主要思想是:</p>
+<p>题目要求:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="err">让每个对象都记录下被多个其他对象引用的数量，当没有其他对象引用时，就可以让该对象被回收。</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>通过二维数组定义了9x9的数独库，这个数独库的某些位置会被数字填充，其他地方填充'.'，现在需要你来验证这个数独库是否合法的。有效数独的规则如下:
+</span><span class='line'>
+</span><span class='line'>1. 每一行都是1-9不重复的数字
+</span><span class='line'>2. 每一列都是1-9不重复的数字
+</span><span class='line'>3. 每一个3x3的小方格中也是1-9不重复的数字</span></code></pre></td></tr></table></div></figure>
 
 
-<p>引用计数算法理解起来比较简单。首先来看下伪代码</p>
+
 
 </div>
       
       
         <footer>
-          <a rel="full-article" href="/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">Read on &rarr;</a>
+          <a rel="full-article" href="/blog/2019/03/29/arts-week-two/">Read on &rarr;</a>
         </footer>
       
+    
+  </li>
+  
+
+
+  
+    
+    
+    
+  
+  <li class="entry ">
+    <h2 class="entry-title"><a href="/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">垃圾回收的算法与实现读书笔记-引用计数法</a></h2>
     
   </li>
   
@@ -253,18 +276,6 @@
   
   <li class="entry ">
     <h2 class="entry-title"><a href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/">SpringMVC 使用AOP拦截Controller</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2015/12/10/synchronized-local-variable-string/">Synchronized 作用于局部变量</a></h2>
     
   </li>
   

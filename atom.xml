@@ -4,7 +4,7 @@
   <title><![CDATA[平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-03-28T22:35:10+08:00</updated>
+  <updated>2019-03-29T21:27:46+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -12,6 +12,285 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Arts-week-two]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/03/29/arts-week-two/"/>
+    <updated>2019-03-29T21:25:12+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/03/29/arts-week-two</id>
+    <content type="html"><![CDATA[<h1>ARTS 第2周</h1>
+
+<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/valid-sudoku/">Valid Sudoku</a></p>
+
+<p>题目要求:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>通过二维数组定义了9x9的数独库，这个数独库的某些位置会被数字填充，其他地方填充'.'，现在需要你来验证这个数独库是否合法的。有效数独的规则如下:
+</span><span class='line'>
+</span><span class='line'>1. 每一行都是1-9不重复的数字
+</span><span class='line'>2. 每一列都是1-9不重复的数字
+</span><span class='line'>3. 每一个3x3的小方格中也是1-9不重复的数字</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p><strong>分析:</strong></p>
+
+<p>要完成有效性的判定，双重循环遍历是肯定要的。我们需要考虑的是如何只使用双重循环就把所有事情搞定。通过对矩阵的观察，我们发现有以下的规律:</p>
+
+<ul>
+<li>当我们访问<code>soduku[i][j]</code>，通过转换顺序<code>soduku[j][i]</code>，这样可以同时访问一行、一列。</li>
+<li>可以通过 <code>(i / 3) 和 (j / 3)</code>得到一个<code>3x3</code>小方格，同时通过<code>(i % 3) * 3 + j % 3</code>计算出<code>sudoku[i][j]</code>在小方格中的位置。</li>
+</ul>
+
+
+<p>通过以上两个规律，我们就可以在<code>n * n</code>次循环中得出是否合法的结果。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValidSudoku</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//实现的比较挫，这里定了9个数组用来代表9个 3x3的小方格</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect0</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect1</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect2</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect3</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect4</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect5</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect6</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect7</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>        <span class="kt">char</span><span class="o">[]</span> <span class="n">rect8</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="kt">char</span><span class="o">[]&gt;</span> <span class="n">maps</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;0_0&quot;</span><span class="o">,</span> <span class="n">rect0</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;0_1&quot;</span><span class="o">,</span> <span class="n">rect1</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;0_2&quot;</span><span class="o">,</span> <span class="n">rect2</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;1_0&quot;</span><span class="o">,</span> <span class="n">rect3</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;1_1&quot;</span><span class="o">,</span> <span class="n">rect4</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;1_2&quot;</span><span class="o">,</span> <span class="n">rect5</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;2_0&quot;</span><span class="o">,</span> <span class="n">rect6</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;2_1&quot;</span><span class="o">,</span> <span class="n">rect7</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">maps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;2_2&quot;</span><span class="o">,</span> <span class="n">rect8</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="kt">char</span><span class="o">[]</span> <span class="n">hor_array</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>            <span class="kt">char</span><span class="o">[]</span> <span class="n">ver_array</span> <span class="o">=</span> <span class="o">{</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">,</span><span class="sc">&#39;.&#39;</span><span class="o">};</span>
+</span><span class='line'>            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="c1">//行</span>
+</span><span class='line'>                <span class="kt">char</span> <span class="n">hor_char</span> <span class="o">=</span> <span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+</span><span class='line'>                <span class="c1">//列</span>
+</span><span class='line'>                <span class="kt">char</span> <span class="n">ver_char</span> <span class="o">=</span> <span class="n">board</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c1">//如果第一次出现，则把对应的位置替换为对应的内容</span>
+</span><span class='line'>                <span class="c1">//如果第二次出现，那么内容就不是初始值了，可以认定是invalid</span>
+</span><span class='line'>                <span class="k">if</span><span class="o">(</span><span class="n">hor_char</span> <span class="o">!=</span> <span class="sc">&#39;.&#39;</span><span class="o">){</span>
+</span><span class='line'>                    <span class="k">if</span><span class="o">(</span><span class="n">hor_array</span><span class="o">[</span><span class="n">hor_char</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="sc">&#39;.&#39;</span><span class="o">){</span>
+</span><span class='line'>                        <span class="n">hor_array</span><span class="o">[</span><span class="n">hor_char</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">hor_char</span><span class="o">;</span>
+</span><span class='line'>                    <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>                    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>                    <span class="c1">//计算当前位置所属的小方格</span>
+</span><span class='line'>                    <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="o">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">3</span><span class="o">)</span> <span class="o">+</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">j</span> <span class="o">/</span> <span class="mi">3</span><span class="o">);</span>
+</span><span class='line'>                    <span class="c1">//int index = (i % 3) * 3 + j % 3;</span>
+</span><span class='line'>                    <span class="kt">char</span><span class="o">[]</span> <span class="n">rect</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+</span><span class='line'>                    <span class="k">if</span> <span class="o">(</span><span class="n">rect</span><span class="o">[</span><span class="n">hor_char</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="sc">&#39;.&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="n">rect</span><span class="o">[</span><span class="n">hor_char</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="n">hor_char</span><span class="o">;</span>
+</span><span class='line'>                    <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>                    <span class="o">}</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">if</span><span class="o">(</span><span class="n">ver_char</span> <span class="o">!=</span> <span class="sc">&#39;.&#39;</span><span class="o">){</span>
+</span><span class='line'>                    <span class="k">if</span><span class="o">(</span><span class="n">ver_array</span><span class="o">[</span><span class="n">ver_char</span> <span class="o">-</span> <span class="mi">49</span><span class="o">]</span> <span class="o">==</span> <span class="sc">&#39;.&#39;</span><span class="o">){</span>
+</span><span class='line'>                        <span class="n">ver_array</span><span class="o">[</span><span class="n">ver_char</span> <span class="o">-</span> <span class="mi">49</span><span class="o">]</span> <span class="o">=</span> <span class="n">ver_char</span><span class="o">;</span>
+</span><span class='line'>                    <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>                    <span class="o">}</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>实现思路上算是正确的，但不是最优的哈。最优代码参考:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * 最快的版本。 10ms  beats 100%。</span>
+</span><span class='line'><span class="cm"> * 对于每个横、竖和3x3 进行 `|` 操作，这样通过 `&amp;`操作就能知道这个数字是否重复过。</span>
+</span><span class='line'><span class="cm"> * @param board</span>
+</span><span class='line'><span class="cm"> * @return</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValidSudokuFastest</span><span class="o">(</span><span class="kt">char</span><span class="o">[][]</span> <span class="n">board</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">[]</span> <span class="n">vset</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">[</span><span class="mi">9</span><span class="o">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">[]</span> <span class="n">hset</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">[</span><span class="mi">9</span><span class="o">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">[]</span> <span class="n">bckt</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">[</span><span class="mi">9</span><span class="o">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">!=</span> <span class="sc">&#39;.&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">idx</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="o">(</span><span class="n">board</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="o">)</span> <span class="o">;</span>
+</span><span class='line'>                <span class="k">if</span> <span class="o">((</span><span class="n">hset</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&amp;</span> <span class="n">idx</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span>
+</span><span class='line'>                        <span class="o">(</span><span class="n">vset</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&amp;</span> <span class="n">idx</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span>
+</span><span class='line'>                        <span class="o">(</span><span class="n">bckt</span><span class="o">[(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">3</span><span class="o">)</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">j</span> <span class="o">/</span> <span class="mi">3</span><span class="o">]</span> <span class="o">&amp;</span> <span class="n">idx</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>                <span class="n">hset</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">|=</span> <span class="n">idx</span><span class="o">;</span>
+</span><span class='line'>                <span class="n">vset</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">|=</span> <span class="n">idx</span><span class="o">;</span>
+</span><span class='line'>                <span class="n">bckt</span><span class="o">[(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">3</span><span class="o">)</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">j</span> <span class="o">/</span> <span class="mi">3</span><span class="o">]</span> <span class="o">|=</span> <span class="n">idx</span><span class="o">;</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://medium.com/s/story/the-law-of-two-thirds-cfad7c4d42eb">A Technique for Deciding When to Say No</a></p>
+
+<p><code>人不能完成所有事情，所以我们需要对要做的事情，想要的东西做取舍。当你选择某些项的时候，也就舍弃了其他的</code></p>
+
+<p>文章中提出了一个<code>2-3</code>法则，就是说在3个关键要素中，你只能同时选择两个。比如：质量、速度和价格，只能选择两个。如果你想要质量和速度，那么价格必然就贵；你想要低价同时也想保持质量，那么速度必然受到影响；你想要低价和速度，那么质量就无法保证。</p>
+
+<p>这个观点和我们程序员熟悉的<code>CAP</code>理论有异曲同工之妙，同样的三个要素，不可兼得。</p>
+
+<p>那么怎么样来进行选择呢？那么首先要弄明白的是你想要的到底是什么？这里要记住：<code>你是不可能做所有事情，得到所有东西的</code>。</p>
+
+<p>对于生活，一定不要让自己时时处于忙碌的状态，忙碌意味着你不知道你想要的是什么，你不知道对什么说<strong>不</strong>，所以你的时间被无关的事情给占有了。</p>
+
+<h2>Tip</h2>
+
+<p><strong>在数据量大的情况下，任何系统的性能隐患都被放大直到系统崩溃。</strong></p>
+
+<p>在本周有一个算法同学写了一段类似如下的大数据处理SQL：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='SQL'><span class='line'><span class="k">select</span> <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">,</span> <span class="n">process</span><span class="p">(</span><span class="n">col4</span><span class="p">,</span> <span class="k">map</span><span class="p">(</span><span class="s1">&#39;{1,2,3,4,5}&#39;</span><span class="p">))</span> <span class="k">from</span> <span class="n">table_a</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>SQL 很简单，<code>process</code> 和 <code>map</code>都是自定的函数。其中<code>map</code>函数会将参数转化成一个map结构。但是在实际运行的时候发现性能很差，100亿条数据执行了9个多小时。他找我帮他看看问题在哪里？</p>
+
+<p>问题其实就是<code>map</code>函数导致的，这个sql每处理一条数据就会调用<code>map</code>函数，就会创建一个新对象。同时因为参数比较长，会多次触发map的扩容，导致整个SQL执行99%以上的时间其实在创建map和扩容中。</p>
+
+<p>当修改实现改成使用缓存以后，性能溜得飞起，只要了<strong>4分钟</strong>就完成了。</p>
+
+<p>在大数据环境下，对象的创建其实是很昂贵的操作。所以像<code>Hadoop</code>这样的大数据框架才会设计成对象复用。</p>
+
+<h2>Share</h2>
+
+<p><a href="http://linuxlsx.top/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">GC算法-引用计数法</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[垃圾回收的算法与实现读书笔记-引用计数法]]></title>
