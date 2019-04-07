@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Arts | 平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/blog/categories/arts/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-04-07T23:57:57+08:00</updated>
+  <updated>2019-04-08T00:04:31+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -12,6 +12,159 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Arts-week-three]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/04/08/arts-week-three/"/>
+    <updated>2019-04-08T00:00:13+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/04/08/arts-week-three</id>
+    <content type="html"><![CDATA[<h1>Algorithm</h1>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/combination-sum/">Combination Sum</a></p>
+
+<p>题目要求:</p>
+
+<pre><code>给定一个不重复的数组(candidates)，以及一个目标(target)，从candidates找到所有的不重复的组合使得他们的和等于target。
+
+Note:
+1. 所有的数字都是正整数
+2. 同一个数字可以无限次的重复使用
+</code></pre>
+
+<!--more-->
+
+
+<p><strong>分析:</strong></p>
+
+<p>这题可以通过回溯法来解决，通过递归下降多次遍历数组来寻找满足条件的组合。</p>
+
+<pre><code class="Java">public class CombinationSum {
+
+    public List&lt;List&lt;Integer&gt;&gt; combinationSum(int[] candidates, int target) {
+
+        List&lt;List&lt;Integer&gt;&gt; lists = new ArrayList&lt;&gt;(8);
+
+        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+        stack.ensureCapacity(candidates.length);
+        calc(candidates, target, 0,new Stack&lt;&gt;(), lists);
+
+        return lists;
+    }
+
+    /**
+     * 递归下降深度优先遍历。 算法复杂度 O((n^2 + n) / 2)
+     * 最终结果是 6ms  beats 92%
+     *
+     * 分析了排在更前面的实现，发现主要的差异就是他们用List替代了Stack
+     * 来保存中间状态，这样可以减少一个subList的操作。基本上可以到2ms
+     *
+     * @param candidates
+     * @param target
+     * @param start
+     * @param stack         需要使用栈来保存中间状态。
+     * @param lists
+     */
+    private void calc(int[] candidates, int target, int start, Stack&lt;Integer&gt; stack, List&lt;List&lt;Integer&gt;&gt; lists){
+
+        for (int i = start; i &lt; candidates.length; i++) {
+
+            if(candidates[i] &gt; target){
+                continue;
+            }
+
+            stack.push(candidates[i]);
+            if(candidates[i] == target){
+                List&lt;Integer&gt; l = new ArrayList&lt;&gt;(stack.size());
+                l.addAll(stack.subList(0, stack.size()));
+                lists.add(l);
+            }else if(candidates[i] &lt; target) {
+                calc(candidates, target - candidates[i], i ,stack , lists);
+            }
+            stack.pop();
+        }
+    }
+}    
+</code></pre>
+
+<h1>Review</h1>
+
+<p>本周Review <a href="https://medium.com/netflix-techblog/building-and-scaling-data-lineage-at-netflix-to-improve-data-infrastructure-reliability-and-1a52526a7977">Building and Scaling Data Lineage at Netflix to Improve Data Infrastructure Reliability, and Efficiency</a></p>
+
+<p>本文是Netflix的一篇技术文章。讲述了Netflix内部是如何构建一个数据链路关系系统的。</p>
+
+<p>公司从小到大的过程中，一定会伴随着数据越来越多，数据链路越来越复杂。很快就没有人能够了解数据全貌了。文章开篇提了三个场景:</p>
+
+<ul>
+<li>假设你是一个决策者，当你要根据数据看报做一个关键决策时，是否可以自己去验证下看报背后的数据到底是什么</li>
+<li>假设你是一个开发者，当你决定要修改你提供的服务的数据结构时，是否可以知道哪些下游会受到影响</li>
+<li>假设你现在负责平台的可靠性，你的任务是主动监测上游任务的问题，提前给数据作业owner报警。你要设计一个SLA预警系统，需要用到上下游数据依赖以及历史状态数据。<code>(Finally, imagine yourself in the role of a data platform reliability engineer tasked with providing advanced lead time to data pipeline (ETL) owners by proactively identifying issues upstream to their ETL jobs. You are designing a learning system to forecast Service Level Agreement (SLA) violations and would want to factor in all upstream dependencies and corresponding historical states)</code></li>
+</ul>
+
+
+<p>要满足以上的需求，就需要有一个 <code>complete and accurate data lineage system</code>。</p>
+
+<p>自由和责任是Netflix内部文化的重要部分。核心思想是你可以自由的选择实现方式，但是要为其负责。同样这样的自由也会导致公司内部技术栈的多样性，同样也会带来更多的负责度。作者就面临这样的问题。以下是Netflix 的一个<code>Data Landscape</code>。</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1400/0*gYI3uCywVhSrcoRo" alt="Data Landscape" /></p>
+
+<p>为了满足Netflix内部多样化的数据，<code>Data Lineage</code>有以下的几个设计原则：</p>
+
+<ul>
+<li><code>Ensure data integrity</code> 数据完整性。 需要精确完整的保存数据关系来建立用户的信心。一个不完全可行系统带来伤害可能多过好处。</li>
+<li><code>Enable seamless intergration</code> 无缝接入。需要能够满足新的数据工具快速接入。</li>
+<li><code>Design a flexible data model</code> 灵活的数据结构。使用一个通用灵活的数据模型来表示不同的数据来源。</li>
+</ul>
+
+
+<p>最终的系统实现图如下：</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/2600/0*Xp1KHPFm1R7GZGAI" alt="系统实现图" /></p>
+
+<p>解释下这个图：</p>
+
+<p>首先左侧是数据接入层，每个业务系统都有它自己独立数据处理逻辑，独立的数据模型。所以在使用之前需要统一进行转换。</p>
+
+<p>中间一层就是数据转换层，转换层将所有收集上来的数据进行转换，统一用点和边的图模式表达。数据转换完毕后会将数据存储到图数据库中。</p>
+
+<p>右侧就是数据存储和服务层。在数据之上建立了的REST服务层，对外提供数据服务。</p>
+
+<h1>Tip</h1>
+
+<p>在Java中很多情况需要对一些特殊字符做一些转义。那么一般的写法就是为罗列出所有的需要进行替换的字符，然后不停的调用replace。比如像下面的代码：</p>
+
+<pre><code class="Java">keyword.replace("\\", "\\\\").replace("*", "\\*")
+                .replace("+", "\\+").replace("|", "\\|")
+                .replace("{", "\\{").replace("}", "\\}")
+                .replace("(", "\\(").replace(")", "\\)")
+                .replace("^", "\\^").replace("$", "\\$")
+                .replace("[", "\\[").replace("]", "\\]")
+                .replace("?", "\\?").replace(",", "\\,")
+                .replace(".", "\\.").replace("&amp;", "\\&amp;")
+                .replace("-", "\\-");
+</code></pre>
+
+<p>这样写虽然能够完成需求，但是不太优雅。在Java的正则表达式中实际是可以支持类似<code>$0 $1</code>这样的占位符的。那么像<code>.replace("[", "\\[")</code> 可以改写成 <code>.replace("[", "\\$0")</code>。</p>
+
+<p>在这个实现中，<code>$0</code> 代表的是整个正则的匹配结果，<code>$1 $2...$n</code> 代表的是从1-n的捕获组的内容。</p>
+
+<p>具体的捕获组的介绍可以参考：<a href="https://blog.csdn.net/just4you/article/details/70767928">正则表达式的捕获组(capture group)在Java中的使用</a></p>
+
+<p>上面的语句改成类似形式的案例：</p>
+
+<pre><code class="Java">String s = "\\*+|{}^$[]?,.&amp;-";
+System.out.println(s);
+System.out.println(s.replaceAll("[\\\\\\*\\+\\|\\{\\}\\(\\)\\^\\$\\[\\]\\?\\,\\.\\&amp;\\-]", "\\\\$0"));
+
+//输出
+\*+|{}^$[]?,.&amp;-
+\\\*\+\|\{\}\^\$\[\]\?\,\.\&amp;\-
+</code></pre>
+
+<h1>Share</h1>
+
+<p><a href="http://linuxlsx.top/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">GC算法-复制算法</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Arts-week-two]]></title>

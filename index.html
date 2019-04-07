@@ -9,7 +9,14 @@
   <meta name="author" content="linuxlsx">
 
   
-  <meta name="description" content="　 平凡的世界 垃圾回收的算法与实现读书笔记-复制算法 在上一篇文章中介绍了引用计数法的实现，这边接着来讲复制算法的实现 文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。 复制算法 GC复制算法是Marvin L. Minsky在1963年研究出来的算法。 &hellip;">
+  <meta name="description" content="Algorithm 本周完成的算法题: Combination Sum 题目要求: 1
+2
+3
+4
+5
+给定一个不重复的数组(candidates)，以及一个目标(target)，从candidates找到所有的不重复的组合使得他们的和等于target。 Note:
+1. 所有的数字都是正整数
+2 &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -77,6 +84,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/04/08/arts-week-three/">Arts-week-three</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">垃圾回收的算法与实现读书笔记-复制算法</a>
       </li>
     
@@ -90,10 +101,6 @@
     
       <li class="post">
         <a href="/blog/2019/03/21/arts-first-week/">ARTS First Week</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/">关键词匹配算法调研</a>
       </li>
     
   </ul>
@@ -132,503 +139,47 @@
     
   
   <li class="entry first-entry">
-    <h2 class="entry-title"><a href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">垃圾回收的算法与实现读书笔记-复制算法</a></h2>
+    <h2 class="entry-title"><a href="/blog/2019/04/08/arts-week-three/">Arts-week-three</a></h2>
     
-      <div class="entry-content"><p>在<a href="http://linuxlsx.top/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">上一篇文章</a>中介绍了<code>引用计数法</code>的实现，这边接着来讲<code>复制算法</code>的实现</p>
+      <div class="entry-content"><h1>Algorithm</h1>
 
-<p>文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。</p>
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/combination-sum/">Combination Sum</a></p>
 
-<h1>复制算法</h1>
+<p>题目要求:</p>
 
-<p>GC复制算法是<code>Marvin L. Minsky</code>在1963年研究出来的算法。该算法会将整个堆分成两个区域：<code>from area</code> 和 <code>to area</code>。这两个空间的大小一样。GC复制算法利用from区做分配，当from区满了以后，会将存活的对象全部复制到to区，当复制完成以后会将from区和to区互换，这样整体的GC也就结束了。下图描述了整体的一个概要:</p>
-
-<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E6%A6%82%E8%A6%81.png?x-oss-process=style/black" alt="复制算法概要" /></p>
-
-<h2>算法实现</h2>
-
-<p>用Java来模拟复制算法有个难点是：因为Java的参数是值传递，所以在复制对象的时候需要更新原来对象的引用，但是这个不引入辅助的情况下是比较难的。所以我们先来通过图解了解下整个GC算法的一个过程。</p>
-
-<p>首先假设现在堆中对象结构如下图所示：</p>
-
-<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%B8%80%E6%AD%A5.png?x-oss-process=style/black" alt="初始状态" /></p>
-
-<p>根引用<strong>A</strong>，<strong>A</strong>同时引用了<strong>C</strong>和<strong>D</strong>，<strong>B</strong>没有引用来源，所以是需要被回收的对象。复制算法的回收是从根开始的，所有能够从根到达的对象都是活的对象，需要被复制。</p>
-
-<p>首先对象A被复制，生成了<strong>A'</strong>。因为<strong>A</strong>有引用其他的对象，所以新生成的<strong>A'</strong>也会引用到这些对象。但是需要注意的是这些对象现在都还在from区域，所以<strong>A'</strong>持有指向from区域的引用，如下图所示：</p>
-
-<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%BA%8C%E6%AD%A5.png?x-oss-process=style/black" alt="复制A" /></p>
-
-<p>接着会将<strong>A</strong>对象标记为<code>COPIED</code>，如下图所示：</p>
-
-<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%B8%89%E6%AD%A5.png?x-oss-process=style/black" alt="复制A第二步" /></p>
-
-<p>接着会把<strong>A</strong>引用的对象<strong>C</strong>和<strong>D</strong>都copy到to区域，同时原对象都标记为<code>COPIED</code>。同时将根的引用切换到<strong>A'</strong>，变成了如下图所示的情况：</p>
-
-<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E5%9B%9B%E6%AD%A5.png?x-oss-process=style/black" alt="复制A的子对象" /></p>
-
-<p>最后将from区里面的对象全部清理掉，并将from和to区域交换，就完成了一次GC的过程。</p>
-
-<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%BA%94%E6%AD%A5.png?x-oss-process=style/black" alt="完成GC" /></p>
-
-<h3>代码模拟实现</h3>
-
-<p>首先对于<code>Obj</code>对象需要增加一个<code>copied</code>的标记来方式对象被重复的复制。</p>
-
-<p>GC复制算法使用的堆对象比前面提到的<code>标记-清除</code>和<code>引用计数</code>都简单，因为在内存中都是连续分配的，所以也不需要指定分配策略。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CopyHeap</span> <span class="o">{</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>给定一个不重复的数组(candidates)，以及一个目标(target)，从candidates找到所有的不重复的组合使得他们的和等于target。
 </span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * from 区域的起始位置。在完成一个copying后，</span>
-</span><span class='line'><span class="cm">     * fromStart 和 toStart的值会进行互换</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="n">fromStart</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * to 区域的起始位置。</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="n">toStart</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 表明当前空闲内存的起始位置。</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="n">free</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 表明实际可用的大小</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">MAXIMUM_CAPACITY</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="nf">CopyHeap</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 因为Copy算法是连续分配的，所以不需要确定分配策略</span>
-</span><span class='line'><span class="cm">     * @param size</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="nf">CopyHeap</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">realSize</span> <span class="o">=</span> <span class="n">calcPowSize</span><span class="o">(</span><span class="n">size</span><span class="o">);</span>
-</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">size</span> <span class="o">=</span> <span class="n">realSize</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">fromStart</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">toStart</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">size</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">free</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 将数据Copy 到 TO 区块。简单的实现为增加空闲内存的起始位置</span>
-</span><span class='line'><span class="cm">     * @param size</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">copyData</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">){</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="n">free</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">free</span> <span class="o">+=</span> <span class="n">size</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">start</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 判断是否有足够的内存来满足对象分配</span>
-</span><span class='line'><span class="cm">     * @param size</span>
-</span><span class='line'><span class="cm">     * @return</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">hasEnoughMemory</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">){</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">free</span> <span class="o">+</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">size</span> <span class="o">+</span> <span class="n">fromStart</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 每次copying完成以后，互换fromStart 和 toStart</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">swap</span><span class="o">(){</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">fromStart</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">fromStart</span> <span class="o">=</span> <span class="n">toStart</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">toStart</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="nf">calcPowSize</span><span class="o">(</span><span class="kt">int</span> <span class="n">cap</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">cap</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">n</span> <span class="o">|=</span> <span class="n">n</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">n</span> <span class="o">|=</span> <span class="n">n</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">n</span> <span class="o">|=</span> <span class="n">n</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">4</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">n</span> <span class="o">|=</span> <span class="n">n</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">8</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">n</span> <span class="o">|=</span> <span class="n">n</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">16</span><span class="o">;</span>
-</span><span class='line'>        <span class="k">return</span> <span class="o">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="n">MAXIMUM_CAPACITY</span><span class="o">)</span> <span class="o">?</span> <span class="n">MAXIMUM_CAPACITY</span> <span class="o">:</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>Note:
+</span><span class='line'>1. 所有的数字都是正整数
+</span><span class='line'>2. 同一个数字可以无限次的重复使用</span></code></pre></td></tr></table></div></figure>
 
 
-<p>GC复制算法本身实现也比较简单，主要注意的地方就是要考虑Java的值传递的问题，所以在实现的时候做了一个小的改造，就是只是将原对象的起始地址修改下，以此来表示对象已经被复制了。否则要在Java中实现引用传递还是比较麻烦的。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CopyAlgo</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">private</span> <span class="n">CopyHeap</span> <span class="n">heap</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 表示GC 的根</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">CopyObj</span><span class="o">&gt;</span> <span class="n">roots</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="nf">CopyAlgo</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">heap</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CopyHeap</span><span class="o">(</span><span class="n">size</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 创建对象</span>
-</span><span class='line'><span class="cm">     * @param size</span>
-</span><span class='line'><span class="cm">     * @return</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="n">CopyObj</span> <span class="nf">newObj</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(!</span><span class="n">heap</span><span class="o">.</span><span class="na">hasEnoughMemory</span><span class="o">(</span><span class="n">size</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">copying</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="k">if</span> <span class="o">(!</span><span class="n">heap</span><span class="o">.</span><span class="na">hasEnoughMemory</span><span class="o">(</span><span class="n">size</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;Copy GC Fail Heap total(%d) used(%d)&quot;</span><span class="o">,</span> <span class="n">heap</span><span class="o">.</span><span class="na">size</span><span class="o">,</span> <span class="n">heap</span><span class="o">.</span><span class="na">free</span><span class="o">));</span>
-</span><span class='line'>                <span class="k">throw</span> <span class="k">new</span> <span class="nf">OutOfMemoryError</span><span class="o">(</span><span class="s">&quot;------ oh, out of memory! ------&quot;</span><span class="o">);</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">copyObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CopyObj</span><span class="o">(</span><span class="n">size</span><span class="o">,</span> <span class="n">heap</span><span class="o">.</span><span class="na">free</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">heap</span><span class="o">.</span><span class="na">free</span> <span class="o">+=</span> <span class="n">size</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">copyObj</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 开始进行复制</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">copying</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">oldSize</span> <span class="o">=</span> <span class="n">heap</span><span class="o">.</span><span class="na">free</span> <span class="o">-</span> <span class="n">heap</span><span class="o">.</span><span class="na">fromStart</span><span class="o">;</span>
-</span><span class='line'>        <span class="c1">//将当前空闲内存的起始位置置为to区域的起始位置</span>
-</span><span class='line'>        <span class="n">heap</span><span class="o">.</span><span class="na">free</span> <span class="o">=</span> <span class="n">heap</span><span class="o">.</span><span class="na">toStart</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//从根节点开始递归的进行复制</span>
-</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">CopyObj</span> <span class="n">root</span> <span class="o">:</span> <span class="n">roots</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">copy</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//交互from 和 to</span>
-</span><span class='line'>        <span class="n">heap</span><span class="o">.</span><span class="na">swap</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;Copy GC End. Heap before(%d) now(%d)&quot;</span><span class="o">,</span> <span class="n">oldSize</span><span class="o">,</span> <span class="n">heap</span><span class="o">.</span><span class="na">free</span> <span class="o">-</span> <span class="n">heap</span><span class="o">.</span><span class="na">fromStart</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">copy</span><span class="o">(</span><span class="n">CopyObj</span> <span class="n">copyObj</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//复制对象，在目标区域中申请同样大小的内存</span>
-</span><span class='line'>        <span class="n">copyData</span><span class="o">(</span><span class="n">copyObj</span><span class="o">);</span>
-</span><span class='line'>        <span class="c1">//将复制标记为置为true</span>
-</span><span class='line'>        <span class="n">copyObj</span><span class="o">.</span><span class="na">copied</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//开始复制引用的对象</span>
-</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">Obj</span> <span class="n">child</span> <span class="o">:</span> <span class="n">copyObj</span><span class="o">.</span><span class="na">children</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">CopyObj</span> <span class="n">obj</span> <span class="o">=</span> <span class="o">(</span><span class="n">CopyObj</span><span class="o">)</span> <span class="n">child</span><span class="o">;</span>
-</span><span class='line'>            <span class="n">copy</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">copyData</span><span class="o">(</span><span class="n">CopyObj</span> <span class="n">copyObj</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="c1">//因为Java的参数传递均为值传递，所以为了不影响上层的使用</span>
-</span><span class='line'>        <span class="c1">//这里均实现为修改对象的起始位置。</span>
-</span><span class='line'>        <span class="n">copyObj</span><span class="o">.</span><span class="na">start</span> <span class="o">=</span> <span class="n">heap</span><span class="o">.</span><span class="na">copyData</span><span class="o">(</span><span class="n">copyObj</span><span class="o">.</span><span class="na">size</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * 把对象置为根节点</span>
-</span><span class='line'><span class="cm">     *</span>
-</span><span class='line'><span class="cm">     * @param obj 根对象</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">makeItToRoot</span><span class="o">(</span><span class="n">CopyObj</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">roots</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">removeFromRoot</span><span class="o">(</span><span class="n">CopyObj</span> <span class="n">obj</span><span class="o">){</span>
-</span><span class='line'>        <span class="n">roots</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
 
 
-<p>最后看一个实例:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GcUseCaseByCopyAlgo</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">CopyAlgo</span> <span class="n">copyAlgo</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CopyAlgo</span><span class="o">(</span><span class="mi">32</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">first</span> <span class="o">=</span> <span class="n">copyAlgo</span><span class="o">.</span><span class="na">newObj</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">second</span> <span class="o">=</span> <span class="n">copyAlgo</span><span class="o">.</span><span class="na">newObj</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">copyAlgo</span><span class="o">.</span><span class="na">makeItToRoot</span><span class="o">(</span><span class="n">first</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">copyAlgo</span><span class="o">.</span><span class="na">makeItToRoot</span><span class="o">(</span><span class="n">second</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">firstChildOne</span> <span class="o">=</span> <span class="n">copyAlgo</span><span class="o">.</span><span class="na">newObj</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//进行到这里时需要的总内存为 13 + 7， 总内存只有16， 所有会进行一次复制</span>
-</span><span class='line'>        <span class="c1">//回收掉没有引用来源的 firstChildOne</span>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">firstChildTwo</span> <span class="o">=</span> <span class="n">copyAlgo</span><span class="o">.</span><span class="na">newObj</span><span class="o">(</span><span class="mi">7</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">first</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">firstChildTwo</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//到这里需要的内存为 4+4+7+6 = 21, 大于总内存 16，会进行一次copy ,</span>
-</span><span class='line'>        <span class="c1">//但是仍然是不能满足要求的，所以会抛出OOM的异常</span>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">firstChildChildOne</span> <span class="o">=</span> <span class="n">copyAlgo</span><span class="o">.</span><span class="na">newObj</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">firstChildTwo</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">firstChildChildOne</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">secondChild</span> <span class="o">=</span> <span class="n">copyAlgo</span><span class="o">.</span><span class="na">newObj</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">second</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">secondChild</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">firstChildOne</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">firstChildChildOne</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">first</span><span class="o">.</span><span class="na">children</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">firstChildTwo</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">CopyObj</span> <span class="n">needCopyingObj</span> <span class="o">=</span> <span class="n">copyAlgo</span><span class="o">.</span><span class="na">newObj</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行结果如下图所示:</p>
-
-<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg?x-oss-process=style/origin" alt="运行结果" /></p>
-
-<h2>算法优缺点</h2>
-
-<p>优点:</p>
-
-<pre><code>* 吞吐量较好。GC复制算法只会搜索存活的对象，跟标记-清除算法比需要的时间较短。
-* 可实现高速分配。GC算法的分配是在一片连续的内存空间分配的，所以只需要移动空闲的指针即可。
-* 不会产生碎片。
-* 对缓存友好。每次GC完成以后，有关联的对象都会顺序排列在一起。
-</code></pre>
-
-<p>缺点:</p>
-
-<pre><code>* 堆的使用效率低下。很明显，只能使用一般的堆
-* 递归调用函数。每次复制对象都要递归的调用函数，效率比较低，还有栈溢出的可能性。
-</code></pre>
 </div>
       
       
+        <footer>
+          <a rel="full-article" href="/blog/2019/04/08/arts-week-three/">Read on &rarr;</a>
+        </footer>
+      
+    
+  </li>
+  
+
+
+  
+    
+    
+    
+  
+  <li class="entry ">
+    <h2 class="entry-title"><a href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">垃圾回收的算法与实现读书笔记-复制算法</a></h2>
     
   </li>
   
@@ -725,18 +276,6 @@
   
   <li class="entry ">
     <h2 class="entry-title"><a href="/blog/2016/03/02/huan-cun-she-ji-si-lu/">缓存设计思路</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/">requireJs 配置可重用</a></h2>
     
   </li>
   

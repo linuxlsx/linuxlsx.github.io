@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://linuxlsx.github.io/blog/2019/04/08/arts-week-three/</loc>
+<lastmod>2019-04-08T00:00:13+08:00</lastmod>
+</url>
+<url>
 <loc>http://linuxlsx.github.io/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/</loc>
 <lastmod>2019-04-07T22:59:17+08:00</lastmod>
 </url>
@@ -123,5 +127,8 @@
 </url>
 <url>
 <loc>http://linuxlsx.github.io/blog/categories/fu-zhi-suan-fa/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/posts/2/</loc>
 </url>
 </urlset>

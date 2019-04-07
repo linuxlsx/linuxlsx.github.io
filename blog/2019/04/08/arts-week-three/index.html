@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Arts-week-three - 平凡的世界</title>
+  <meta name="author" content="linuxlsx">
+
+  
+  <meta name="description" content="Algorithm 本周完成的算法题: Combination Sum 题目要求: 1
+2
+3
+4
+5
+给定一个不重复的数组(candidates)，以及一个目标(target)，从candidates找到所有的不重复的组合使得他们的和等于target。 Note:
+1. 所有的数字都是正整数
+2 &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2019/04/08/arts-week-three">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-111612120-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      .lsx
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">平凡的世界</a></h1>
+  
+    <h2>Hello Little Cat</h2>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:linuxlsx.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2019/04/08/arts-week-three/">Arts-week-three</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">垃圾回收的算法与实现读书笔记-复制算法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/03/29/arts-week-two/">Arts-week-two</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">垃圾回收的算法与实现读书笔记-引用计数法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/03/21/arts-first-week/">ARTS First Week</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/linuxlsx">@linuxlsx</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">Arts-week-three</h1>
+    </header>
+  
+  <div class="entry-content"><h1>Algorithm</h1>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/combination-sum/">Combination Sum</a></p>
+
+<p>题目要求:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>给定一个不重复的数组(candidates)，以及一个目标(target)，从candidates找到所有的不重复的组合使得他们的和等于target。
+</span><span class='line'>
+</span><span class='line'>Note:
+</span><span class='line'>1. 所有的数字都是正整数
+</span><span class='line'>2. 同一个数字可以无限次的重复使用</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<p><strong>分析:</strong></p>
+
+<p>这题可以通过回溯法来解决，通过递归下降多次遍历数组来寻找满足条件的组合。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CombinationSum</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">combinationSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">candidates</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">lists</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="mi">8</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">Stack</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'>        <span class="n">stack</span><span class="o">.</span><span class="na">ensureCapacity</span><span class="o">(</span><span class="n">candidates</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">calc</span><span class="o">(</span><span class="n">candidates</span><span class="o">,</span> <span class="n">target</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;&gt;(),</span> <span class="n">lists</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">lists</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/**</span>
+</span><span class='line'><span class="cm">     * 递归下降深度优先遍历。 算法复杂度 O((n^2 + n) / 2)</span>
+</span><span class='line'><span class="cm">     * 最终结果是 6ms  beats 92%</span>
+</span><span class='line'><span class="cm">     *</span>
+</span><span class='line'><span class="cm">     * 分析了排在更前面的实现，发现主要的差异就是他们用List替代了Stack</span>
+</span><span class='line'><span class="cm">     * 来保存中间状态，这样可以减少一个subList的操作。基本上可以到2ms</span>
+</span><span class='line'><span class="cm">     *</span>
+</span><span class='line'><span class="cm">     * @param candidates</span>
+</span><span class='line'><span class="cm">     * @param target</span>
+</span><span class='line'><span class="cm">     * @param start</span>
+</span><span class='line'><span class="cm">     * @param stack         需要使用栈来保存中间状态。</span>
+</span><span class='line'><span class="cm">     * @param lists</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">calc</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">candidates</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">stack</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">lists</span><span class="o">){</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">candidates</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">if</span><span class="o">(</span><span class="n">candidates</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">){</span>
+</span><span class='line'>                <span class="k">continue</span><span class="o">;</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">candidates</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+</span><span class='line'>            <span class="k">if</span><span class="o">(</span><span class="n">candidates</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">){</span>
+</span><span class='line'>                <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+</span><span class='line'>                <span class="n">l</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">subList</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()));</span>
+</span><span class='line'>                <span class="n">lists</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span><span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">candidates</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">calc</span><span class="o">(</span><span class="n">candidates</span><span class="o">,</span> <span class="n">target</span> <span class="o">-</span> <span class="n">candidates</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">i</span> <span class="o">,</span><span class="n">stack</span> <span class="o">,</span> <span class="n">lists</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>            <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Review</h1>
+
+<p>本周Review <a href="https://medium.com/netflix-techblog/building-and-scaling-data-lineage-at-netflix-to-improve-data-infrastructure-reliability-and-1a52526a7977">Building and Scaling Data Lineage at Netflix to Improve Data Infrastructure Reliability, and Efficiency</a></p>
+
+<p>本文是Netflix的一篇技术文章。讲述了Netflix内部是如何构建一个数据链路关系系统的。</p>
+
+<p>公司从小到大的过程中，一定会伴随着数据越来越多，数据链路越来越复杂。很快就没有人能够了解数据全貌了。文章开篇提了三个场景:</p>
+
+<ul>
+<li>假设你是一个决策者，当你要根据数据看报做一个关键决策时，是否可以自己去验证下看报背后的数据到底是什么</li>
+<li>假设你是一个开发者，当你决定要修改你提供的服务的数据结构时，是否可以知道哪些下游会受到影响</li>
+<li>假设你现在负责平台的可靠性，你的任务是主动监测上游任务的问题，提前给数据作业owner报警。你要设计一个SLA预警系统，需要用到上下游数据依赖以及历史状态数据。<code>(Finally, imagine yourself in the role of a data platform reliability engineer tasked with providing advanced lead time to data pipeline (ETL) owners by proactively identifying issues upstream to their ETL jobs. You are designing a learning system to forecast Service Level Agreement (SLA) violations and would want to factor in all upstream dependencies and corresponding historical states)</code></li>
+</ul>
+
+
+<p>要满足以上的需求，就需要有一个 <code>complete and accurate data lineage system</code>。</p>
+
+<p>自由和责任是Netflix内部文化的重要部分。核心思想是你可以自由的选择实现方式，但是要为其负责。同样这样的自由也会导致公司内部技术栈的多样性，同样也会带来更多的负责度。作者就面临这样的问题。以下是Netflix 的一个<code>Data Landscape</code>。</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1400/0*gYI3uCywVhSrcoRo" alt="Data Landscape" /></p>
+
+<p>为了满足Netflix内部多样化的数据，<code>Data Lineage</code>有以下的几个设计原则：</p>
+
+<ul>
+<li><code>Ensure data integrity</code> 数据完整性。 需要精确完整的保存数据关系来建立用户的信心。一个不完全可行系统带来伤害可能多过好处。</li>
+<li><code>Enable seamless intergration</code> 无缝接入。需要能够满足新的数据工具快速接入。</li>
+<li><code>Design a flexible data model</code> 灵活的数据结构。使用一个通用灵活的数据模型来表示不同的数据来源。</li>
+</ul>
+
+
+<p>最终的系统实现图如下：</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/2600/0*Xp1KHPFm1R7GZGAI" alt="系统实现图" /></p>
+
+<p>解释下这个图：</p>
+
+<p>首先左侧是数据接入层，每个业务系统都有它自己独立数据处理逻辑，独立的数据模型。所以在使用之前需要统一进行转换。</p>
+
+<p>中间一层就是数据转换层，转换层将所有收集上来的数据进行转换，统一用点和边的图模式表达。数据转换完毕后会将数据存储到图数据库中。</p>
+
+<p>右侧就是数据存储和服务层。在数据之上建立了的REST服务层，对外提供数据服务。</p>
+
+<h1>Tip</h1>
+
+<p>在Java中很多情况需要对一些特殊字符做一些转义。那么一般的写法就是为罗列出所有的需要进行替换的字符，然后不停的调用replace。比如像下面的代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="n">keyword</span><span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;\\&quot;</span><span class="o">,</span> <span class="s">&quot;\\\\&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;*&quot;</span><span class="o">,</span> <span class="s">&quot;\\*&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;+&quot;</span><span class="o">,</span> <span class="s">&quot;\\+&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;|&quot;</span><span class="o">,</span> <span class="s">&quot;\\|&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;{&quot;</span><span class="o">,</span> <span class="s">&quot;\\{&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;}&quot;</span><span class="o">,</span> <span class="s">&quot;\\}&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;(&quot;</span><span class="o">,</span> <span class="s">&quot;\\(&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;)&quot;</span><span class="o">,</span> <span class="s">&quot;\\)&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;^&quot;</span><span class="o">,</span> <span class="s">&quot;\\^&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;$&quot;</span><span class="o">,</span> <span class="s">&quot;\\$&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;[&quot;</span><span class="o">,</span> <span class="s">&quot;\\[&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;]&quot;</span><span class="o">,</span> <span class="s">&quot;\\]&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;?&quot;</span><span class="o">,</span> <span class="s">&quot;\\?&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">,</span> <span class="s">&quot;\\,&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;.&quot;</span><span class="o">,</span> <span class="s">&quot;\\.&quot;</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;&amp;&quot;</span><span class="o">,</span> <span class="s">&quot;\\&amp;&quot;</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="s">&quot;-&quot;</span><span class="o">,</span> <span class="s">&quot;\\-&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样写虽然能够完成需求，但是不太优雅。在Java的正则表达式中实际是可以支持类似<code>$0 $1</code>这样的占位符的。那么像<code>.replace("[", "\\[")</code> 可以改写成 <code>.replace("[", "\\$0")</code>。</p>
+
+<p>在这个实现中，<code>$0</code> 代表的是整个正则的匹配结果，<code>$1 $2...$n</code> 代表的是从1-n的捕获组的内容。</p>
+
+<p>具体的捕获组的介绍可以参考：<a href="https://blog.csdn.net/just4you/article/details/70767928">正则表达式的捕获组(capture group)在Java中的使用</a></p>
+
+<p>上面的语句改成类似形式的案例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;\\*+|{}^$[]?,.&amp;-&quot;</span><span class="o">;</span>
+</span><span class='line'><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+</span><span class='line'><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">&quot;[\\\\\\*\\+\\|\\{\\}\\(\\)\\^\\$\\[\\]\\?\\,\\.\\&amp;\\-]&quot;</span><span class="o">,</span> <span class="s">&quot;\\\\$0&quot;</span><span class="o">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//输出</span>
+</span><span class='line'><span class="err">\</span><span class="o">*+|{}^</span><span class="n">$</span><span class="o">[]?,.&amp;-</span>
+</span><span class='line'><span class="err">\\\</span><span class="o">*</span><span class="err">\</span><span class="o">+</span><span class="err">\</span><span class="o">|</span><span class="err">\</span><span class="o">{</span><span class="err">\</span><span class="o">}</span><span class="err">\</span><span class="o">^</span><span class="err">\</span><span class="n">$</span><span class="err">\</span><span class="o">[</span><span class="err">\</span><span class="o">]</span><span class="err">\</span><span class="o">?</span><span class="err">\</span><span class="o">,</span><span class="err">\</span><span class="o">.</span><span class="err">\</span><span class="o">&amp;</span><span class="err">\</span><span class="o">-</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Share</h1>
+
+<p><a href="http://linuxlsx.top/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">GC算法-复制算法</a></p>
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/arts/'>arts</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-04-08T00:00:13+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2019/04/08/arts-week-three/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/" title="Previous Post: 垃圾回收的算法与实现读书笔记-复制算法">&laquo; 垃圾回收的算法与实现读书笔记-复制算法</a>
+      &nbsp;&nbsp;
+      
+    </div>
+  </footer>
+
+
+</article>
+
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2019 linuxlsx
+  </p>
+</div>
+
+</footer>
+    
+
+<script type="text/javascript">
+  disqus_shortname = 'linuxlsx';
+  
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2019/04/08/arts-week-three/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2019/04/08/arts-week-three/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'linuxlsx',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>
