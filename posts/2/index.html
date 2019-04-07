@@ -9,8 +9,7 @@
   <meta name="author" content="linuxlsx">
 
   
-  <meta name="description" content="synchronized 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 synchronized 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式: 1. 对于普通方法, 锁是当前对象的实例
-2. 对于静态同步方法, &hellip;">
+  <meta name="description" content="最近使用SpringMVC开发一个后台应用, 要求对操作进行权限控制并记录操作日志。这是典型的AOP应用场景, 所以自然而然的想通过 AOP 拦截 SpringMVC 的 Controller 执行来达到想要的效果. 但是在按照之前的配置调试的时候, AOP的拦截代码并没有得到执行。 &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -78,6 +77,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">垃圾回收的算法与实现读书笔记-复制算法</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/03/29/arts-week-two/">Arts-week-two</a>
       </li>
     
@@ -91,10 +94,6 @@
     
       <li class="post">
         <a href="/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/">关键词匹配算法调研</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">垃圾回收的算法与实现读书笔记-标记清除算法</a>
       </li>
     
   </ul>
@@ -133,22 +132,29 @@
     
   
   <li class="entry first-entry">
-    <h2 class="entry-title"><a href="/blog/2015/12/10/synchronized-local-variable-string/">Synchronized 作用于局部变量</a></h2>
+    <h2 class="entry-title"><a href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/">SpringMVC 使用AOP拦截Controller</a></h2>
     
-      <div class="entry-content"><p><code>synchronized</code> 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 <code>synchronized</code> 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式:</p>
-
-<pre><code>1. 对于普通方法, 锁是当前对象的实例
-2. 对于静态同步方法, 锁是当前类的 Class 对象
-3. 对于同步方法块, 锁是 synchronized 括号里面配置的对象
-</code></pre>
+      <div class="entry-content"><p>最近使用SpringMVC开发一个后台应用, 要求对操作进行权限控制并记录操作日志。这是典型的AOP应用场景, 所以自然而然的想通过 AOP 拦截 SpringMVC 的 Controller 执行来达到想要的效果. 但是在按照之前的配置调试的时候, AOP的拦截代码并没有得到执行。经过几番研究后找到了答案。</p>
 
 </div>
       
       
         <footer>
-          <a rel="full-article" href="/blog/2015/12/10/synchronized-local-variable-string/">Read on &rarr;</a>
+          <a rel="full-article" href="/blog/2016/01/14/springmvc-shi-yong-aoplan-jie-controller/">Read on &rarr;</a>
         </footer>
       
+    
+  </li>
+  
+
+
+  
+    
+    
+    
+  
+  <li class="entry ">
+    <h2 class="entry-title"><a href="/blog/2015/12/10/synchronized-local-variable-string/">Synchronized 作用于局部变量</a></h2>
     
   </li>
   

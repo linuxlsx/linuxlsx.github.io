@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 复制算法 | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/fu-zhi-suan-fa/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2019-04-07T23:57:57+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[垃圾回收的算法与实现读书笔记-复制算法]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/"/>
+    <updated>2019-04-07T22:59:17+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa</id>
+    <content type="html"><![CDATA[<p>在<a href="http://linuxlsx.top/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">上一篇文章</a>中介绍了<code>引用计数法</code>的实现，这边接着来讲<code>复制算法</code>的实现</p>
+
+<p>文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。</p>
+
+<h1>复制算法</h1>
+
+<p>GC复制算法是<code>Marvin L. Minsky</code>在1963年研究出来的算法。该算法会将整个堆分成两个区域：<code>from area</code> 和 <code>to area</code>。这两个空间的大小一样。GC复制算法利用from区做分配，当from区满了以后，会将存活的对象全部复制到to区，当复制完成以后会将from区和to区互换，这样整体的GC也就结束了。下图描述了整体的一个概要:</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E6%A6%82%E8%A6%81.png?x-oss-process=style/black" alt="复制算法概要" /></p>
+
+<h2>算法实现</h2>
+
+<p>用Java来模拟复制算法有个难点是：因为Java的参数是值传递，所以在复制对象的时候需要更新原来对象的引用，但是这个不引入辅助的情况下是比较难的。所以我们先来通过图解了解下整个GC算法的一个过程。</p>
+
+<p>首先假设现在堆中对象结构如下图所示：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%B8%80%E6%AD%A5.png?x-oss-process=style/black" alt="初始状态" /></p>
+
+<p>根引用<strong>A</strong>，<strong>A</strong>同时引用了<strong>C</strong>和<strong>D</strong>，<strong>B</strong>没有引用来源，所以是需要被回收的对象。复制算法的回收是从根开始的，所有能够从根到达的对象都是活的对象，需要被复制。</p>
+
+<p>首先对象A被复制，生成了<strong>A'</strong>。因为<strong>A</strong>有引用其他的对象，所以新生成的<strong>A'</strong>也会引用到这些对象。但是需要注意的是这些对象现在都还在from区域，所以<strong>A'</strong>持有指向from区域的引用，如下图所示：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%BA%8C%E6%AD%A5.png?x-oss-process=style/black" alt="复制A" /></p>
+
+<p>接着会将<strong>A</strong>对象标记为<code>COPIED</code>，如下图所示：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%B8%89%E6%AD%A5.png?x-oss-process=style/black" alt="复制A第二步" /></p>
+
+<p>接着会把<strong>A</strong>引用的对象<strong>C</strong>和<strong>D</strong>都copy到to区域，同时原对象都标记为<code>COPIED</code>。同时将根的引用切换到<strong>A'</strong>，变成了如下图所示的情况：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E5%9B%9B%E6%AD%A5.png?x-oss-process=style/black" alt="复制A的子对象" /></p>
+
+<p>最后将from区里面的对象全部清理掉，并将from和to区域交换，就完成了一次GC的过程。</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%A4%8D%E5%88%B6%E7%AC%AC%E4%BA%94%E6%AD%A5.png?x-oss-process=style/black" alt="完成GC" /></p>
+
+<h3>代码模拟实现</h3>
+
+<p>首先对于<code>Obj</code>对象需要增加一个<code>copied</code>的标记来方式对象被重复的复制。</p>
+
+<p>GC复制算法使用的堆对象比前面提到的<code>标记-清除</code>和<code>引用计数</code>都简单，因为在内存中都是连续分配的，所以也不需要指定分配策略。</p>
+
+<pre><code class="Java">public class CopyHeap {
+
+    /**
+     * from 区域的起始位置。在完成一个copying后，
+     * fromStart 和 toStart的值会进行互换
+     */
+    public int fromStart;
+
+    /**
+     * to 区域的起始位置。
+     */
+    public int toStart;
+
+    /**
+     * 表明当前空闲内存的起始位置。
+     */
+    public int free;
+
+    /**
+     * 表明实际可用的大小
+     */
+    public int size;
+
+
+    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;
+
+    public CopyHeap() {
+    }
+
+    /**
+     * 因为Copy算法是连续分配的，所以不需要确定分配策略
+     * @param size
+     */
+    public CopyHeap(int size) {
+        int realSize = calcPowSize(size);
+        this.size = realSize / 2;
+        fromStart = 0;
+        toStart = this.size;
+        free = 0;
+    }
+
+
+    /**
+     * 将数据Copy 到 TO 区块。简单的实现为增加空闲内存的起始位置
+     * @param size
+     */
+    public int copyData(int size){
+
+        int start = free;
+        free += size;
+
+        return start;
+    }
+
+    /**
+     * 判断是否有足够的内存来满足对象分配
+     * @param size
+     * @return
+     */
+    public boolean hasEnoughMemory(int size){
+        return free + size &lt; (this.size + fromStart);
+    }
+
+
+    /**
+     * 每次copying完成以后，互换fromStart 和 toStart
+     */
+    public void swap(){
+        int tmp = fromStart;
+        fromStart = toStart;
+        toStart = tmp;
+    }
+
+
+    private static final int calcPowSize(int cap) {
+        int n = cap - 1;
+        n |= n &gt;&gt;&gt; 1;
+        n |= n &gt;&gt;&gt; 2;
+        n |= n &gt;&gt;&gt; 4;
+        n |= n &gt;&gt;&gt; 8;
+        n |= n &gt;&gt;&gt; 16;
+        return (n &lt; 0) ? 1 : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    }
+}
+</code></pre>
+
+<p>GC复制算法本身实现也比较简单，主要注意的地方就是要考虑Java的值传递的问题，所以在实现的时候做了一个小的改造，就是只是将原对象的起始地址修改下，以此来表示对象已经被复制了。否则要在Java中实现引用传递还是比较麻烦的。</p>
+
+<pre><code class="Java">public class CopyAlgo {
+
+    private CopyHeap heap;
+
+    /**
+     * 表示GC 的根
+     */
+    private LinkedList&lt;CopyObj&gt; roots = new LinkedList&lt;&gt;();
+
+
+    public CopyAlgo(int size) {
+        heap = new CopyHeap(size);
+    }
+
+    /**
+     * 创建对象
+     * @param size
+     * @return
+     */
+    public CopyObj newObj(int size) {
+        if (!heap.hasEnoughMemory(size)) {
+            copying();
+
+            if (!heap.hasEnoughMemory(size)) {
+
+                System.out.println(String.format("Copy GC Fail Heap total(%d) used(%d)", heap.size, heap.free));
+                throw new OutOfMemoryError("------ oh, out of memory! ------");
+            }
+        }
+
+        CopyObj copyObj = new CopyObj(size, heap.free);
+        heap.free += size;
+
+        return copyObj;
+    }
+
+    /**
+     * 开始进行复制
+     */
+    private void copying() {
+
+        int oldSize = heap.free - heap.fromStart;
+        //将当前空闲内存的起始位置置为to区域的起始位置
+        heap.free = heap.toStart;
+
+        //从根节点开始递归的进行复制
+        for (CopyObj root : roots) {
+            copy(root);
+        }
+
+        //交互from 和 to
+        heap.swap();
+
+        System.out.println(String.format("Copy GC End. Heap before(%d) now(%d)", oldSize, heap.free - heap.fromStart));
+    }
+
+    private void copy(CopyObj copyObj) {
+
+        //复制对象，在目标区域中申请同样大小的内存
+        copyData(copyObj);
+        //将复制标记为置为true
+        copyObj.copied = true;
+
+        //开始复制引用的对象
+        for (Obj child : copyObj.children) {
+            CopyObj obj = (CopyObj) child;
+            copy(obj);
+
+        }
+    }
+
+    private void copyData(CopyObj copyObj) {
+        //因为Java的参数传递均为值传递，所以为了不影响上层的使用
+        //这里均实现为修改对象的起始位置。
+        copyObj.start = heap.copyData(copyObj.size);
+    }
+
+    /**
+     * 把对象置为根节点
+     *
+     * @param obj 根对象
+     */
+    public void makeItToRoot(CopyObj obj) {
+        roots.add(obj);
+    }
+
+    public void removeFromRoot(CopyObj obj){
+        roots.remove(obj);
+    }
+}
+</code></pre>
+
+<p>最后看一个实例:</p>
+
+<pre><code class="Java">public class GcUseCaseByCopyAlgo {
+
+    public static void main(String[] args) {
+
+        CopyAlgo copyAlgo = new CopyAlgo(32);
+
+        CopyObj first = copyAlgo.newObj(4);
+        CopyObj second = copyAlgo.newObj(4);
+
+        copyAlgo.makeItToRoot(first);
+        copyAlgo.makeItToRoot(second);
+
+        CopyObj firstChildOne = copyAlgo.newObj(5);
+
+        //进行到这里时需要的总内存为 13 + 7， 总内存只有16， 所有会进行一次复制
+        //回收掉没有引用来源的 firstChildOne
+        CopyObj firstChildTwo = copyAlgo.newObj(7);
+
+        first.children.add(firstChildTwo);
+
+        //到这里需要的内存为 4+4+7+6 = 21, 大于总内存 16，会进行一次copy ,
+        //但是仍然是不能满足要求的，所以会抛出OOM的异常
+        CopyObj firstChildChildOne = copyAlgo.newObj(6);
+        firstChildTwo.children.add(firstChildChildOne);
+
+
+        CopyObj secondChild = copyAlgo.newObj(6);
+        second.children.add(secondChild);
+
+        firstChildOne.children.remove(firstChildChildOne);
+        first.children.remove(firstChildTwo);
+
+        CopyObj needCopyingObj = copyAlgo.newObj(4);
+    }
+}
+</code></pre>
+
+<p>运行结果如下图所示:</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg?x-oss-process=style/origin" alt="运行结果" /></p>
+
+<h2>算法优缺点</h2>
+
+<p>优点:</p>
+
+<pre><code>* 吞吐量较好。GC复制算法只会搜索存活的对象，跟标记-清除算法比需要的时间较短。
+* 可实现高速分配。GC算法的分配是在一片连续的内存空间分配的，所以只需要移动空闲的指针即可。
+* 不会产生碎片。
+* 对缓存友好。每次GC完成以后，有关联的对象都会顺序排列在一起。
+</code></pre>
+
+<p>缺点:</p>
+
+<pre><code>* 堆的使用效率低下。很明显，只能使用一般的堆
+* 递归调用函数。每次复制对象都要递归的调用函数，效率比较低，还有栈溢出的可能性。
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>平凡的世界</title>
+  <title>垃圾回收的算法与实现读书笔记-复制算法 - 平凡的世界</title>
   <meta name="author" content="linuxlsx">
 
   
-  <meta name="description" content="　 平凡的世界 垃圾回收的算法与实现读书笔记-复制算法 在上一篇文章中介绍了引用计数法的实现，这边接着来讲复制算法的实现 文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。 复制算法 GC复制算法是Marvin L. Minsky在1963年研究出来的算法。 &hellip;">
+  <meta name="description" content="在上一篇文章中介绍了引用计数法的实现，这边接着来讲复制算法的实现 文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。 复制算法 GC复制算法是Marvin L. Minsky在1963年研究出来的算法。该算法会将整个堆分成两个区域：from area 和 to area。 &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -17,7 +17,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
   
-  <link rel="canonical" href="http://linuxlsx.github.io">
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
@@ -117,24 +117,15 @@
   </div>
   <div id="main">
     <div class="content">
-      
-<header>
-  <div class="back">　</div>
-  <h1 class="entry-title"><a href="/">平凡的世界</a></h1>
-</header>
-<ul class="blog-index">
+      <article class="hentry" role="article">
   
-    
-    
-      
-      
-    
-    
   
-  <li class="entry first-entry">
-    <h2 class="entry-title"><a href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">垃圾回收的算法与实现读书笔记-复制算法</a></h2>
-    
-      <div class="entry-content"><p>在<a href="http://linuxlsx.top/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">上一篇文章</a>中介绍了<code>引用计数法</code>的实现，这边接着来讲<code>复制算法</code>的实现</p>
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">垃圾回收的算法与实现读书笔记-复制算法</h1>
+    </header>
+  
+  <div class="entry-content"><p>在<a href="http://linuxlsx.top/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">上一篇文章</a>中介绍了<code>引用计数法</code>的实现，这边接着来讲<code>复制算法</code>的实现</p>
 
 <p>文中部分图片引用自《垃圾回收的算法与实现》一书，如有版权问题，请联系删除。</p>
 
@@ -627,129 +618,62 @@
 * 递归调用函数。每次复制对象都要递归的调用函数，效率比较低，还有栈溢出的可能性。
 </code></pre>
 </div>
-      
-      
-    
-  </li>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
   
+    <a class='category' href='/blog/categories/gc/'>gc</a>, <a class='category' href='/blog/categories/la-ji-hui-shou/'>垃圾回收</a>, <a class='category' href='/blog/categories/fu-zhi-suan-fa/'>复制算法</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
 
 
   
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2019/03/29/arts-week-two/">Arts-week-two</a></h2>
-    
-  </li>
-  
 
 
+<time datetime="2019-04-07T22:59:17+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
   
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2019/03/26/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-yin-yong-ji-shu-fa/">垃圾回收的算法与实现读书笔记-引用计数法</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2019/03/21/arts-first-week/">ARTS First Week</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2019/03/21/guan-jian-ci-pi-pei-suan-fa-diao-yan/">关键词匹配算法调研</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2017/12/28/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-biao-ji-zheng-li-suan-fa/">垃圾回收的算法与实现读书笔记-标记清除算法</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2017/12/25/macos-docker-rong-qi-wang-luo-dai-li-she-zhi/">macOS Docker 容器网络代理设置</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2016/08/25/react-shi-zhan-part-1/">React 实战Part 1</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2016/03/02/huan-cun-she-ji-si-lu/">缓存设计思路</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2016/01/15/requirejs-pei-zhi-ke-zhong-yong/">requireJs 配置可重用</a></h2>
-    
-  </li>
-  
-
-
-  
-</ul>
-<div class="pagination">
-  
-    <a class="prev" href="2">&larr; Older</a>
   
   
 </div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2019/03/29/arts-week-two/" title="Previous Post: arts-week-two">&laquo; arts-week-two</a>
+      &nbsp;&nbsp;
+      
+    </div>
+  </footer>
+
+
+</article>
+
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
 
     </div>
     <footer role="contentinfo"><div class="content">
@@ -763,6 +687,19 @@
 
 <script type="text/javascript">
   disqus_shortname = 'linuxlsx';
+  
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
   
   (function () {
     var disqus_script = 'count.js';
