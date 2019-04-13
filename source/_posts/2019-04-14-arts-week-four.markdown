@@ -14,13 +14,15 @@ categories: ["ARTS", "负载均衡算法", "一致性Hash"]
 
 题目要求:
 
-```
+```Text
 给定一个没有排序的Int数组，做到数组中不存在的最小正整数。
 
 Note:
 1. 算法复杂度必须是O(n)
 2. 使用常数个额外的空间
 ```
+
+<!-- more -->
 
 **分析:**
 
@@ -84,7 +86,7 @@ Note:
 
 本周分享一个线上排查问题时需要将日志内容按照不同的要求写到不同的文件。
 
-```Shell
+```Bash
 awk -F',' '{if ($2 ==1) print $1 > "down.txt"; else if($2 == 6) print $1 > "delete.txt"; else print $1 > "other.txt"}' xxx.log
 ```
 
