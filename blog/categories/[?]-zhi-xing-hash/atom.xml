@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 一致性hash | 平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/blog/categories/[?]-zhi-xing-hash/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-04-14T00:08:40+08:00</updated>
+  <updated>2019-04-14T00:14:11+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -26,12 +26,15 @@
 
 <p>题目要求:</p>
 
-<pre><code>给定一个没有排序的Int数组，做到数组中不存在的最小正整数。
+<pre><code class="Text">给定一个没有排序的Int数组，做到数组中不存在的最小正整数。
 
 Note:
 1. 算法复杂度必须是O(n)
 2. 使用常数个额外的空间
 </code></pre>
+
+<!-- more -->
+
 
 <p><strong>分析:</strong></p>
 
@@ -99,7 +102,7 @@ Note:
 
 <p>本周分享一个线上排查问题时需要将日志内容按照不同的要求写到不同的文件。</p>
 
-<pre><code class="Shell">awk -F',' '{if ($2 ==1) print $1 &gt; "down.txt"; else if($2 == 6) print $1 &gt; "delete.txt"; else print $1 &gt; "other.txt"}' xxx.log
+<pre><code class="Bash">awk -F',' '{if ($2 ==1) print $1 &gt; "down.txt"; else if($2 == 6) print $1 &gt; "delete.txt"; else print $1 &gt; "other.txt"}' xxx.log
 </code></pre>
 
 <h2>Share</h2>
