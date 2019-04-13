@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://linuxlsx.github.io/blog/2019/04/14/arts-week-four/</loc>
+<lastmod>2019-04-14T00:06:02+08:00</lastmod>
+</url>
+<url>
 <loc>http://linuxlsx.github.io/blog/2019/04/08/arts-week-three/</loc>
 <lastmod>2019-04-08T00:00:13+08:00</lastmod>
 </url>
@@ -129,6 +133,9 @@
 <loc>http://linuxlsx.github.io/blog/categories/fu-zhi-suan-fa/</loc>
 </url>
 <url>
-<loc>http://linuxlsx.github.io/posts/2/</loc>
+<loc>http://linuxlsx.github.io/blog/categories/fu-zai-jun-heng-suan-fa/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/blog/categories/%5B%3F%5D-zhi-xing-hash/</loc>
 </url>
 </urlset>
