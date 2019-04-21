@@ -1,0 +1,1361 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Arts-week-five - 平凡的世界</title>
+  <meta name="author" content="linuxlsx">
+
+  
+  <meta name="description" content="Algorithm 本周完成的算法题: Trapping Rain Water 题目要求: 1
+给定一个n个大于等于0的整数，每个整数代表一个宽度为1的竖条的高度。计算其组成的图形可以在雨后保留多少单位的水 这个是图代表数组[0,1,0,2,1,0,1,3,2,1,2,1]，在这个情况下， &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2019/04/22/arts-week-five">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-111612120-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      .lsx
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">平凡的世界</a></h1>
+  
+    <h2>Hello Little Cat</h2>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:linuxlsx.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2019/04/22/arts-week-five/">Arts-week-five</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/04/14/arts-week-four/">Arts-week-four</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/04/08/arts-week-three/">Arts-week-three</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/04/07/la-ji-hui-shou-de-suan-fa-yu-shi-xian-du-shu-bi-ji-fu-zhi-suan-fa/">垃圾回收的算法与实现读书笔记-复制算法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/03/29/arts-week-two/">Arts-week-two</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/linuxlsx">@linuxlsx</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">Arts-week-five</h1>
+    </header>
+  
+  <div class="entry-content"><h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/trapping-rain-water/">Trapping Rain Water</a></p>
+
+<p>题目要求:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>给定一个n个大于等于0的整数，每个整数代表一个宽度为1的竖条的高度。计算其组成的图形可以在雨后保留多少单位的水</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png" alt="rainwatertrap.png" /></p>
+
+<!-- more -->
+
+
+<p>这个是图代表数组<code>[0,1,0,2,1,0,1,3,2,1,2,1]</code>，在这个情况下，可以保留6个单位的雨水。</p>
+
+<p><strong>分析:</strong></p>
+
+<p>这个题我原始解决思路是尝试从左往右找到最大的一个蓄水区间。如下图(a)所示: 条件是 <code>right &gt; left</code>，这样可以直接计算出<strong>left</strong>和<strong>right</strong>之间的蓄水量。当然还有一种情况如图(b)所示，<code>left</code>是剩下所有中最高的，那么我们需要找到右侧中最大的一个，把它当做<strong>right</strong>和<strong>left</strong>计算水数量。然后让<code>left = right</code>继续迭代。</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/rainwatertrap.png?x-oss-process=style/black" alt="rainwatertrapv2.png" /></p>
+
+<p>算法复杂的：在正常情况下是<code>O(N)</code>，最坏情况是<code>O(N^2)</code>，这个会在数组是倒序有序的情况下出现，因为每次都要往右循环到底才能确定<strong>right</strong>的位置。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'>    <span class="cm">/**</span>
+</span><span class='line'><span class="cm">    *  runtime 1ms, beats 99%</span>
+</span><span class='line'><span class="cm">    */</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">trap</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">height</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">maxLessThanLeftIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">maxLessThanLeftValue</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">solid</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">height</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="kt">boolean</span> <span class="n">cal</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">height</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="n">solid</span> <span class="o">+=</span> <span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>
+</span><span class='line'>                    <span class="c1">//计算第二大的数，以便后续回溯使用</span>
+</span><span class='line'>                    <span class="k">if</span> <span class="o">(</span><span class="n">maxLessThanLeftValue</span> <span class="o">&lt;=</span> <span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="n">maxLessThanLeftIndex</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+</span><span class='line'>                        <span class="n">maxLessThanLeftValue</span> <span class="o">=</span> <span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>                    <span class="o">}</span>
+</span><span class='line'>                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="c1">//在这里说明要计算蓄水了</span>
+</span><span class='line'>                    <span class="n">total</span> <span class="o">+=</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">],</span> <span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">*</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">-</span> <span class="n">solid</span><span class="o">);</span>
+</span><span class='line'>                    <span class="n">left</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+</span><span class='line'>                    <span class="n">cal</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>                    <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(!</span><span class="n">cal</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="c1">//到这里说明左边界是最大的值，需要使用第二大的数来做右边界。</span>
+</span><span class='line'>                <span class="n">solid</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxLessThanLeftIndex</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="n">solid</span> <span class="o">+=</span> <span class="n">height</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>                <span class="n">total</span> <span class="o">+=</span> <span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">],</span> <span class="n">height</span><span class="o">[</span><span class="n">maxLessThanLeftIndex</span><span class="o">])</span> <span class="o">*</span> <span class="o">(</span><span class="n">maxLessThanLeftIndex</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">-</span> <span class="n">solid</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">left</span> <span class="o">=</span> <span class="n">maxLessThanLeftIndex</span><span class="o">;</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">maxLessThanLeftIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">maxLessThanLeftValue</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">solid</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">total</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在这个题的Solution中有一个更简洁的双指针版本，算法复杂度O(N)。其思想是单独为每个位置计算它的蓄水量，一个位置的蓄水量的大小是有它两侧最高点中较小的一个减去该位置的高度决定的(公式  = <code>min(left_max, right_max) - height</code>) ，比如我们在计算位置3的蓄水量时，它的left_max是位置1，right_max是位置10，根据公式位置3的蓄水量=<code>left_max - height</code></p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/rainwatertrapv2.png?x-oss-process=style/black" alt="rainwatertrapv2" /></p>
+
+<p>代码更简单:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kt">int</span> <span class="nf">trap2Points</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">left_max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">right_max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">height</span><span class="o">[</span><span class="n">right</span><span class="o">])</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">left_max</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">left_max</span> <span class="o">=</span> <span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">];</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">ans</span> <span class="o">+=</span> <span class="o">(</span><span class="n">left_max</span> <span class="o">-</span> <span class="n">height</span><span class="o">[</span><span class="n">left</span><span class="o">]);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>            <span class="o">++</span><span class="n">left</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">height</span><span class="o">[</span><span class="n">right</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">right_max</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">right_max</span> <span class="o">=</span> <span class="n">height</span><span class="o">[</span><span class="n">right</span><span class="o">];</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">ans</span> <span class="o">+=</span> <span class="o">(</span><span class="n">right_max</span> <span class="o">-</span> <span class="n">height</span><span class="o">[</span><span class="n">right</span><span class="o">]);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>            <span class="o">--</span><span class="n">right</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://medium.com/airbnb-engineering/avoiding-double-payments-in-a-distributed-payments-system-2981f6b070bb">Avoiding Double Payments in a Distributed Payments System</a></p>
+
+<p>本文介绍了Aribnb支付团队是如何分析和解决重复支付的问题。</p>
+
+<h3>背景介绍</h3>
+
+<p>Aribnb内部服务架构像SOA转型，这就导致原本在一个系统或者大服务里面完成的功能(比如下单和支付)，会被拆分成独立的服务。这样能够让开发人员更加专注且快速迭代，但是也引入了如何保证数据一致性的问题。</p>
+
+<p>为了解决分布式一致性的问题，文中提到了三种解决方案：</p>
+
+<ul>
+<li>read repair. 在读取求的时候进行一致性的校验和补偿。<a href="https://docs.datastax.com/en/cassandra/3.0/cassandra/operations/opsRepairNodesReadRepair.html">参考</a>。
+
+<ul>
+<li>优点：客户端简单，无需关注一致性逻辑</li>
+<li>缺点：服务端需要额外的逻辑来保证一致性，会降低读的吞吐量。</li>
+</ul>
+</li>
+<li>write repair. 客户端通过重试的方式来保证数据一致。
+
+<ul>
+<li>优点：服务端无需额外的逻辑保证一致性。</li>
+<li>缺点：客户端需要维护一套重试的逻辑。服务端需要保证重试请求的幂等性</li>
+</ul>
+</li>
+<li>asynchronous repair. 通过后台程序，定时任务等检查数据一致性，并通知客户端结果。
+
+<ul>
+<li>优点：与主逻辑解耦</li>
+<li>缺点：会有一定的延迟性</li>
+</ul>
+</li>
+</ul>
+
+
+<p>在实践上可以把<code>asynchronous repair</code>作为read repair和write repair的第二道防线。</p>
+
+<h3>幂等性[idempotency]</h3>
+
+<p>幂等性是下单&amp;支付这类分布式应用中最基本的要求，必须保证每次请求<code>有且仅被处理一次</code>。如果不这样的话就会出现重复扣款的情况。同时幂等性允许一次操作多次重试，并且得到一致的结果。</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/1_bft4XyiErJha_uhbGLL6-w.png" alt="幂等性" /></p>
+
+<h3>问题难点描述</h3>
+
+<ul>
+<li>需要设计一个通用支持多个支付服务的幂等性解决方案。</li>
+<li>数据一致性不能妥协。这个会影响公司的形象</li>
+<li>低延迟。需要分布式部署。</li>
+<li>简单易用。业务开发不需要了解底层实现细节</li>
+</ul>
+
+
+<h3>解决方案</h3>
+
+<p>Airbnb支付团队实现了一个通用幂等库(<code>general-purpose idempotency library</code>)，取得名字叫<a href="https://zh.wikipedia.org/wiki/%E4%BF%84%E8%80%B3%E7%94%AB%E6%96%AF">Orpheus</a>。(发现国内外取名都喜欢用希腊神话故事里面的任务)</p>
+
+<p>这个库可以提供低延迟，并且与上下游良好隔离的实现。从整体来看，主要有以下几个概念：</p>
+
+<ul>
+<li><strong>idempotency key</strong> 通过一个idempotency key来代表一次幂等的请求。</li>
+<li><strong>sharded master</strong> 数据的读和写都走数据库Master节点</li>
+<li><strong>Database transactions</strong> 使用<code>Java Lambdas</code>将分布在不同代码中的逻辑组合到一起保证原子性。</li>
+</ul>
+
+
+<p>Orpheus将一次请求划分为三个阶段: Pre-RPC, RPS和Post-RPC:</p>
+
+<ul>
+<li><strong>Pre-RPC</strong> 将请求详情持久化到数据库</li>
+<li><strong>RPC</strong> 执行业务请求</li>
+<li><strong>Post-RPC</strong> 将请求结果持久化的数据库。包括: 成功、失败以及是否可以重试等。</li>
+</ul>
+
+
+<p>这里有两条基本原则：</p>
+
+<ol>
+<li>在Pre-RPC和Post-RPC阶段不会有业务逻辑</li>
+<li>在RPC阶段不会有数据库操作</li>
+</ol>
+
+
+<p>通过这两个原则将网络通信和数据库操作隔离开来，避免处理因为网络带来的各种不确定的问题，比如超时等。同时为了保证一致性，框架将Pre-RPC和Post-RPC放到同一个事物中执行，这样可以保证这两个阶段一定是从事成功或者失败。以下是一次请求的示意图:</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/1_EzRHQV1GaNO6fXg8NSQ2Cg.png" alt="请求流程图" /></p>
+
+<h3>异常处理</h3>
+
+<p>当出现异常时，框架需要明确告知客户端本次请求是可重试的还是不可重试的。Airbnb通过以下的策略将不同的异常划分为可重试或者不可重试.</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/1__q2kiqlR69N_Tybu37Px2Q.png" alt="异常处理" /></p>
+
+<h3>客户端至关重要</h3>
+
+<p>在本文的场景下，客户端需要一些智能。他需要有以下几项关键职责：</p>
+
+<ol>
+<li>为每个请求生成一个唯一的<code>Idempotency Key</code>,并且在重试的时候复用原来的key</li>
+<li>请求之前持久化key</li>
+<li>合适的处理成功请求</li>
+<li>在不允许重试的时候要处理好请求压力</li>
+<li>设定合适的重试策略</li>
+</ol>
+
+
+<h3>怎么选择一个 Idempotency Key</h3>
+
+<p>有两种方式来生成一个Idempotency Key：</p>
+
+<ol>
+<li><strong>request-level</strong> 每次请求都使用一个随机且唯一的key。比如UUID，snowflake等</li>
+<li><strong>entity-level</strong> 包含了业务含义的key，比request-level的要更加严格。可以通过实体模型的关键字段来生成一个明确的key. 比如支付操作<code>1234</code>只能产生一次退款操作，那么可以定义类似<code>payment-1234-refund</code>的key来保证唯一性。</li>
+</ol>
+
+
+<h3>每个请求都有可过期的租约(Expiring Lease)</h3>
+
+<p>在请求处理之前需要先获取一个锁，拿到锁以后才可以继续处理数据。锁一般要有超时时间，当超时时间到了以后可以发起重试。</p>
+
+<p>推荐锁的超时间要比RPC请求的超时时间长。否则可能会有重复请求。</p>
+
+<h3>坚持使用数据库Master节点</h3>
+
+<p>Orpheus通过数据来保存<code>Idempotency Key</code>等重要数据，为了保证数据一致性所有读写操作都在Master节点上执行。避免主从结构中因为数据复制可能出现的重复操作。以下是主从结构中可能出现的重复操作示意图:</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/1_ASFZE0BWYFYxokg1WUgnZw.png" alt="主从有问题" /></p>
+
+<p>只用主节点就不会出现因为数据复制导致可能的重复操作:</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/1_FBLUYnSjxQ15uSdAisvriA.png" alt="只用主没问题" /></p>
+
+<p>如果只用一个主节点的话，主节点就会成为整个系统的瓶颈。所以系统设计通过key分片的方式部署多个主节点，避免一个主节点过热的问题。</p>
+
+<h3>总结</h3>
+
+<p>想要做到数据一致性就会引入额外的复杂度。没有付出就没有回报。
+Orpheus目前达到了5个9的一致性。</p>
+
+<p>注意: Review中出现的图片均引用自<a href="https://medium.com/airbnb-engineering/avoiding-double-payments-in-a-distributed-payments-system-2981f6b070bb">Avoiding Double Payments in a Distributed Payments System</a>，版权归它所有。</p>
+
+<h2>Tip</h2>
+
+<p>本周分享一个线上排查问题时查看占用CPU高的前几个线程。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="n">ps</span> <span class="o">-</span><span class="n">eL</span> <span class="o">-</span><span class="n">o</span> <span class="n">pid</span><span class="o">,%</span><span class="n">cpu</span><span class="o">,</span><span class="n">lwp</span> <span class="o">|</span> <span class="n">grep</span> <span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">pid</span><span class="o">&gt;</span> <span class="o">|</span> <span class="n">sort</span> <span class="o">-</span><span class="n">nr</span> <span class="o">-</span><span class="n">k2</span> <span class="o">|</span> <span class="n">awk</span> <span class="err">&#39;</span><span class="o">{</span><span class="n">printf</span><span class="o">(</span><span class="s">&quot;%s %s %x\n&quot;</span><span class="o">,</span> <span class="n">$1</span><span class="o">,</span><span class="n">$2</span><span class="o">,</span><span class="n">$3</span><span class="o">)}</span><span class="err">&#39;</span> <span class="o">|</span> <span class="n">head</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Share</h2>
+
+<p><strong>Gson源码阅读(一)</strong></p>
+
+<p><code>Gson</code>是开发中常用的<code>Json</code>库，使用起来非常简单。整个<a href="https://github.com/google/gson">工程的源码</a>不多，非常适合作为源码阅读的开胃菜。</p>
+
+<p><code>Gson</code>的核心类不多，整体类结构如下图(去掉了一些具体的实现类和异常类):</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/gson%E7%B1%BB%E5%9B%BE.jpg?x-oss-process=style/black" alt="gson类图" /></p>
+
+<p>主要分以下几块：</p>
+
+<ul>
+<li><strong>JsonElement(以及子类)</strong> 代表了Json的中的几种类型：<code>对象</code>，<code>数组</code>，<code>基本类型</code>(在Java中主包括: String, Java基本类型以及基本类型的包装类)，<code>Null</code></li>
+<li><strong>JsonReader和JsonWriter</strong> 封装了Gson读取和输出Json数据的过程。</li>
+<li><strong>TypeAdapter和TypeAdapterFactory</strong> Gson的核心部分，通过TypeAdapter将具体类型的转换细节封装起来，使Gson有良好的灵活性和扩展性。</li>
+<li><strong>JsonSerializer和JsonDeserializer</strong> 这里两个接口允许你自定义某个类型的序列化逻辑。不过现在推荐使用<strong>TypeAdapter</strong>的方式</li>
+</ul>
+
+
+<p>可以看到Gson的核心逻辑是很简单的<code>^_^</code>。</p>
+
+<p>第一篇首先通过简单的描述下 <code>new Gson().toJson(new A())</code> 流程来说明下Gson的核心实现，后续再继续深入其他的细节。</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/ARTS-gson-%E6%B5%81%E7%A8%8B.png?x-oss-process=style/black" alt="流程" /></p>
+
+<h3>创建Gson对象</h3>
+
+<p>最简单的用法中创建<code>Gson</code>对象: <code>Gson gson = new Gson()</code>，但是实际上内部做的事情远比看上去的多：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="nf">Gson</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">(</span><span class="n">Excluder</span><span class="o">.</span><span class="na">DEFAULT</span><span class="o">,</span> <span class="n">FieldNamingPolicy</span><span class="o">.</span><span class="na">IDENTITY</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">Collections</span><span class="o">.&lt;</span><span class="n">Type</span><span class="o">,</span> <span class="n">InstanceCreator</span><span class="o">&lt;?&gt;&gt;</span><span class="n">emptyMap</span><span class="o">(),</span> <span class="n">DEFAULT_SERIALIZE_NULLS</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">DEFAULT_COMPLEX_MAP_KEYS</span><span class="o">,</span> <span class="n">DEFAULT_JSON_NON_EXECUTABLE</span><span class="o">,</span> <span class="n">DEFAULT_ESCAPE_HTML</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">DEFAULT_PRETTY_PRINT</span><span class="o">,</span> <span class="n">DEFAULT_LENIENT</span><span class="o">,</span> <span class="n">DEFAULT_SPECIALIZE_FLOAT_VALUES</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">LongSerializationPolicy</span><span class="o">.</span><span class="na">DEFAULT</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">DateFormat</span><span class="o">.</span><span class="na">DEFAULT</span><span class="o">,</span> <span class="n">DateFormat</span><span class="o">.</span><span class="na">DEFAULT</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">Collections</span><span class="o">.&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;</span><span class="n">emptyList</span><span class="o">(),</span> <span class="n">Collections</span><span class="o">.&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;</span><span class="n">emptyList</span><span class="o">(),</span>
+</span><span class='line'>        <span class="n">Collections</span><span class="o">.&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;</span><span class="n">emptyList</span><span class="o">());</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//实际的</span>
+</span><span class='line'><span class="n">Gson</span><span class="o">(</span><span class="n">Excluder</span> <span class="n">excluder</span><span class="o">,</span> <span class="n">FieldNamingStrategy</span> <span class="n">fieldNamingStrategy</span><span class="o">,</span>
+</span><span class='line'>      <span class="n">Map</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">,</span> <span class="n">InstanceCreator</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">instanceCreators</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">serializeNulls</span><span class="o">,</span>
+</span><span class='line'>      <span class="kt">boolean</span> <span class="n">complexMapKeySerialization</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">generateNonExecutableGson</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">htmlSafe</span><span class="o">,</span>
+</span><span class='line'>      <span class="kt">boolean</span> <span class="n">prettyPrinting</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">lenient</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">serializeSpecialFloatingPointValues</span><span class="o">,</span>
+</span><span class='line'>      <span class="n">LongSerializationPolicy</span> <span class="n">longSerializationPolicy</span><span class="o">,</span> <span class="n">String</span> <span class="n">datePattern</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dateStyle</span><span class="o">,</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">timeStyle</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;</span> <span class="n">builderFactories</span><span class="o">,</span>
+</span><span class='line'>      <span class="n">List</span><span class="o">&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;</span> <span class="n">builderHierarchyFactories</span><span class="o">,</span>
+</span><span class='line'>      <span class="n">List</span><span class="o">&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;</span> <span class="n">factoriesToBeAdded</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// 执行排查的字段和类型  </span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">excluder</span> <span class="o">=</span> <span class="n">excluder</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 字段命名机制。比如是 aName 后者是 a_name</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">fieldNamingStrategy</span> <span class="o">=</span> <span class="n">fieldNamingStrategy</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// Gson默认是需要有不带参数的构造函数，但是碰到没有无参数构造函数且没有权限修改第三方类的情况下，可以通过InstanceCreator来解决</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">instanceCreators</span> <span class="o">=</span> <span class="n">instanceCreators</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 通过构造器创建指定的类型</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">constructorConstructor</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ConstructorConstructor</span><span class="o">(</span><span class="n">instanceCreators</span><span class="o">);</span>
+</span><span class='line'>    <span class="c1">// 是否序列化null</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">serializeNulls</span> <span class="o">=</span> <span class="n">serializeNulls</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">complexMapKeySerialization</span> <span class="o">=</span> <span class="n">complexMapKeySerialization</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 是否输出不可执行的json。如果为true，会在开头先输出一个&quot;)]}&#39;\n&quot;</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">generateNonExecutableJson</span> <span class="o">=</span> <span class="n">generateNonExecutableGson</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 是否输出Html安全的JSON. 如果为true，在输出前会转义 &lt; &gt; &amp; =</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">htmlSafe</span> <span class="o">=</span> <span class="n">htmlSafe</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">prettyPrinting</span> <span class="o">=</span> <span class="n">prettyPrinting</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 是否使用宽松的模式。如果为true，则会忽略某些限制</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">lenient</span> <span class="o">=</span> <span class="n">lenient</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">serializeSpecialFloatingPointValues</span> <span class="o">=</span> <span class="n">serializeSpecialFloatingPointValues</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 对long和Long类型的序列化策略</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">longSerializationPolicy</span> <span class="o">=</span> <span class="n">longSerializationPolicy</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 日期的模式</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">datePattern</span> <span class="o">=</span> <span class="n">datePattern</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">dateStyle</span> <span class="o">=</span> <span class="n">dateStyle</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">timeStyle</span> <span class="o">=</span> <span class="n">timeStyle</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 创建TypeAdapter的工厂类</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">builderFactories</span> <span class="o">=</span> <span class="n">builderFactories</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">builderHierarchyFactories</span> <span class="o">=</span> <span class="n">builderHierarchyFactories</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;</span> <span class="n">factories</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">TypeAdapterFactory</span><span class="o">&gt;();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// built-in type adapters that cannot be overridden</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">JSON_ELEMENT_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ObjectTypeAdapter</span><span class="o">.</span><span class="na">FACTORY</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// the excluder must precede all adapters that handle user-defined types</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">excluder</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// users&#39; type adapters</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">factoriesToBeAdded</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// type adapters for basic platform types</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">STRING_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">INTEGER_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">BOOLEAN_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">BYTE_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">SHORT_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">TypeAdapter</span><span class="o">&lt;</span><span class="n">Number</span><span class="o">&gt;</span> <span class="n">longAdapter</span> <span class="o">=</span> <span class="n">longAdapter</span><span class="o">(</span><span class="n">longSerializationPolicy</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">newFactory</span><span class="o">(</span><span class="kt">long</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">Long</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">longAdapter</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">newFactory</span><span class="o">(</span><span class="kt">double</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">Double</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+</span><span class='line'>            <span class="n">doubleAdapter</span><span class="o">(</span><span class="n">serializeSpecialFloatingPointValues</span><span class="o">)));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">newFactory</span><span class="o">(</span><span class="kt">float</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">Float</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+</span><span class='line'>            <span class="n">floatAdapter</span><span class="o">(</span><span class="n">serializeSpecialFloatingPointValues</span><span class="o">)));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">NUMBER_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">ATOMIC_INTEGER_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">ATOMIC_BOOLEAN_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">newFactory</span><span class="o">(</span><span class="n">AtomicLong</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">atomicLongAdapter</span><span class="o">(</span><span class="n">longAdapter</span><span class="o">)));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">newFactory</span><span class="o">(</span><span class="n">AtomicLongArray</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">atomicLongArrayAdapter</span><span class="o">(</span><span class="n">longAdapter</span><span class="o">)));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">ATOMIC_INTEGER_ARRAY_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">CHARACTER_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">STRING_BUILDER_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">STRING_BUFFER_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">newFactory</span><span class="o">(</span><span class="n">BigDecimal</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">TypeAdapters</span><span class="o">.</span><span class="na">BIG_DECIMAL</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">newFactory</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">TypeAdapters</span><span class="o">.</span><span class="na">BIG_INTEGER</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">URL_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">URI_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">UUID_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">CURRENCY_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">LOCALE_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">INET_ADDRESS_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">BIT_SET_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">DateTypeAdapter</span><span class="o">.</span><span class="na">FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">CALENDAR_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TimeTypeAdapter</span><span class="o">.</span><span class="na">FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">SqlDateTypeAdapter</span><span class="o">.</span><span class="na">FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">TIMESTAMP_FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ArrayTypeAdapter</span><span class="o">.</span><span class="na">FACTORY</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">CLASS_FACTORY</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// type adapters for composite and user-defined types</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">CollectionTypeAdapterFactory</span><span class="o">(</span><span class="n">constructorConstructor</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">MapTypeAdapterFactory</span><span class="o">(</span><span class="n">constructorConstructor</span><span class="o">,</span> <span class="n">complexMapKeySerialization</span><span class="o">));</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">jsonAdapterFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">JsonAdapterAnnotationTypeAdapterFactory</span><span class="o">(</span><span class="n">constructorConstructor</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">jsonAdapterFactory</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">TypeAdapters</span><span class="o">.</span><span class="na">ENUM_FACTORY</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//在通常情况下，我们自定义的类型会通过这个 ReflectiveTypeAdapter 来做转换。</span>
+</span><span class='line'>    <span class="n">factories</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">ReflectiveTypeAdapterFactory</span><span class="o">(</span>
+</span><span class='line'>        <span class="n">constructorConstructor</span><span class="o">,</span> <span class="n">fieldNamingStrategy</span><span class="o">,</span> <span class="n">excluder</span><span class="o">,</span> <span class="n">jsonAdapterFactory</span><span class="o">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">factories</span> <span class="o">=</span> <span class="n">Collections</span><span class="o">.</span><span class="na">unmodifiableList</span><span class="o">(</span><span class="n">factories</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到<code>Gson</code>提供了很多的开关和扩展点来定制行为。</p>
+
+<h3>创建Reader/Writer</h3>
+
+<p>创建JsonReader 和 JsonWriter。这个会根据Json标准来读取和输出json数据，具体的细节本文先不深入研究，下篇文章深入研究下。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'>  <span class="kd">public</span> <span class="n">JsonWriter</span> <span class="nf">newJsonWriter</span><span class="o">(</span><span class="n">Writer</span> <span class="n">writer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">generateNonExecutableJson</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">JSON_NON_EXECUTABLE_PREFIX</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="n">JsonWriter</span> <span class="n">jsonWriter</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">JsonWriter</span><span class="o">(</span><span class="n">writer</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">prettyPrinting</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">jsonWriter</span><span class="o">.</span><span class="na">setIndent</span><span class="o">(</span><span class="s">&quot;  &quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="n">jsonWriter</span><span class="o">.</span><span class="na">setSerializeNulls</span><span class="o">(</span><span class="n">serializeNulls</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">jsonWriter</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">JsonReader</span> <span class="nf">newJsonReader</span><span class="o">(</span><span class="n">Reader</span> <span class="n">reader</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">JsonReader</span> <span class="n">jsonReader</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">JsonReader</span><span class="o">(</span><span class="n">reader</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">jsonReader</span><span class="o">.</span><span class="na">setLenient</span><span class="o">(</span><span class="n">lenient</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">jsonReader</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>获取类型对应的TypeAdapter</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'>  <span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">TypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">getAdapter</span><span class="o">(</span><span class="n">TypeToken</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// 首先从本地内存获取</span>
+</span><span class='line'>    <span class="n">TypeAdapter</span><span class="o">&lt;?&gt;</span> <span class="n">cached</span> <span class="o">=</span> <span class="n">typeTokenCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">NULL_KEY_SURROGATE</span> <span class="o">:</span> <span class="n">type</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">cached</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="o">(</span><span class="n">TypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;)</span> <span class="n">cached</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 接着从ThreadLocal中获取</span>
+</span><span class='line'>    <span class="n">Map</span><span class="o">&lt;</span><span class="n">TypeToken</span><span class="o">&lt;?&gt;,</span> <span class="n">FutureTypeAdapter</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">threadCalls</span> <span class="o">=</span> <span class="n">calls</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+</span><span class='line'>    <span class="kt">boolean</span> <span class="n">requiresThreadLocalCleanup</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">threadCalls</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">threadCalls</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">TypeToken</span><span class="o">&lt;?&gt;,</span> <span class="n">FutureTypeAdapter</span><span class="o">&lt;?&gt;&gt;();</span>
+</span><span class='line'>      <span class="n">calls</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">threadCalls</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">requiresThreadLocalCleanup</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// the key and value type parameters always agree</span>
+</span><span class='line'>    <span class="n">FutureTypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">ongoingCall</span> <span class="o">=</span> <span class="o">(</span><span class="n">FutureTypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;)</span> <span class="n">threadCalls</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">ongoingCall</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">ongoingCall</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">FutureTypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">call</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FutureTypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;();</span>
+</span><span class='line'>      <span class="n">threadCalls</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">call</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// 循环左右的 TypeAdapterFactory 找到可以处理当前类型的第一个 Factory</span>
+</span><span class='line'>      <span class="k">for</span> <span class="o">(</span><span class="n">TypeAdapterFactory</span> <span class="n">factory</span> <span class="o">:</span> <span class="n">factories</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">TypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">candidate</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">candidate</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">call</span><span class="o">.</span><span class="na">setDelegate</span><span class="o">(</span><span class="n">candidate</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">typeTokenCache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">candidate</span><span class="o">);</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">candidate</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;GSON (&quot;</span> <span class="o">+</span> <span class="n">GsonBuildConfig</span><span class="o">.</span><span class="na">VERSION</span> <span class="o">+</span> <span class="s">&quot;) cannot handle &quot;</span> <span class="o">+</span> <span class="n">type</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">threadCalls</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">requiresThreadLocalCleanup</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">calls</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>前面提到在没有特定指定的情况下，自定义的类型都是由<code>ReflectiveTypeAdapterFactory</code>来处理的，让我们来看下<code>ReflectiveTypeAdapterFactory</code>的<code>create</code>方法。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">TypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">create</span><span class="o">(</span><span class="n">Gson</span> <span class="n">gson</span><span class="o">,</span> <span class="kd">final</span> <span class="n">TypeToken</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">getRawType</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(!</span><span class="n">Object</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">raw</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// 到这里的话说明是基本类型</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 为指定类型创建一个构造器工厂。 这里会优先使用前面提到的 InstanceCreator.</span>
+</span><span class='line'>    <span class="n">ObjectConstructor</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">constructor</span> <span class="o">=</span> <span class="n">constructorConstructor</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 为类型的每个字段映射成内部的 BoundField对象。</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">new</span> <span class="n">Adapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;(</span><span class="n">constructor</span><span class="o">,</span> <span class="n">getBoundFields</span><span class="o">(</span><span class="n">gson</span><span class="o">,</span> <span class="n">type</span><span class="o">,</span> <span class="n">raw</span><span class="o">));</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>BoundField</code> 是一个重要的对象，定义了一个字段该如何读取和输出。来看下它的定义：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'>  <span class="kd">static</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">BoundField</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">serialized</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">deserialized</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">protected</span> <span class="nf">BoundField</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">serialized</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">deserialized</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">serialized</span> <span class="o">=</span> <span class="n">serialized</span><span class="o">;</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">deserialized</span> <span class="o">=</span> <span class="n">deserialized</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 判断一个字段是否可写</span>
+</span><span class='line'>    <span class="kd">abstract</span> <span class="kt">boolean</span> <span class="nf">writeField</span><span class="o">(</span><span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">IllegalAccessException</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 将字段写入到writer</span>
+</span><span class='line'>    <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="n">JsonWriter</span> <span class="n">writer</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">IllegalAccessException</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">// 从输入中读取字段的值</span>
+</span><span class='line'>    <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">read</span><span class="o">(</span><span class="n">JsonReader</span> <span class="n">reader</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">IllegalAccessException</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>来看看<code>BoundField</code>是如何构建出来的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">BoundField</span><span class="o">&gt;</span> <span class="nf">getBoundFields</span><span class="o">(</span><span class="n">Gson</span> <span class="n">context</span><span class="o">,</span> <span class="n">TypeToken</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">raw</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">BoundField</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">BoundField</span><span class="o">&gt;();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 如果是接口直接返回</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">raw</span><span class="o">.</span><span class="na">isInterface</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Type</span> <span class="n">declaredType</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">getType</span><span class="o">();</span>
+</span><span class='line'>    <span class="k">while</span> <span class="o">(</span><span class="n">raw</span> <span class="o">!=</span> <span class="n">Object</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// 获取当前类型声明的字段</span>
+</span><span class='line'>      <span class="n">Field</span><span class="o">[]</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="na">getDeclaredFields</span><span class="o">();</span>
+</span><span class='line'>      <span class="k">for</span> <span class="o">(</span><span class="n">Field</span> <span class="n">field</span> <span class="o">:</span> <span class="n">fields</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//判断字段是否需要序列化</span>
+</span><span class='line'>        <span class="kt">boolean</span> <span class="n">serialize</span> <span class="o">=</span> <span class="n">excludeField</span><span class="o">(</span><span class="n">field</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+</span><span class='line'>        <span class="kt">boolean</span> <span class="n">deserialize</span> <span class="o">=</span> <span class="n">excludeField</span><span class="o">(</span><span class="n">field</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(!</span><span class="n">serialize</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">deserialize</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">continue</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="n">accessor</span><span class="o">.</span><span class="na">makeAccessible</span><span class="o">(</span><span class="n">field</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Type</span> <span class="n">fieldType</span> <span class="o">=</span> <span class="n">$Gson$Types</span><span class="o">.</span><span class="na">resolve</span><span class="o">(</span><span class="n">type</span><span class="o">.</span><span class="na">getType</span><span class="o">(),</span> <span class="n">raw</span><span class="o">,</span> <span class="n">field</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">fieldNames</span> <span class="o">=</span> <span class="n">getFieldNames</span><span class="o">(</span><span class="n">field</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">BoundField</span> <span class="n">previous</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">fieldNames</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">fieldNames</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</span><span class='line'>          <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="n">serialize</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span> <span class="c1">// only serialize the default name</span>
+</span><span class='line'>          <span class="n">BoundField</span> <span class="n">boundField</span> <span class="o">=</span> <span class="n">createBoundField</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">field</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span>
+</span><span class='line'>              <span class="n">TypeToken</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">fieldType</span><span class="o">),</span> <span class="n">serialize</span><span class="o">,</span> <span class="n">deserialize</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">BoundField</span> <span class="n">replaced</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">boundField</span><span class="o">);</span>
+</span><span class='line'>          <span class="k">if</span> <span class="o">(</span><span class="n">previous</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="n">previous</span> <span class="o">=</span> <span class="n">replaced</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">previous</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="n">declaredType</span>
+</span><span class='line'>              <span class="o">+</span> <span class="s">&quot; declares multiple JSON fields named &quot;</span> <span class="o">+</span> <span class="n">previous</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">//继续处理父类</span>
+</span><span class='line'>      <span class="n">type</span> <span class="o">=</span> <span class="n">TypeToken</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">$Gson$Types</span><span class="o">.</span><span class="na">resolve</span><span class="o">(</span><span class="n">type</span><span class="o">.</span><span class="na">getType</span><span class="o">(),</span> <span class="n">raw</span><span class="o">,</span> <span class="n">raw</span><span class="o">.</span><span class="na">getGenericSuperclass</span><span class="o">()));</span>
+</span><span class='line'>      <span class="n">raw</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">getRawType</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">private</span> <span class="n">ReflectiveTypeAdapterFactory</span><span class="o">.</span><span class="na">BoundField</span> <span class="nf">createBoundField</span><span class="o">(</span>
+</span><span class='line'>      <span class="kd">final</span> <span class="n">Gson</span> <span class="n">context</span><span class="o">,</span> <span class="kd">final</span> <span class="n">Field</span> <span class="n">field</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span>
+</span><span class='line'>      <span class="kd">final</span> <span class="n">TypeToken</span><span class="o">&lt;?&gt;</span> <span class="n">fieldType</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">serialize</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">deserialize</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">isPrimitive</span> <span class="o">=</span> <span class="n">Primitives</span><span class="o">.</span><span class="na">isPrimitive</span><span class="o">(</span><span class="n">fieldType</span><span class="o">.</span><span class="na">getRawType</span><span class="o">());</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 为字段关联TypeAdapter. 首先看是否有通过注解特别指定的，没有的话通过getAdapter来创建</span>
+</span><span class='line'>    <span class="n">JsonAdapter</span> <span class="n">annotation</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">JsonAdapter</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">TypeAdapter</span><span class="o">&lt;?&gt;</span> <span class="n">mapped</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">annotation</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">mapped</span> <span class="o">=</span> <span class="n">jsonAdapterFactory</span><span class="o">.</span><span class="na">getTypeAdapter</span><span class="o">(</span>
+</span><span class='line'>          <span class="n">constructorConstructor</span><span class="o">,</span> <span class="n">context</span><span class="o">,</span> <span class="n">fieldType</span><span class="o">,</span> <span class="n">annotation</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">jsonAdapterPresent</span> <span class="o">=</span> <span class="n">mapped</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">mapped</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="n">mapped</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getAdapter</span><span class="o">(</span><span class="n">fieldType</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">TypeAdapter</span><span class="o">&lt;?&gt;</span> <span class="n">typeAdapter</span> <span class="o">=</span> <span class="n">mapped</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">new</span> <span class="n">ReflectiveTypeAdapterFactory</span><span class="o">.</span><span class="na">BoundField</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">serialize</span><span class="o">,</span> <span class="n">deserialize</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span> <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="n">JsonWriter</span> <span class="n">writer</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span>
+</span><span class='line'>          <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">IllegalAccessException</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Object</span> <span class="n">fieldValue</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">TypeAdapter</span> <span class="n">t</span> <span class="o">=</span> <span class="n">jsonAdapterPresent</span> <span class="o">?</span> <span class="n">typeAdapter</span>
+</span><span class='line'>            <span class="o">:</span> <span class="k">new</span> <span class="nf">TypeAdapterRuntimeTypeWrapper</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">typeAdapter</span><span class="o">,</span> <span class="n">fieldType</span><span class="o">.</span><span class="na">getType</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">t</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">writer</span><span class="o">,</span> <span class="n">fieldValue</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="nd">@Override</span> <span class="kt">void</span> <span class="nf">read</span><span class="o">(</span><span class="n">JsonReader</span> <span class="n">reader</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span>
+</span><span class='line'>          <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">IllegalAccessException</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Object</span> <span class="n">fieldValue</span> <span class="o">=</span> <span class="n">typeAdapter</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">reader</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">fieldValue</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">||</span> <span class="o">!</span><span class="n">isPrimitive</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">field</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">fieldValue</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">writeField</span><span class="o">(</span><span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">IllegalAccessException</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(!</span><span class="n">serialized</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">Object</span> <span class="n">fieldValue</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">fieldValue</span> <span class="o">!=</span> <span class="n">value</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>    <span class="o">};</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>至此，已经解析好了该类以及父类的所有字段。接下来看下是TypeAdapter是怎么执行转换的。</p>
+
+<h3>TypaAdapter执行转换</h3>
+
+<p>这块从<code>ReflectiveTypeAdapterFactory</code>的实现来看就比较简单了，通过对每个解析好的<code>BoundField</code> 调用它的<code>read</code>和<code>write</code>方法即可。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">toJson</span><span class="o">(</span><span class="n">Object</span> <span class="n">src</span><span class="o">,</span> <span class="n">Type</span> <span class="n">typeOfSrc</span><span class="o">,</span> <span class="n">JsonWriter</span> <span class="n">writer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">JsonIOException</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">TypeAdapter</span><span class="o">&lt;?&gt;</span> <span class="n">adapter</span> <span class="o">=</span> <span class="n">getAdapter</span><span class="o">(</span><span class="n">TypeToken</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">typeOfSrc</span><span class="o">));</span>
+</span><span class='line'>    <span class="kt">boolean</span> <span class="n">oldLenient</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="na">isLenient</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">writer</span><span class="o">.</span><span class="na">setLenient</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class='line'>    <span class="kt">boolean</span> <span class="n">oldHtmlSafe</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="na">isHtmlSafe</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">writer</span><span class="o">.</span><span class="na">setHtmlSafe</span><span class="o">(</span><span class="n">htmlSafe</span><span class="o">);</span>
+</span><span class='line'>    <span class="kt">boolean</span> <span class="n">oldSerializeNulls</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="na">getSerializeNulls</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">writer</span><span class="o">.</span><span class="na">setSerializeNulls</span><span class="o">(</span><span class="n">serializeNulls</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>      <span class="o">((</span><span class="n">TypeAdapter</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;)</span> <span class="n">adapter</span><span class="o">).</span><span class="na">write</span><span class="o">(</span><span class="n">writer</span><span class="o">,</span> <span class="n">src</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="k">new</span> <span class="nf">JsonIOException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AssertionError</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="n">error</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">writer</span><span class="o">.</span><span class="na">setLenient</span><span class="o">(</span><span class="n">oldLenient</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">writer</span><span class="o">.</span><span class="na">setHtmlSafe</span><span class="o">(</span><span class="n">oldHtmlSafe</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">writer</span><span class="o">.</span><span class="na">setSerializeNulls</span><span class="o">(</span><span class="n">oldSerializeNulls</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">fromJson</span><span class="o">(</span><span class="n">JsonReader</span> <span class="n">reader</span><span class="o">,</span> <span class="n">Type</span> <span class="n">typeOfT</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">JsonIOException</span><span class="o">,</span> <span class="n">JsonSyntaxException</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kt">boolean</span> <span class="n">isEmpty</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="kt">boolean</span> <span class="n">oldLenient</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="na">isLenient</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">reader</span><span class="o">.</span><span class="na">setLenient</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">reader</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">isEmpty</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>      <span class="n">TypeToken</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">typeToken</span> <span class="o">=</span> <span class="o">(</span><span class="n">TypeToken</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;)</span> <span class="n">TypeToken</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">typeOfT</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">TypeAdapter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">typeAdapter</span> <span class="o">=</span> <span class="n">getAdapter</span><span class="o">(</span><span class="n">typeToken</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">T</span> <span class="n">object</span> <span class="o">=</span> <span class="n">typeAdapter</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">reader</span><span class="o">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">object</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">EOFException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="k">new</span> <span class="nf">JsonSyntaxException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IllegalStateException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="k">new</span> <span class="nf">JsonSyntaxException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="k">new</span> <span class="nf">JsonSyntaxException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AssertionError</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="n">error</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">reader</span><span class="o">.</span><span class="na">setLenient</span><span class="o">(</span><span class="n">oldLenient</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>总结</h3>
+
+<p>从代码中可以看到，Gson针对所有的类型细节的处理都抽象封装到了TypeAdapter中，这样使得主流程可以不用关心转换细节，同时也为用户扩展提供了无限的可能。</p>
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/arts/'>arts</a>, <a class='category' href='/blog/categories/duplicate-payment/'>duplicate payment</a>, <a class='category' href='/blog/categories/gson/'>gson</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-04-22T00:58:05+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2019/04/22/arts-week-five/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2019/04/14/arts-week-four/" title="Previous Post: arts-week-four">&laquo; arts-week-four</a>
+      &nbsp;&nbsp;
+      
+    </div>
+  </footer>
+
+
+</article>
+
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2019 linuxlsx
+  </p>
+</div>
+
+</footer>
+    
+
+<script type="text/javascript">
+  disqus_shortname = 'linuxlsx';
+  
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2019/04/22/arts-week-five/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2019/04/22/arts-week-five/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'linuxlsx',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>
