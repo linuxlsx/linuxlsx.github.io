@@ -4,7 +4,7 @@
   <title><![CDATA[平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-04-28T21:53:45+08:00</updated>
+  <updated>2019-05-05T21:08:17+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -12,6 +12,287 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Arts-week-7]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/05/05/arts-week-7/"/>
+    <updated>2019-05-05T21:06:15+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/05/05/arts-week-7</id>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/wildcard-matching/">Wildcard Matching</a></p>
+
+<p>题目要求:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*'.
+</span><span class='line'>
+</span><span class='line'>'?' Matches any single character.
+</span><span class='line'>'*' Matches any sequence of characters (including the empty sequence).
+</span><span class='line'>The matching should cover the entire input string (not partial).</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>本题可以通过动态规划解决。时间复杂度和空间复杂度都为O(mn)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isMatch</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="n">String</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">boolean</span><span class="o">[][]</span> <span class="n">match</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">][</span><span class="n">p</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+</span><span class='line'>    <span class="n">match</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 初始化空串的匹配。</span>
+</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">p</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="sc">&#39;*&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">match</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">p</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">!=</span> <span class="sc">&#39;*&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">match</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="sc">&#39;?&#39;</span> <span class="o">||</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="n">p</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">match</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">||</span> <span class="n">match</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">match</span><span class="o">[</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()][</span><span class="n">p</span><span class="o">.</span><span class="na">length</span><span class="o">()];</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://medium.com/@vaibhav0109/how-to-build-a-tiny-url-service-that-scales-to-billions-f6fb5ea22e8c">How to build a Tiny URL service that scales to billions?</a></p>
+
+<p>本文主要介绍了在Twitter和微博类应用场景下，如何把长URL转成短URL的实践。作者的实现是<a href="https://tinyurl.com/">TinyUrl</a></p>
+
+<p>目标是：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="n">Creating</span> <span class="n">a</span> <span class="n">unique</span><span class="o">,</span> <span class="n">repeatable</span> <span class="n">identifier</span> <span class="k">for</span> <span class="n">a</span> <span class="n">URL</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>直接使用Hash算法可不可以？作者的建议是不推荐，主要有以下几个缺点:</p>
+
+<ul>
+<li>长度。大多数常规的Hash算法都会产出长度比较大的字符串(32位，128位)，这个不符合短URL的设计目标</li>
+<li>唯一性。Hash算法在本质上并不唯一(存在重复可能)，所以需要考虑重复后的替代方案</li>
+<li>查找。使用Hash后的字符作为数据的Key，在查询上并不友好。</li>
+</ul>
+
+
+<h3>算法实现</h3>
+
+<p>在TinyUrl中，使用了名为Base62的算法，就是使用[0-9 a-z A-Z]62个字符来表示一个URL。使用62个字符且字符串长度为7，8，9，10，11时可以表示的URL数量为:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="mi">62</span><span class="n">⁷</span> <span class="o">=</span> <span class="mi">3</span><span class="o">,</span><span class="mi">521</span><span class="o">,</span><span class="mi">614</span><span class="o">,</span><span class="mi">606</span><span class="o">,</span><span class="mi">208</span> <span class="n">urls</span>
+</span><span class='line'><span class="mi">62</span><span class="n">⁸</span> <span class="o">=</span> <span class="mi">218</span><span class="o">,</span><span class="mi">340</span><span class="o">,</span><span class="mi">105</span><span class="o">,</span><span class="mi">584</span><span class="o">,</span><span class="mi">896</span> <span class="n">urls</span>
+</span><span class='line'><span class="mi">62</span><span class="n">⁹</span> <span class="o">=</span> <span class="mi">13</span><span class="o">,</span><span class="mi">537</span><span class="o">,</span><span class="mi">086</span><span class="o">,</span><span class="mi">546</span><span class="o">,</span><span class="mi">263</span><span class="o">,</span><span class="mi">552</span> <span class="n">urls</span>
+</span><span class='line'><span class="mi">62</span><span class="n">¹⁰</span> <span class="o">=</span> <span class="mi">839</span><span class="o">,</span><span class="mi">299</span><span class="o">,</span><span class="mi">365</span><span class="o">,</span><span class="mi">868</span><span class="o">,</span><span class="mi">340</span><span class="o">,</span><span class="mi">224</span> <span class="n">urls</span>
+</span><span class='line'><span class="mi">62</span><span class="n">¹¹</span> <span class="o">=</span> <span class="mi">52</span><span class="o">,</span><span class="mi">036</span><span class="o">,</span><span class="mi">560</span><span class="o">,</span><span class="mi">683</span><span class="o">,</span><span class="mi">837</span><span class="o">,</span><span class="mi">093</span><span class="o">,</span><span class="mi">888</span> <span class="n">urls</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用7个字符可以表示3500亿，使用8个字符可以表示218万亿个URL。以下是算法的实现部分：首先将要转换的URL生成一个对应的整数(seed)，然后根据这个seed来生成短URL.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">corpus</span>   <span class="o">=</span> <span class="s">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+</span><span class='line'><span class="cm">/*</span>
+</span><span class='line'><span class="cm">* 通过输入一个数字种子，返回该种子对应的Base62字符串。种子不同的情况下可以保证不会重复</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="nf">getBase62From10</span><span class="o">(</span><span class="kd">final</span> <span class="kt">long</span> <span class="n">seed</span><span class="o">)</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="n">String</span> <span class="n">number</span> <span class="o">=</span> <span class="n">seed</span> <span class="o">+</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+</span><span class='line'>  <span class="kt">char</span><span class="o">[]</span> <span class="n">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="o">[</span><span class="n">number</span><span class="o">.</span><span class="na">length</span><span class="o">()];</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">charPos</span> <span class="o">=</span> <span class="n">number</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>  <span class="n">BigInteger</span> <span class="n">bigIntegerNumber</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BigInteger</span><span class="o">(</span><span class="n">number</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">BigInteger</span> <span class="n">radix</span> <span class="o">=</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">62</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">while</span> <span class="o">(</span><span class="n">bigIntegerNumber</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">radix</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>   <span class="n">buf</span><span class="o">[</span><span class="n">charPos</span><span class="o">--]</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">[</span><span class="n">bigIntegerNumber</span><span class="o">.</span><span class="na">mod</span><span class="o">(</span><span class="n">radix</span><span class="o">).</span><span class="na">intValue</span><span class="o">()];</span>
+</span><span class='line'>   <span class="n">bigIntegerNumber</span> <span class="o">=</span> <span class="n">bigIntegerNumber</span><span class="o">.</span><span class="na">divide</span><span class="o">(</span><span class="n">radix</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="n">buf</span><span class="o">[</span><span class="n">charPos</span><span class="o">]</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">[</span><span class="n">bigIntegerNumber</span><span class="o">.</span><span class="na">intValue</span><span class="o">()];</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="nf">String</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="n">charPos</span><span class="o">,</span> <span class="o">(</span><span class="n">number</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="n">charPos</span><span class="o">));</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm">* 将一个62进制的整数转换为10进制的整数。</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="nf">getBase10From62</span><span class="o">(</span><span class="kd">final</span> <span class="kt">long</span> <span class="n">longNumber</span><span class="o">)</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="n">String</span> <span class="n">number</span> <span class="o">=</span> <span class="n">longNumber</span> <span class="o">+</span> <span class="s">&quot;&quot;</span><span class="o">;</span>
+</span><span class='line'>  <span class="n">BigInteger</span> <span class="n">value</span> <span class="o">=</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">ZERO</span><span class="o">;</span>
+</span><span class='line'>  <span class="k">for</span> <span class="o">(</span><span class="kt">char</span> <span class="n">c</span> <span class="o">:</span> <span class="n">number</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">62</span><span class="o">));</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="sc">&#39;0&#39;</span> <span class="o">&lt;=</span> <span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="sc">&#39;9&#39;</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>      <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="sc">&#39;a&#39;</span> <span class="o">&lt;=</span> <span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="sc">&#39;z&#39;</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>      <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span> <span class="o">+</span> <span class="mi">10</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="sc">&#39;A&#39;</span> <span class="o">&lt;=</span> <span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="sc">&#39;Z&#39;</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>      <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">c</span> <span class="o">-</span> <span class="sc">&#39;A&#39;</span> <span class="o">+</span> <span class="mi">36</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>设计</h3>
+
+<p>简单的方案可以通过数据表来实现，表可能的字段有：</p>
+
+<ul>
+<li>id (DB generated sequence ID)</li>
+<li>original_url      原来的链接</li>
+<li>shorten_url       短连接</li>
+<li>creation_date     创建时间</li>
+<li>expiration_date   过期时间</li>
+</ul>
+
+
+<p>交互流程如下图：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/TinyUrl-Flow-1.png?x-oss-process=style/black" alt="TinyUrl-Flow-1" /></p>
+
+<p>这个简单方案有两个缺点：</p>
+
+<ol>
+<li>需要两次数据库交互。在高并发场景下会对数据库造成压力</li>
+<li>当数据量达到一定数据级后迁移到多个表，数据库的自增ID会有重复，导致重复的短域名产生。</li>
+</ol>
+
+
+<p>现在来改进下这个方案，需要修改下表结构同时数据库操作只需要一次insert即可。新的字段如下：</p>
+
+<ul>
+<li>id_hash           通过Base62算法生成的字符串作为主键</li>
+<li>original_url      原来的链接</li>
+<li>shorten_url       短连接</li>
+<li>creation_date     创建时间</li>
+<li>expiration_date   过期时间</li>
+</ul>
+
+
+<p>在新方案中使用Base62产生的字符串做为主键而不是使用数据库自增ID。这样要求引入一个能够提供唯一ID的服务(可以利用Redis的自增特性)。新的方案交互流程如下：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/TinyUrl-Flow-2.png?x-oss-process=style/black" alt="TinyUrl-Flow-2" /></p>
+
+<h3>其他</h3>
+
+<h4>清除过期数据</h4>
+
+<ul>
+<li>当用户访问过期URL的时候，清理URL并返回错误给用户</li>
+<li>使用定时任务来主动清理(在系统低峰时执行)</li>
+</ul>
+
+
+<h4>安全性</h4>
+
+<ul>
+<li>由于<code>id_hash</code>是基于一个整数计算出来的，那么用户可以通过<code>id+1</code>的方式来获取出下一个TinyUrl。如果是私密数据的话这样的操作是不允许的。可以通过在url之后增加随机数的方式来解决这个问题，但是相应的会增加url的长度，这个是需要权衡的。</li>
+</ul>
+
+
+<h2>Tip</h2>
+
+<p>本周做算法题的时候卡了好久，通过查询相关资料才了解到应该使用动态规划来解。在网上搜寻了不少资料，文字版总感觉某些地方绕不过来。终于在油管上找到了一个讲解这个问题的视频，讲的清晰易懂，分享给大家。
+<a href="https://www.youtube.com/watch?v=3ZDZ-N0EPV0">https://www.youtube.com/watch?v=3ZDZ-N0EPV0</a></p>
+
+<h2>Share</h2>
+
+<p>本周没有自己写文章，结合自己最近的工作主要是知识图谱。所以给大家分享一份由清华大学整理的关于知识图谱的介绍文档：<a href="https://www.aminer.cn/research_report/5c3d5a8709e961951592a49d?download=true&amp;pathname=knowledgegraph.pdf">2019年第二期《人工智能之知识图谱》</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Arts-week-six]]></title>
