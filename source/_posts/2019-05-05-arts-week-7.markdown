@@ -1,0 +1,183 @@
+---
+layout: post
+title: "arts-week-7"
+date: 2019-05-05 21:06:15 +0800
+comments: true
+categories: ["ARTS", "动态规划", "短链接"]
+---
+
+## Algorithm
+
+本周完成的算法题: [Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
+
+题目要求:
+
+```
+Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*'.
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+The matching should cover the entire input string (not partial).
+```
+
+<!-- more -->
+
+本题可以通过动态规划解决。时间复杂度和空间复杂度都为O(mn)
+
+```Java
+    public boolean isMatch(String s, String p) {
+
+        boolean[][] match = new boolean[s.length() + 1][p.length() + 1];
+        match[0][0] = true;
+        
+        // 初始化空串的匹配。
+        for (int i = 1; i <= p.length(); i++) {
+            if (p.charAt(i - 1) == '*') {
+                match[0][i] = match[0][i - 1];
+            }
+        }
+
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= p.length(); j++) {
+                if (p.charAt(j - 1) != '*') {
+                    match[i][j] = match[i - 1][j - 1] && (p.charAt(j - 1) == '?' || s.charAt(i - 1) == p.charAt(j - 1));
+                } else {
+                    match[i][j] = match[i][j - 1] || match[i - 1][j];
+                }
+            }
+        }
+        return match[s.length()][p.length()];
+    }
+```
+
+## Review
+
+本周Review [How to build a Tiny URL service that scales to billions?](https://medium.com/@vaibhav0109/how-to-build-a-tiny-url-service-that-scales-to-billions-f6fb5ea22e8c)
+
+本文主要介绍了在Twitter和微博类应用场景下，如何把长URL转成短URL的实践。作者的实现是[TinyUrl](https://tinyurl.com/)
+
+目标是：
+
+```
+Creating a unique, repeatable identifier for a URL
+```
+
+直接使用Hash算法可不可以？作者的建议是不推荐，主要有以下几个缺点:
+
+* 长度。大多数常规的Hash算法都会产出长度比较大的字符串(32位，128位)，这个不符合短URL的设计目标
+* 唯一性。Hash算法在本质上并不唯一(存在重复可能)，所以需要考虑重复后的替代方案
+* 查找。使用Hash后的字符作为数据的Key，在查询上并不友好。
+
+### 算法实现
+
+在TinyUrl中，使用了名为Base62的算法，就是使用[0-9 a-z A-Z]62个字符来表示一个URL。使用62个字符且字符串长度为7，8，9，10，11时可以表示的URL数量为:
+
+```
+62⁷ = 3,521,614,606,208 urls
+62⁸ = 218,340,105,584,896 urls
+62⁹ = 13,537,086,546,263,552 urls
+62¹⁰ = 839,299,365,868,340,224 urls
+62¹¹ = 52,036,560,683,837,093,888 urls
+```
+
+使用7个字符可以表示3500亿，使用8个字符可以表示218万亿个URL。以下是算法的实现部分：首先将要转换的URL生成一个对应的整数(seed)，然后根据这个seed来生成短URL.
+
+```Java
+private static final char[] corpus   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+/*
+* 通过输入一个数字种子，返回该种子对应的Base62字符串。种子不同的情况下可以保证不会重复
+*/
+public static final String getBase62From10(final long seed)
+{
+  String number = seed + "";
+  char[] buf = new char[number.length()];
+  int charPos = number.length() - 1;
+  BigInteger bigIntegerNumber = new BigInteger(number);
+  BigInteger radix = BigInteger.valueOf(62);
+ 
+  while (bigIntegerNumber.compareTo(radix) >= 0)
+  {
+   buf[charPos--] = corpus[bigIntegerNumber.mod(radix).intValue()];
+   bigIntegerNumber = bigIntegerNumber.divide(radix);
+  }
+  buf[charPos] = corpus[bigIntegerNumber.intValue()];
+  return new String(buf, charPos, (number.length() - charPos));
+}
+/**
+* 将一个62进制的整数转换为10进制的整数。
+*/
+public static final String getBase10From62(final long longNumber)
+{
+  String number = longNumber + "";
+  BigInteger value = BigInteger.ZERO;
+  for (char c : number.toCharArray())
+  {
+    value = value.multiply(BigInteger.valueOf(62)); 
+    if ('0' <= c && c <= '9')
+    {
+      value = value.add(BigInteger.valueOf(c - '0'));
+    }
+    if ('a' <= c && c <= 'z')
+    {
+      value = value.add(BigInteger.valueOf(c - 'a' + 10));
+    }
+    if ('A' <= c && c <= 'Z')
+    {
+      value = value.add(BigInteger.valueOf(c - 'A' + 36));
+    }
+   }
+   return value.toString();
+}
+```
+
+### 设计
+
+简单的方案可以通过数据表来实现，表可能的字段有：
+
+* id (DB generated sequence ID)
+* original_url      原来的链接
+* shorten_url       短连接
+* creation_date     创建时间
+* expiration_date   过期时间
+
+交互流程如下图：
+
+![TinyUrl-Flow-1](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/TinyUrl-Flow-1.png?x-oss-process=style/black)
+
+这个简单方案有两个缺点：
+
+1. 需要两次数据库交互。在高并发场景下会对数据库造成压力
+2. 当数据量达到一定数据级后迁移到多个表，数据库的自增ID会有重复，导致重复的短域名产生。
+
+现在来改进下这个方案，需要修改下表结构同时数据库操作只需要一次insert即可。新的字段如下：
+
+* id_hash           通过Base62算法生成的字符串作为主键
+* original_url      原来的链接
+* shorten_url       短连接
+* creation_date     创建时间
+* expiration_date   过期时间
+
+在新方案中使用Base62产生的字符串做为主键而不是使用数据库自增ID。这样要求引入一个能够提供唯一ID的服务(可以利用Redis的自增特性)。新的方案交互流程如下：
+
+![TinyUrl-Flow-2](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/TinyUrl-Flow-2.png?x-oss-process=style/black)
+
+### 其他
+
+#### 清除过期数据
+
+* 当用户访问过期URL的时候，清理URL并返回错误给用户
+* 使用定时任务来主动清理(在系统低峰时执行)
+
+#### 安全性
+
+* 由于`id_hash`是基于一个整数计算出来的，那么用户可以通过`id+1`的方式来获取出下一个TinyUrl。如果是私密数据的话这样的操作是不允许的。可以通过在url之后增加随机数的方式来解决这个问题，但是相应的会增加url的长度，这个是需要权衡的。
+
+## Tip
+
+本周做算法题的时候卡了好久，通过查询相关资料才了解到应该使用动态规划来解。在网上搜寻了不少资料，文字版总感觉某些地方绕不过来。终于在油管上找到了一个讲解这个问题的视频，讲的清晰易懂，分享给大家。
+[https://www.youtube.com/watch?v=3ZDZ-N0EPV0](https://www.youtube.com/watch?v=3ZDZ-N0EPV0)
+
+
+## Share
+
+本周没有自己写文章，结合自己最近的工作主要是知识图谱。所以给大家分享一份由清华大学整理的关于知识图谱的介绍文档：[2019年第二期《人工智能之知识图谱》](https://www.aminer.cn/research_report/5c3d5a8709e961951592a49d?download=true&pathname=knowledgegraph.pdf)
