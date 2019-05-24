@@ -1,0 +1,131 @@
+---
+layout: post
+title: "arts-week-8"
+date: 2019-05-24 15:20:26 +0800
+comments: true
+categories: ["ARTS", "Jump Game", "贪心算法", "Synchronized"]
+---
+
+## Algorithm
+
+本周完成的算法题: [Jump Game II](https://leetcode.com/problems/jump-game-ii/)
+
+题目要求:
+
+```
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Your goal is to reach the last index in the minimum number of jumps.
+```
+
+这个问题可以通过贪心算法实现O(n)的时间复杂度。具体代码如下：
+
+<!-- more -->
+
+```Java
+public int jump(int[] nums) {
+
+        //跳动的次数
+        int jumpCount = 0;
+        //需要更新次数的位置
+        int newJumpIndex = 0;
+        //当前跳动周期内最远能够到达的位置
+        int currentFarthestIndex = 0;
+        for (int i = 0; i < nums.length - 1; i++) {
+
+            //如果已经超过了边界，则直接返回。
+            if(i + nums[i] >= nums.length - 1){
+                return ++jumpCount;
+            }
+
+            //获取最远位置
+            currentFarthestIndex = Math.max(currentFarthestIndex, i + nums[i]);
+
+            //更新跳动次数
+            if (i == newJumpIndex) {
+                jumpCount++;
+                newJumpIndex = currentFarthestIndex;
+            }
+        }
+        return jumpCount;
+    }
+```
+
+为了便于理解，自己画了一个示意图：
+
+![jumpGame](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/jumpgame.png?x-oss-process=style/black)
+
+假设当前节点位置为**k**, 那么该位置下一跳的位置为**k + nums[k]**。现在根据图上的节点来模拟过程：
+
+1. 初始状态没得选，直接到第一个节点，注意这时 jumpCount = 1。
+2. 从第一个节点开始，我们要考虑怎么跳使得下一条达到最远的距离： 
+    * 2.1 现在的节点是5，那我们有5中跳法，一次跳1个节点，2个节点，...，5个节点。那么接下来就对每种跳法计算下一跳能到达的位置。
+    * 2.2 跳一个点 k=1, nums[k] = 6，那么能到的位置为 k + nums[k] = 7
+    * 2.3 跳两个点 k=2, nums[k] = 4，那么能到的位置为 k + nums[k] = 6
+    * 2.4 跳三个点 k=3, nums[k] = 4，那么能到的位置为 k + nums[k] = 7
+    * 2.5 跳四个点 k=4, nums[k] = 6，那么能到的位置为 k + nums[k] = 10
+    * 2.6 跳五个点 k=5, nums[k] = 9，那么能到的位置为 k + nums[k] = 14
+    * 2.7 这样就可以得到结论，应该选择跳五个点，这样下一跳的距离最远。
+
+3. 使用新的位置重复第二步，直到结束
+
+注意图中红色的节点，到这个点再加上这个点可跳的距离就能够到达终点了，所以就可以不用继续遍历后续的点，直接返回**当前跳数+1**即可。
+
+## Review
+
+本周Review [The 10-Step Process of Learning How to Learn](https://medium.com/constraint-drives-creativity/the-10-step-process-of-learning-how-to-learn-c2af6fa71e3f)
+
+本文分享的是：10个步骤学会如何学习。我们一直都在学习各种知识，但是我们的学习方法是否正确高效因人而异。掌握正确的学习方法会让学习事半功倍。
+
+使用`10-Step`方法可以做到以下三点：
+
+* How to get started。你要学的东西该怎么用
+* The breadth of the subject。你要学的东西的边界是什么，什么可以做，什么不可以做
+* The basics。最基本和最常用的场景是什么。考虑20-80定律
+
+`10-Step`
+
+* **Get the big picture** 对学习的内容先进行大概的了解，解决`unknown unknowns`困境。
+* **Determine scope** 确定要学的范围。记住贪多嚼不烂。
+* **Define success** 定义好学习结束的标准，否则就失去了目标。
+* **Find resources** 找到相关的学习资源。不限于书籍、视频、博客、论文等
+* **Create a learning plan** 创建学习计划
+* **Filter resources** 过滤资源
+* **Learn enough to get started** 比如搭建好开发环境，动手写个 Hello World。
+* **Play around**  探索和练习
+* **Learn enough to do something useful**  深入学习
+* **Teach** 将所学教给其他人。可以是沟通交流、博客、视频等
+
+## Tip
+
+在使用ORM框架时，插入一条数据后通常会需要知道该条记录的自增主键ID是什么。比如iBatis可以用如下的配置获取：
+
+```xml
+<selectKey resultClass="java.lang.Long" keyProperty="id" type="post">
+    SELECT last_insert_id() as id
+</selectKey>
+```
+
+使用MyBatis则是如下的配置:
+
+```xml
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+    </insert>
+```
+
+在MyBatis 中有 keyProperty 和 keyColumn 两个属性比较容易混淆。在底层数据库为MySQL的情况下，如果同时配置这两个属性就会出现获取不到主键ID的情况，解决办法是只使用 `keyProperty`。
+
+在MyBatis的[文档](http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html)中对这两个属性的解释如下：
+
+* **keyProperty** （仅对 insert 和 update 有用）唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值，默认值：未设置（unset）。如果希望得到多个生成的列，也可以是逗号分隔的属性名称列表。
+* **keyColumn** （仅对 insert 和 update 有用）通过生成的键值设置表中的列名，这个设置仅在某些数据库（像 PostgreSQL）是必须的，当主键列不是表中的第一列的时候需要设置。如果希望使用多个生成的列，也可以设置为逗号分隔的属性名称列表。
+
+## Share
+
+关于`Synchronized`的实现有很多的文章，近期看到一个很不错的合集，分享给大家：
+
+[死磕Synchronized底层实现--概论](https://github.com/farmerjohngit/myblog/issues/12) 
+
+总共有4篇，可以通过上面的文章中找到相关链接。
