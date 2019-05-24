@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://linuxlsx.github.io/blog/2019/05/24/arts-week-8/</loc>
+<lastmod>2019-05-24T15:20:26+08:00</lastmod>
+</url>
+<url>
 <loc>http://linuxlsx.github.io/blog/2019/05/05/arts-week-7/</loc>
 <lastmod>2019-05-05T21:06:15+08:00</lastmod>
 </url>
@@ -172,6 +176,9 @@
 <loc>http://linuxlsx.github.io/blog/categories/duan-lian-jie/</loc>
 </url>
 <url>
-<loc>http://linuxlsx.github.io/posts/2/</loc>
+<loc>http://linuxlsx.github.io/blog/categories/jump-game/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/blog/categories/tan-xin-suan-fa/</loc>
 </url>
 </urlset>

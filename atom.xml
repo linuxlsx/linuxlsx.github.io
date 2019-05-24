@@ -4,7 +4,7 @@
   <title><![CDATA[平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-05-05T21:08:17+08:00</updated>
+  <updated>2019-05-24T15:24:08+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -12,6 +12,190 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Arts-week-8]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/05/24/arts-week-8/"/>
+    <updated>2019-05-24T15:20:26+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/05/24/arts-week-8</id>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/jump-game-ii/">Jump Game II</a></p>
+
+<p>题目要求:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Given an array of non-negative integers, you are initially positioned at the first index of the array.
+</span><span class='line'>
+</span><span class='line'>Each element in the array represents your maximum jump length at that position.
+</span><span class='line'>
+</span><span class='line'>Your goal is to reach the last index in the minimum number of jumps.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个问题可以通过贪心算法实现O(n)的时间复杂度。具体代码如下：</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kt">int</span> <span class="nf">jump</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//跳动的次数</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">jumpCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="c1">//需要更新次数的位置</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">newJumpIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="c1">//当前跳动周期内最远能够到达的位置</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">currentFarthestIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">//如果已经超过了边界，则直接返回。</span>
+</span><span class='line'>            <span class="k">if</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">){</span>
+</span><span class='line'>                <span class="k">return</span> <span class="o">++</span><span class="n">jumpCount</span><span class="o">;</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">//获取最远位置</span>
+</span><span class='line'>            <span class="n">currentFarthestIndex</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">currentFarthestIndex</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">//更新跳动次数</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">newJumpIndex</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">jumpCount</span><span class="o">++;</span>
+</span><span class='line'>                <span class="n">newJumpIndex</span> <span class="o">=</span> <span class="n">currentFarthestIndex</span><span class="o">;</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">jumpCount</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了便于理解，自己画了一个示意图：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/jumpgame.png?x-oss-process=style/black" alt="jumpGame" /></p>
+
+<p>假设当前节点位置为<strong>k</strong>, 那么该位置下一跳的位置为<strong>k + nums[k]</strong>。现在根据图上的节点来模拟过程：</p>
+
+<ol>
+<li>初始状态没得选，直接到第一个节点，注意这时 jumpCount = 1。</li>
+<li><p>从第一个节点开始，我们要考虑怎么跳使得下一条达到最远的距离：</p>
+
+<ul>
+<li>2.1 现在的节点是5，那我们有5中跳法，一次跳1个节点，2个节点，&hellip;，5个节点。那么接下来就对每种跳法计算下一跳能到达的位置。</li>
+<li>2.2 跳一个点 k=1, nums[k] = 6，那么能到的位置为 k + nums[k] = 7</li>
+<li>2.3 跳两个点 k=2, nums[k] = 4，那么能到的位置为 k + nums[k] = 6</li>
+<li>2.4 跳三个点 k=3, nums[k] = 4，那么能到的位置为 k + nums[k] = 7</li>
+<li>2.5 跳四个点 k=4, nums[k] = 6，那么能到的位置为 k + nums[k] = 10</li>
+<li>2.6 跳五个点 k=5, nums[k] = 9，那么能到的位置为 k + nums[k] = 14</li>
+<li>2.7 这样就可以得到结论，应该选择跳五个点，这样下一跳的距离最远。</li>
+</ul>
+</li>
+<li><p>使用新的位置重复第二步，直到结束</p></li>
+</ol>
+
+
+<p>注意图中红色的节点，到这个点再加上这个点可跳的距离就能够到达终点了，所以就可以不用继续遍历后续的点，直接返回<strong>当前跳数+1</strong>即可。</p>
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://medium.com/constraint-drives-creativity/the-10-step-process-of-learning-how-to-learn-c2af6fa71e3f">The 10-Step Process of Learning How to Learn</a></p>
+
+<p>本文分享的是：10个步骤学会如何学习。我们一直都在学习各种知识，但是我们的学习方法是否正确高效因人而异。掌握正确的学习方法会让学习事半功倍。</p>
+
+<p>使用<code>10-Step</code>方法可以做到以下三点：</p>
+
+<ul>
+<li>How to get started。你要学的东西该怎么用</li>
+<li>The breadth of the subject。你要学的东西的边界是什么，什么可以做，什么不可以做</li>
+<li>The basics。最基本和最常用的场景是什么。考虑20-80定律</li>
+</ul>
+
+
+<p><code>10-Step</code></p>
+
+<ul>
+<li><strong>Get the big picture</strong> 对学习的内容先进行大概的了解，解决<code>unknown unknowns</code>困境。</li>
+<li><strong>Determine scope</strong> 确定要学的范围。记住贪多嚼不烂。</li>
+<li><strong>Define success</strong> 定义好学习结束的标准，否则就失去了目标。</li>
+<li><strong>Find resources</strong> 找到相关的学习资源。不限于书籍、视频、博客、论文等</li>
+<li><strong>Create a learning plan</strong> 创建学习计划</li>
+<li><strong>Filter resources</strong> 过滤资源</li>
+<li><strong>Learn enough to get started</strong> 比如搭建好开发环境，动手写个 Hello World。</li>
+<li><strong>Play around</strong>  探索和练习</li>
+<li><strong>Learn enough to do something useful</strong>  深入学习</li>
+<li><strong>Teach</strong> 将所学教给其他人。可以是沟通交流、博客、视频等</li>
+</ul>
+
+
+<h2>Tip</h2>
+
+<p>在使用ORM框架时，插入一条数据后通常会需要知道该条记录的自增主键ID是什么。比如iBatis可以用如下的配置获取：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;selectKey</span> <span class="na">resultClass=</span><span class="s">&quot;java.lang.Long&quot;</span> <span class="na">keyProperty=</span><span class="s">&quot;id&quot;</span> <span class="na">type=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    SELECT last_insert_id() as id
+</span><span class='line'><span class="nt">&lt;/selectKey&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用MyBatis则是如下的配置:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&quot;insert&quot;</span> <span class="na">useGeneratedKeys=</span><span class="s">&quot;true&quot;</span> <span class="na">keyProperty=</span><span class="s">&quot;id&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/insert&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在MyBatis 中有 keyProperty 和 keyColumn 两个属性比较容易混淆。在底层数据库为MySQL的情况下，如果同时配置这两个属性就会出现获取不到主键ID的情况，解决办法是只使用 <code>keyProperty</code>。</p>
+
+<p>在MyBatis的<a href="http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html">文档</a>中对这两个属性的解释如下：</p>
+
+<ul>
+<li><strong>keyProperty</strong> （仅对 insert 和 update 有用）唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值，默认值：未设置（unset）。如果希望得到多个生成的列，也可以是逗号分隔的属性名称列表。</li>
+<li><strong>keyColumn</strong> （仅对 insert 和 update 有用）通过生成的键值设置表中的列名，这个设置仅在某些数据库（像 PostgreSQL）是必须的，当主键列不是表中的第一列的时候需要设置。如果希望使用多个生成的列，也可以设置为逗号分隔的属性名称列表。</li>
+</ul>
+
+
+<h2>Share</h2>
+
+<p>关于<code>Synchronized</code>的实现有很多的文章，近期看到一个很不错的合集，分享给大家：</p>
+
+<p><a href="https://github.com/farmerjohngit/myblog/issues/12">死磕Synchronized底层实现&ndash;概论</a></p>
+
+<p>总共有4篇，可以通过上面的文章中找到相关链接。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Arts-week-7]]></title>
