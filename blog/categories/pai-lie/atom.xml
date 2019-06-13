@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 排列 | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/pai-lie/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2019-06-13T15:58:07+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Arts-week-9]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/06/13/arts-week-9/"/>
+    <updated>2019-06-13T15:55:16+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/06/13/arts-week-9</id>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/permutations-ii/">Permutations II</a></p>
+
+<p>题目要求:</p>
+
+<pre><code>Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Example:
+
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+</code></pre>
+
+<!--more-->
+
+
+<p>这个问题通过使用Map来记录每个数字出现的个数，然后对出现数字通过回溯法可以解决。</p>
+
+<pre><code class="Java">class Solution {
+    public List&lt;List&lt;Integer&gt;&gt; permuteUnique(int[] nums) {
+        List&lt;List&lt;Integer&gt;&gt; lists = new ArrayList&lt;&gt;();
+
+        Map&lt;Integer, Integer&gt; counter = new HashMap&lt;&gt;();
+        for (int num : nums) {
+            Integer c = counter.get(num);
+            if (c == null) {
+                counter.put(num, 1);
+            }else {
+                counter.put(num, c + 1);
+            }
+        }
+        backtrack(nums, lists, new ArrayList&lt;&gt;(), counter);
+
+        return lists;
+    }
+
+    private void backtrack(int[] nums, List&lt;List&lt;Integer&gt;&gt; lists, List&lt;Integer&gt; stack, Map&lt;Integer, Integer&gt; counter) {
+        if (stack.size() == nums.length) {
+            lists.add(new ArrayList&lt;&gt;(stack));
+        } else {
+
+            //注意这里遍历的是计数的Map 而不是原来的数组
+            for (Integer i : counter.keySet()) {
+
+                //只对计数大于0的数字做后续的操作
+                if(counter.get(i) &gt; 0){
+                    counter.put(i, counter.get(i) - 1);
+                    stack.add(i);
+                    backtrack(nums,lists, stack, counter);
+                    stack.remove(stack.size() - 1);
+                    counter.put(i, counter.get(i) + 1);
+                }
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://medium.com/system-design-blog/bloom-filter-a-probabilistic-data-structure-12e4e5cf0638">Bloom Filter : A Probabilistic Data Structure</a></p>
+
+<p>本文主要分享的是Bloom Filter的特性和使用场景。</p>
+
+<p>Bloom Filter的特点：</p>
+
+<ul>
+<li>能够在Constant space &amp; time 回答类似“商品是否在集合内?”的 YES/NO问题。</li>
+<li>一定不存在(Definitely not in the set) 和 可能存在(Probably in the set)</li>
+</ul>
+
+
+<p>Bloom Filter的使用场景：</p>
+
+<ul>
+<li>内容平台可以用来判断用户是否阅读过某个内容</li>
+<li>文件系统可以用来判断文件或者数据是否存在以便减少磁盘寻找时间</li>
+<li>恶意网址校验。</li>
+</ul>
+
+
+<p>更多参考内容:</p>
+
+<ul>
+<li><a href="http://oserror.com/backend/bloomfilter/">BloomFilter原理，实现及优化</a></li>
+<li><a href="https://blog.medium.com/what-are-bloom-filters-1ec2a50c68ff">What are Bloom Filters</a></li>
+</ul>
+
+
+<h2>Tip</h2>
+
+<p>在HashMap循环时，如何增加、删除HashMap中的元素?</p>
+
+<pre><code class="Java">        Map&lt;String, String&gt; map = new HashMap&lt;&gt;(16);
+        for (Map.Entry&lt;String, String&gt; entry : map.entrySet()) {
+
+            // will throw java.util.ConcurrentModificationException
+            map.remove(entry.getKey());
+
+            // will throw java.util.ConcurrentModificationException
+            map.put("new Key", "new Value");
+        }
+</code></pre>
+
+<p>如果直接在循环体中删除或者增加元素会抛出<code>java.util.ConcurrentModificationException</code>异常。
+HashMap遍历的顺序是不固定的，所以当你加入或者增加元素时可能会改变顺序(rehash)，这样的话有些元素可能会出现多次，有的可能就不出现了。程序应当保持一种一致的可预期的行为，因此在循环中增加或者删除是与允许的。</p>
+
+<p>HashMap中定义了一个变量<code>modCount</code>，这个变量代表这个HashMap被修改(增加、删除、Rehash等)的次数。同时在HashMap定义的<code>HashIterator</code>中用一个变量<code>expectedModCount</code>记录了当前的<code>modCount</code>，在每次循环是会比较这两个值是否一样，如果不一样就抛出<code>java.util.ConcurrentModificationException</code> 异常。</p>
+
+<pre><code class="Java">    abstract class HashIterator {
+        Node&lt;K,V&gt; next;        // next entry to return
+        Node&lt;K,V&gt; current;     // current entry
+        int expectedModCount;  // for fast-fail
+        int index;             // current slot
+
+        HashIterator() {
+            expectedModCount = modCount;
+            Node&lt;K,V&gt;[] t = table;
+            current = next = null;
+            index = 0;
+            if (t != null &amp;&amp; size &gt; 0) { // advance to first entry
+                do {} while (index &lt; t.length &amp;&amp; (next = t[index++]) == null);
+            }
+        }
+    }
+</code></pre>
+
+<p>所以对于HashMap的修改正确的方式是引入额外的空间。比如使用一个<code>List</code>来记录需要删除的key, 使用一个临时Map来记录需要增加的元素，在循环结束后统一处理。</p>
+
+<h2>Share</h2>
+
+<p>相信很多人程序员都会碰到晋升述职的场景，如何把自己做的事情、自己的能力最大化的展示出来是程序员普遍的一个短板。最近看到一篇关于晋升述职的文章感觉很不错，特地分享给大家。</p>
+
+<p><a href="https://www.linkedin.com/pulse/%E9%80%9A%E9%81%93%E7%AD%94%E8%BE%A9%E7%9A%847%E4%B8%AA%E5%B0%8F%E6%8A%80%E5%B7%A7-eason-wang">通道答辩的7个小技巧 7 Tips to Grow Your Career</a></p>
+]]></content>
+  </entry>
+  
+</feed>
