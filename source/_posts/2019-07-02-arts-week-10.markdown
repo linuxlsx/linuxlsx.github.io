@@ -1,0 +1,119 @@
+---
+layout: post
+title: "arts week 10"
+date: 2019-07-02 23:22:44 +0800
+comments: true
+categories: ["ARTS", "Rotate Image", "Matrix"]
+---
+
+## Algorithm
+
+本周完成的算法题: [Rotate Image](https://leetcode.com/problems/rotate-image/)
+
+<!-- more -->
+
+题目要求:
+
+```
+You are given an n x n 2D matrix representing an image.
+
+Rotate the image by 90 degrees (clockwise).
+
+Note:
+
+You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
+
+Example 1:
+
+Given input matrix = 
+[
+  [1,2,3],
+  [4,5,6],
+  [7,8,9]
+],
+
+rotate the input matrix in-place such that it becomes:
+[
+  [7,4,1],
+  [8,5,2],
+  [9,6,3]
+]
+```
+
+这个题目主要的思想就是要找到旋转前后每个数字的映射关系。例如：数字1(0,0)经过旋转后的位置变成了(0,2)，而原来(0,2)上的数字3旋转后的位置变为了(2,2)，原来(2,2)旋转后的新位置为(2,0)，最后(2,0)的新位置为(0,2)。这样通过(0,0) -> (0,2) -> (2,2) -> (2,0) -> (0,2) 就完成了一次完整的旋转了。
+
+更抽象一些 N x N 的矩阵，对于起始点 (0, x) x < N 那么它的一个旋转路径应该是：(0, x) -> (x, N - 1) -> (N - 1, x) -> (x, 0) -> (0, x)。通过这个公式就对任意x完成旋转了。
+
+有这个示意图可能会比较容易理解：
+
+![Rotate Image](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/ARTS-Rotate-Image.png?x-oss-process=style/black)
+
+```Java
+class Solution {
+    public void rotate(int[][] matrix) {
+        int len = matrix.length - 1;
+
+        for (int i = 0; i < matrix.length / 2; i++) {
+
+            for (int j = i; j < len - i; j++) {
+
+                int a = matrix[i][j];
+                int b = matrix[j][len - i];
+                int c = matrix[len - i][len -j];
+                int d = matrix[len - j][i];
+
+                //starting rotate
+                matrix[i][j] = d;
+                matrix[j][len - i] = a;
+                matrix[len - i][len -j] = b;
+                matrix[len - j][i] = c;
+            }
+        }
+    }
+}
+```
+
+## Review
+
+本周Review [Web Architecture 101](https://engineering.videoblocks.com/web-architecture-101-a3224e126947)
+
+**用户在浏览器点击查询或者提交到最终看到结果中间发生了哪些步骤，涉及哪些系统?**是面试官比较喜欢问的问题，这个可以了解到候选人对于整体架构的了解程度。本文就通过一张架构图展示了这个过程中涉及的各个步骤和系统，个人认为相当的全面，所以分享给大家：
+
+![WebApplicationArchitecture.png](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/WebApplicationArchitecture.png)
+
+## Tip
+
+在设计高可用系统时，限流和降级是必不可少的机制。那么在限流这个方案中有哪些算法和解决方案呢，我特意整理了下：
+
+* **固定计数法**  使用计数器记录1s内的请求数量，如果超过限制则阻塞当前请求。当超过时间后将计数器清零。该方法实现简单，能够满足部分需求，但是缺点也比较明显：
+
+    1.如果1s内的前100ms，请求已达到了限流配置阈值触发限流机制，而此后的900ms系统虽然处于空闲状态，但依然还是处于限流状态
+    
+    2.计数器清零时临界点问题。如果2s中，第1s的后100ms和第2s的前100ms都即将超过了限流阈值，但由于第1s总流量没有超过，第2s时计数重新清零。但将第1s的后100ms和第2s的前100ms视为同1s内的，则在这1s内的实际通过流量为配置的限流阈值的两倍，跟预期差异。如下图：
+    ![固定计数法](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3.png)
+    
+* **滑动窗口** 固定窗口将统计单位时间当做一个大的统计窗口。滑动窗口则将统计单位时间再等分为多个更小的时间窗口，分别对每个时间窗口进行流量的统计。计算单位时间的总流量，对所有的小窗口进行累加。 如下图：
+    ![滑动窗口](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3.png)
+    
+    滑动窗口很好的解决了固定窗口的第二个问题。在阿里的限流中间件`Sentinel`就采用了滑动窗口的思想。不过在实现上使用无锁环形的结构，在空间使用上与链表等实现有优势。
+    
+    缺点：在滑动窗口中如果出现某个单位时间内请求特别多，就会出现毛刺，导致请求效率降低。在`Sentinel`中采用[Exponential moving average算法](https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average)来减低毛刺的影响。
+
+* **漏桶算法**  漏桶算法思路很简单，水（请求）先进入到漏桶里，漏桶以一定的速度出水，可以看出漏桶算法能强行限制数据的处理速度。如下图：
+    ![漏桶算法](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png)
+    
+    缺点：漏桶的漏出速率是固定的参数，所以即使网络中不存在资源冲突（没有发生拥塞），漏桶算法也不能使某一个单独的流突发到端口速率。因此，漏桶算法对于存在突发特性的流量来说缺乏效率
+    
+    在并发场景中常见的线程池加任务队列的方式可以看作是漏桶算法的一种近似实现。
+
+* **令牌桶** 令牌桶算法与漏桶算法相似。令牌桶算法，生成者以恒定的速度生成令牌往令牌桶中存放（决定了QPS阈值）。每个请求尝试从令牌桶中获取令牌，获取到则马上进行执行。否则计算在指定的超时时间内是否能够申请到令牌，获取得到则在队列中等待获取令牌执行，获取不到则触发限流机制。如下图：
+
+    ![令牌桶](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95.png)
+    
+    优点： 对比漏桶算法，当瞬间访问流量变大时，只要令牌桶中的令牌数足够，则可以马上进行执行，不受“漏桶”恒定出水率的限制，体验更好。但需要保证令牌桶的容量不能过大，避免瞬间流量压垮系统。
+    
+    在Guava中有令牌桶的实现：RateLimiter。详细解释可见：[流量控制与令牌桶算法](https://www.techug.com/post/ratelimiter-designed.html)
+
+## Share
+
+[不想学习的时候如何逼迫自己去学习？](https://www.zhihu.com/question/20773513/answer/136229297?s_r=0&utm_division=web_hot_list&utm_medium=social&utm_oi=708251938717696000&utm_source=wechat_timeline&from=timeline&isappinstalled=0)
