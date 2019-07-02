@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://linuxlsx.github.io/blog/2019/07/02/arts-week-10/</loc>
+<lastmod>2019-07-02T23:22:44+08:00</lastmod>
+</url>
+<url>
 <loc>http://linuxlsx.github.io/blog/2019/06/13/arts-week-9/</loc>
 <lastmod>2019-06-13T15:55:16+08:00</lastmod>
 </url>
@@ -199,5 +203,17 @@
 </url>
 <url>
 <loc>http://linuxlsx.github.io/blog/categories/shu-zhi/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/blog/categories/rotate-image/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/blog/categories/matrix/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/posts/2/</loc>
+</url>
+<url>
+<loc>http://linuxlsx.github.io/posts/3/</loc>
 </url>
 </urlset>

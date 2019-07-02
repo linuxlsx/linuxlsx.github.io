@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Arts Week 10 - 平凡的世界</title>
+  <meta name="author" content="linuxlsx">
+
+  
+  <meta name="description" content="Algorithm 本周完成的算法题: Rotate Image 题目要求: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+You are given an n x n 2D matrix representing an &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://linuxlsx.github.io/blog/2019/07/02/arts-week-10">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="平凡的世界" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.proxy.ustclug.org/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-111612120-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      .lsx
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">平凡的世界</a></h1>
+  
+    <h2>Hello Little Cat</h2>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:linuxlsx.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2019/07/02/arts-week-10/">Arts Week 10</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/06/13/arts-week-9/">Arts-week-9</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/05/24/arts-week-8/">Arts-week-8</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/05/05/arts-week-7/">Arts-week-7</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/04/28/arts-week-six/">Arts-week-six</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/linuxlsx">@linuxlsx</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">Arts Week 10</h1>
+    </header>
+  
+  <div class="entry-content"><h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/rotate-image/">Rotate Image</a></p>
+
+<!-- more -->
+
+
+<p>题目要求:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>You are given an n x n 2D matrix representing an image.
+</span><span class='line'>
+</span><span class='line'>Rotate the image by 90 degrees (clockwise).
+</span><span class='line'>
+</span><span class='line'>Note:
+</span><span class='line'>
+</span><span class='line'>You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
+</span><span class='line'>
+</span><span class='line'>Example 1:
+</span><span class='line'>
+</span><span class='line'>Given input matrix = 
+</span><span class='line'>[
+</span><span class='line'>  [1,2,3],
+</span><span class='line'>  [4,5,6],
+</span><span class='line'>  [7,8,9]
+</span><span class='line'>],
+</span><span class='line'>
+</span><span class='line'>rotate the input matrix in-place such that it becomes:
+</span><span class='line'>[
+</span><span class='line'>  [7,4,1],
+</span><span class='line'>  [8,5,2],
+</span><span class='line'>  [9,6,3]
+</span><span class='line'>]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个题目主要的思想就是要找到旋转前后每个数字的映射关系。例如：数字1(0,0)经过旋转后的位置变成了(0,2)，而原来(0,2)上的数字3旋转后的位置变为了(2,2)，原来(2,2)旋转后的新位置为(2,0)，最后(2,0)的新位置为(0,2)。这样通过(0,0) -> (0,2) -> (2,2) -> (2,0) -> (0,2) 就完成了一次完整的旋转了。</p>
+
+<p>更抽象一些 N x N 的矩阵，对于起始点 (0, x) x &lt; N 那么它的一个旋转路径应该是：(0, x) -> (x, N - 1) -> (N - 1, x) -> (x, 0) -> (0, x)。通过这个公式就对任意x完成旋转了。</p>
+
+<p>有这个示意图可能会比较容易理解：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/ARTS-Rotate-Image.png?x-oss-process=style/black" alt="Rotate Image" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rotate</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">matrix</span><span class="o">.</span><span class="na">length</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">-</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span><span class="o">];</span>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">[</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span><span class="o">][</span><span class="n">len</span> <span class="o">-</span><span class="n">j</span><span class="o">];</span>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">[</span><span class="n">len</span> <span class="o">-</span> <span class="n">j</span><span class="o">][</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c1">//starting rotate</span>
+</span><span class='line'>                <span class="n">matrix</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">;</span>
+</span><span class='line'>                <span class="n">matrix</span><span class="o">[</span><span class="n">j</span><span class="o">][</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+</span><span class='line'>                <span class="n">matrix</span><span class="o">[</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span><span class="o">][</span><span class="n">len</span> <span class="o">-</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+</span><span class='line'>                <span class="n">matrix</span><span class="o">[</span><span class="n">len</span> <span class="o">-</span> <span class="n">j</span><span class="o">][</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://engineering.videoblocks.com/web-architecture-101-a3224e126947">Web Architecture 101</a></p>
+
+<p><strong>用户在浏览器点击查询或者提交到最终看到结果中间发生了哪些步骤，涉及哪些系统?</strong>是面试官比较喜欢问的问题，这个可以了解到候选人对于整体架构的了解程度。本文就通过一张架构图展示了这个过程中涉及的各个步骤和系统，个人认为相当的全面，所以分享给大家：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/WebApplicationArchitecture.png" alt="WebApplicationArchitecture.png" /></p>
+
+<h2>Tip</h2>
+
+<p>在设计高可用系统时，限流和降级是必不可少的机制。那么在限流这个方案中有哪些算法和解决方案呢，我特意整理了下：</p>
+
+<ul>
+<li><p><strong>固定计数法</strong>  使用计数器记录1s内的请求数量，如果超过限制则阻塞当前请求。当超过时间后将计数器清零。该方法实现简单，能够满足部分需求，但是缺点也比较明显：</p>
+
+<p>  1.如果1s内的前100ms，请求已达到了限流配置阈值触发限流机制，而此后的900ms系统虽然处于空闲状态，但依然还是处于限流状态</p>
+
+<p>  2.计数器清零时临界点问题。如果2s中，第1s的后100ms和第2s的前100ms都即将超过了限流阈值，但由于第1s总流量没有超过，第2s时计数重新清零。但将第1s的后100ms和第2s的前100ms视为同1s内的，则在这1s内的实际通过流量为配置的限流阈值的两倍，跟预期差异。如下图：
+  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3.png" alt="固定计数法" /></p></li>
+<li><p><strong>滑动窗口</strong> 固定窗口将统计单位时间当做一个大的统计窗口。滑动窗口则将统计单位时间再等分为多个更小的时间窗口，分别对每个时间窗口进行流量的统计。计算单位时间的总流量，对所有的小窗口进行累加。 如下图：
+  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3.png" alt="滑动窗口" /></p>
+
+<p>  滑动窗口很好的解决了固定窗口的第二个问题。在阿里的限流中间件<code>Sentinel</code>就采用了滑动窗口的思想。不过在实现上使用无锁环形的结构，在空间使用上与链表等实现有优势。</p>
+
+<p>  缺点：在滑动窗口中如果出现某个单位时间内请求特别多，就会出现毛刺，导致请求效率降低。在<code>Sentinel</code>中采用<a href="https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average">Exponential moving average算法</a>来减低毛刺的影响。</p></li>
+<li><p><strong>漏桶算法</strong>  漏桶算法思路很简单，水（请求）先进入到漏桶里，漏桶以一定的速度出水，可以看出漏桶算法能强行限制数据的处理速度。如下图：
+  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png" alt="漏桶算法" /></p>
+
+<p>  缺点：漏桶的漏出速率是固定的参数，所以即使网络中不存在资源冲突（没有发生拥塞），漏桶算法也不能使某一个单独的流突发到端口速率。因此，漏桶算法对于存在突发特性的流量来说缺乏效率</p>
+
+<p>  在并发场景中常见的线程池加任务队列的方式可以看作是漏桶算法的一种近似实现。</p></li>
+<li><p><strong>令牌桶</strong> 令牌桶算法与漏桶算法相似。令牌桶算法，生成者以恒定的速度生成令牌往令牌桶中存放（决定了QPS阈值）。每个请求尝试从令牌桶中获取令牌，获取到则马上进行执行。否则计算在指定的超时时间内是否能够申请到令牌，获取得到则在队列中等待获取令牌执行，获取不到则触发限流机制。如下图：</p>
+
+<p>  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95.png" alt="令牌桶" /></p>
+
+<p>  优点： 对比漏桶算法，当瞬间访问流量变大时，只要令牌桶中的令牌数足够，则可以马上进行执行，不受“漏桶”恒定出水率的限制，体验更好。但需要保证令牌桶的容量不能过大，避免瞬间流量压垮系统。</p>
+
+<p>  在Guava中有令牌桶的实现：RateLimiter。详细解释可见：<a href="https://www.techug.com/post/ratelimiter-designed.html">流量控制与令牌桶算法</a></p></li>
+</ul>
+
+
+<h2>Share</h2>
+
+<p><a href="https://www.zhihu.com/question/20773513/answer/136229297?s_r=0&amp;utm_division=web_hot_list&amp;utm_medium=social&amp;utm_oi=708251938717696000&amp;utm_source=wechat_timeline&amp;from=timeline&amp;isappinstalled=0">不想学习的时候如何逼迫自己去学习？</a></p>
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/arts/'>arts</a>, <a class='category' href='/blog/categories/matrix/'>matrix</a>, <a class='category' href='/blog/categories/rotate-image/'>rotate image</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-07-02T23:22:44+08:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#disqus_thread" onclick="return false;" data-disqus-identifier="http://linuxlsx.github.io/blog/2019/07/02/arts-week-10/">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2019/06/13/arts-week-9/" title="Previous Post: arts-week-9">&laquo; arts-week-9</a>
+      &nbsp;&nbsp;
+      
+    </div>
+  </footer>
+
+
+</article>
+
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2019 linuxlsx
+  </p>
+</div>
+
+</footer>
+    
+
+<script type="text/javascript">
+  disqus_shortname = 'linuxlsx';
+  
+    disqus_identifier = 'http://linuxlsx.github.io/blog/2019/07/02/arts-week-10/';
+    disqus_url = 'http://linuxlsx.github.io/blog/2019/07/02/arts-week-10/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'linuxlsx',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Arts | 平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/blog/categories/arts/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-06-13T15:58:07+08:00</updated>
+  <updated>2019-07-02T23:25:25+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Arts Week 10]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/07/02/arts-week-10/"/>
+    <updated>2019-07-02T23:22:44+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/07/02/arts-week-10</id>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/rotate-image/">Rotate Image</a></p>
+
+<!-- more -->
+
+
+<p>题目要求:</p>
+
+<pre><code>You are given an n x n 2D matrix representing an image.
+
+Rotate the image by 90 degrees (clockwise).
+
+Note:
+
+You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
+
+Example 1:
+
+Given input matrix = 
+[
+  [1,2,3],
+  [4,5,6],
+  [7,8,9]
+],
+
+rotate the input matrix in-place such that it becomes:
+[
+  [7,4,1],
+  [8,5,2],
+  [9,6,3]
+]
+</code></pre>
+
+<p>这个题目主要的思想就是要找到旋转前后每个数字的映射关系。例如：数字1(0,0)经过旋转后的位置变成了(0,2)，而原来(0,2)上的数字3旋转后的位置变为了(2,2)，原来(2,2)旋转后的新位置为(2,0)，最后(2,0)的新位置为(0,2)。这样通过(0,0) -> (0,2) -> (2,2) -> (2,0) -> (0,2) 就完成了一次完整的旋转了。</p>
+
+<p>更抽象一些 N x N 的矩阵，对于起始点 (0, x) x &lt; N 那么它的一个旋转路径应该是：(0, x) -> (x, N - 1) -> (N - 1, x) -> (x, 0) -> (0, x)。通过这个公式就对任意x完成旋转了。</p>
+
+<p>有这个示意图可能会比较容易理解：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/ARTS-Rotate-Image.png?x-oss-process=style/black" alt="Rotate Image" /></p>
+
+<pre><code class="Java">class Solution {
+    public void rotate(int[][] matrix) {
+        int len = matrix.length - 1;
+
+        for (int i = 0; i &lt; matrix.length / 2; i++) {
+
+            for (int j = i; j &lt; len - i; j++) {
+
+                int a = matrix[i][j];
+                int b = matrix[j][len - i];
+                int c = matrix[len - i][len -j];
+                int d = matrix[len - j][i];
+
+                //starting rotate
+                matrix[i][j] = d;
+                matrix[j][len - i] = a;
+                matrix[len - i][len -j] = b;
+                matrix[len - j][i] = c;
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://engineering.videoblocks.com/web-architecture-101-a3224e126947">Web Architecture 101</a></p>
+
+<p><strong>用户在浏览器点击查询或者提交到最终看到结果中间发生了哪些步骤，涉及哪些系统?</strong>是面试官比较喜欢问的问题，这个可以了解到候选人对于整体架构的了解程度。本文就通过一张架构图展示了这个过程中涉及的各个步骤和系统，个人认为相当的全面，所以分享给大家：</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/WebApplicationArchitecture.png" alt="WebApplicationArchitecture.png" /></p>
+
+<h2>Tip</h2>
+
+<p>在设计高可用系统时，限流和降级是必不可少的机制。那么在限流这个方案中有哪些算法和解决方案呢，我特意整理了下：</p>
+
+<ul>
+<li><p><strong>固定计数法</strong>  使用计数器记录1s内的请求数量，如果超过限制则阻塞当前请求。当超过时间后将计数器清零。该方法实现简单，能够满足部分需求，但是缺点也比较明显：</p>
+
+<p>  1.如果1s内的前100ms，请求已达到了限流配置阈值触发限流机制，而此后的900ms系统虽然处于空闲状态，但依然还是处于限流状态</p>
+
+<p>  2.计数器清零时临界点问题。如果2s中，第1s的后100ms和第2s的前100ms都即将超过了限流阈值，但由于第1s总流量没有超过，第2s时计数重新清零。但将第1s的后100ms和第2s的前100ms视为同1s内的，则在这1s内的实际通过流量为配置的限流阈值的两倍，跟预期差异。如下图：
+  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E5%9B%BA%E5%AE%9A%E7%AA%97%E5%8F%A3.png" alt="固定计数法" /></p></li>
+<li><p><strong>滑动窗口</strong> 固定窗口将统计单位时间当做一个大的统计窗口。滑动窗口则将统计单位时间再等分为多个更小的时间窗口，分别对每个时间窗口进行流量的统计。计算单位时间的总流量，对所有的小窗口进行累加。 如下图：
+  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3.png" alt="滑动窗口" /></p>
+
+<p>  滑动窗口很好的解决了固定窗口的第二个问题。在阿里的限流中间件<code>Sentinel</code>就采用了滑动窗口的思想。不过在实现上使用无锁环形的结构，在空间使用上与链表等实现有优势。</p>
+
+<p>  缺点：在滑动窗口中如果出现某个单位时间内请求特别多，就会出现毛刺，导致请求效率降低。在<code>Sentinel</code>中采用<a href="https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average">Exponential moving average算法</a>来减低毛刺的影响。</p></li>
+<li><p><strong>漏桶算法</strong>  漏桶算法思路很简单，水（请求）先进入到漏桶里，漏桶以一定的速度出水，可以看出漏桶算法能强行限制数据的处理速度。如下图：
+  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png" alt="漏桶算法" /></p>
+
+<p>  缺点：漏桶的漏出速率是固定的参数，所以即使网络中不存在资源冲突（没有发生拥塞），漏桶算法也不能使某一个单独的流突发到端口速率。因此，漏桶算法对于存在突发特性的流量来说缺乏效率</p>
+
+<p>  在并发场景中常见的线程池加任务队列的方式可以看作是漏桶算法的一种近似实现。</p></li>
+<li><p><strong>令牌桶</strong> 令牌桶算法与漏桶算法相似。令牌桶算法，生成者以恒定的速度生成令牌往令牌桶中存放（决定了QPS阈值）。每个请求尝试从令牌桶中获取令牌，获取到则马上进行执行。否则计算在指定的超时时间内是否能够申请到令牌，获取得到则在队列中等待获取令牌执行，获取不到则触发限流机制。如下图：</p>
+
+<p>  <img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/image/%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95.png" alt="令牌桶" /></p>
+
+<p>  优点： 对比漏桶算法，当瞬间访问流量变大时，只要令牌桶中的令牌数足够，则可以马上进行执行，不受“漏桶”恒定出水率的限制，体验更好。但需要保证令牌桶的容量不能过大，避免瞬间流量压垮系统。</p>
+
+<p>  在Guava中有令牌桶的实现：RateLimiter。详细解释可见：<a href="https://www.techug.com/post/ratelimiter-designed.html">流量控制与令牌桶算法</a></p></li>
+</ul>
+
+
+<h2>Share</h2>
+
+<p><a href="https://www.zhihu.com/question/20773513/answer/136229297?s_r=0&amp;utm_division=web_hot_list&amp;utm_medium=social&amp;utm_oi=708251938717696000&amp;utm_source=wechat_timeline&amp;from=timeline&amp;isappinstalled=0">不想学习的时候如何逼迫自己去学习？</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Arts-week-8]]></title>
@@ -1187,121 +1305,6 @@ public &lt;T&gt; T fromJson(JsonReader reader, Type typeOfT) throws JsonIOExcept
 <h3>总结</h3>
 
 <p>从代码中可以看到，Gson针对所有的类型细节的处理都抽象封装到了TypeAdapter中，这样使得主流程可以不用关心转换细节，同时也为用户扩展提供了无限的可能。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Arts-week-four]]></title>
-    <link href="http://linuxlsx.github.io/blog/2019/04/14/arts-week-four/"/>
-    <updated>2019-04-14T00:06:02+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2019/04/14/arts-week-four</id>
-    <content type="html"><![CDATA[<h2>Algorithm</h2>
-
-<p>本周完成的算法题: <a href="https://leetcode.com/problems/first-missing-positive/">First Missing Positive</a></p>
-
-<p>本题非独立完成，根据<a href="https://stackoverflow.com/questions/1586858/find-the-smallest-integer-not-in-a-list">Find the Smallest Integer Not in a List</a> 参考实现</p>
-
-<p>题目要求:</p>
-
-<pre><code class="Text">给定一个没有排序的Int数组，做到数组中不存在的最小正整数。
-
-Note:
-1. 算法复杂度必须是O(n)
-2. 使用常数个额外的空间
-</code></pre>
-
-<!-- more -->
-
-
-<p><strong>分析:</strong></p>
-
-<p>这个题的解法很巧妙，通过利用数组的下标和其对应的值做比较就可以确定确实的最小正整数。算法运行时间至多为<code>O(3N)</code>，而且只需要一个额外的Int变量。</p>
-
-<pre><code class="Java">    public int firstMissingPositive(int[] nums) {
-
-        int p;
-        //第一个O(N)
-        for (int i = 0; i &lt; nums.length; i++) {
-            p = nums[i];
-
-            //为什么这里也只会最多执行O(N)次
-            //因为在条件中会判断 nums[p - 1] != p，然后在循环体里面会设置 nums[p - 1] = p
-            //那么每执行一次赋值，就会减少一个可赋值的位置。
-            //就可以保证至多执行N次
-            while (p &gt; 0 &amp;&amp; p &lt; nums.length &amp;&amp; nums[p - 1] != p) {
-                nums[i] = nums[p - 1];
-                nums[p - 1] = p;
-                p = nums[i];
-            }
-        }
-
-        //第三个O(N)
-        for (int i = 0; i &lt; nums.length; i++) {
-            if (i + 1 != nums[i]) {
-                return i + 1;
-            }
-        }
-
-        ////只有数组是 [1,2,3,4] 这种情况才会走到这里
-        return nums.length + 1;
-    }
-</code></pre>
-
-<h2>Review</h2>
-
-<p>本周Review <a href="https://medium.com/s/story/reflections-on-clean-code-8c9b683277ca">What is Clean Code?</a></p>
-
-<p>本文是作者对于《Clean Code》一书的总结，从他的视角来看，可以归纳总结为三点:</p>
-
-<ul>
-<li><strong>工匠精神(Craftsmanship Matters)</strong> 可以<code>Works</code>的代码并不能说已经<code>done</code>，粗制滥造的代码会比你想象的快的出现问题。(Poorly crafted code frays at the edge much faster than you might expect.)</li>
-<li><strong>今天的额外努力会减少明天的痛苦(Extra Effort Today Saves Pain Tomorrow)</strong> 就跟买衣服，鞋子一样，好的鞋子可能在价格上会高些，但是它可以穿两年、三年甚至十年，那么长远来看，这个价格就不高了。高质量的代码也是一样的，可以在开始时会困难些，但是会降低未来的技术债和维护成本。</li>
-<li><strong>你写的代码不仅仅是你的(Your Code Is Not Your Own)</strong> 过于聪明的把戏，黑科技和编程技巧只是当时作者的乐趣(Overly clever tricks, hacks, and sleights of programmatic hand are only fun for the author.)，但是会给后续的维护者(也可能是你自己)带来无数的麻烦。</li>
-</ul>
-
-
-<p>对于什么是<code>Clean Code</code>，也总结了一下几点:</p>
-
-<ul>
-<li>Clean code is simple。虽然可能在算法或者系统层级上复杂，但是实现上要简单。少用比较冷门的技巧。</li>
-<li>Clean code is readable。在命名规范、缩进、结构和流程要有良好的设计，虽然显得有些古板但是会减少后来着的理解难度。</li>
-<li>Clean code is considerate。Clean code 要为后续的读者考虑，可以假设他们也是拥有同样背景和经验的人。</li>
-<li>Clean code is tested。Clean code 要有充分的测试</li>
-<li>Clean code is practiced。Clean code 需要多练习</li>
-<li>Clean code is relentlessly refactored。Clean code 需要经常重构</li>
-<li>Clean code is SOLID。遵循<a href="https://medium.com/@severinperez/writing-flexible-code-with-the-single-responsibility-principle-b71c4f3f883f">Solid 原则</a></li>
-</ul>
-
-
-<p>结合自身的实际来说，我觉得最重要的是 <code>tested</code> 和 <code>readable</code>。只有测试过的代码才能保证联调、测试和线上运行的时候不出现问题。另外很少有情况是你一直维护一套代码，所以让代码有良好的可读性会对后来者有很大帮助，同时自己也会有成就感。</p>
-
-<h2>Tip</h2>
-
-<p>本周分享一个线上排查问题时需要将日志内容按照不同的要求写到不同的文件。</p>
-
-<pre><code class="Bash">awk -F',' '{if ($2 ==1) print $1 &gt; "down.txt"; else if($2 == 6) print $1 &gt; "delete.txt"; else print $1 &gt; "other.txt"}' xxx.log
-</code></pre>
-
-<h2>Share</h2>
-
-<p><strong>主要负载均衡算法</strong></p>
-
-<p>分布式场景下client 访问 server 的策略有很多，典型的有 轮询，随机，Hash，最少连接，响应速度，加权算法等。</p>
-
-<p><strong>轮询算法</strong>：将所有请求，依次分发到每台服务器上。缺点: 所有机器的请求一样， 处理能力慢的机器压力变大。
-<strong>随机算法</strong>：请求随机分配到各个服务器。简单。缺点：理论上所有机器的请求一样，处理能力慢的机器压力变大。
-<strong>最少连接</strong>：将请求分配到连接数最少的服务器（目前处理请求最少的服务器）。优点：根据服务器当前的请求处理情况，动态分配。缺点: 实现比较复杂，需要感知服务器的状态
-<strong>Hash</strong> : 根据IP地址进行Hash计算，得到IP地址。优点： 将来自同一IP地址的请求，同一会话期内，转发到相同的服务器；实现会话粘滞。缺点：机器变化时会需要重新计算，最坏情况下所有请求都需要变化。
-加权算法：在轮询，随机，最少链接，Hash’等算法的基础上，通过加权的方式，进行负载服务器分配。优点：根据权重，调节转发服务器的请求数目；缺点：使用相对复杂；
-<strong>一致性 Hash</strong> ：一致性Hash 的实现是将 node 映射到一个 固定长度的圆环上，请求计算出Hash值按照预定的规则（一般是按照顺时钟方向）落到最近的服务器上。这样当出现机器的变化时，只会影响受影响机器与该机器反方向最近有效服务器之间的节点。其他的节点不会收到影响。当新增node时，只需要计算出该node的hash地址，然后将node 添加到 环的对应位置，只有新node 与后一个node之间的数据会受到影响。这种设计下的扩展性和容错性都比较好。比较不好的问题是在服务器比较少的情况下容易出现负责不均和的情况下。</p>
-
-<p>一致性Hash 的实现是将 node 映射到一个 固定长度的圆环上，并在有效节点中引入多个虚节点（每个虚节点都是有效的的一个影子）。这个所有请求能够均匀的落到node上。</p>
-
-<p>在现在的一致性hash实现上，Google 的研究人员发现在多次负载均衡过后不能够获得最优的负载均衡的效果，开发一个带负载因子(a)的一致性hash算法。</p>
-
-<p>这个算法的能够保证一致性和负责的均衡性（所有的机器的load 都是平均load 的 （1+a）倍）。当出现机器的新增和删除后，通过节点移动的操作重新使得负载重新达到均衡，而这个移动的次数只跟负载因子(a)相关，而与实际节点数的多少无关。每个新增或者删除节点的动作只会导致  O(1/a2) 次其他节点的移动。</p>
-
-<p>更多一致性Hash参考 : <a href="https://juejin.im/post/5b8f93576fb9a05d11175b8d">一致性Hash在负载均衡中的应用</a> </p>
 ]]></content>
   </entry>
   
