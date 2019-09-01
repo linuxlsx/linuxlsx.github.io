@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 零拷贝 | 平凡的世界]]></title>
+  <link href="http://linuxlsx.github.io/blog/categories/ling-kao-bei/atom.xml" rel="self"/>
+  <link href="http://linuxlsx.github.io/"/>
+  <updated>2019-09-01T17:18:29+08:00</updated>
+  <id>http://linuxlsx.github.io/</id>
+  <author>
+    <name><![CDATA[linuxlsx]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ARTS 第11周 零拷贝]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/09/01/arts-week-11/"/>
+    <updated>2019-09-01T17:09:16+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/09/01/arts-week-11</id>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/jump-game/">Jump Game</a></p>
+
+<!--more-->
+
+
+<p>题目要求:</p>
+
+<pre><code>Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+Example 1:
+
+Input: [2,3,1,1,4]
+Output: true
+Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+Example 2:
+
+Input: [3,2,1,0,4]
+Output: false
+Explanation: You will always arrive at index 3 no matter what. Its maximum
+             jump length is 0, which makes it impossible to reach the last index.
+</code></pre>
+
+<p>这个题的解可以使用贪心算法来解决。但是具体细节与<a href="https://leetcode.com/problems/jump-game-ii/">Jump GameII</a>略有不同。对于实例中给出的第二种情况，当我们到达<code>index 3</code>以后，再也无法往后继续跳，所以我们要在循环条件中增加<code>i &lt;= nextMaxIndex</code></p>
+
+<pre><code class="Java">    public boolean canJump(int[] nums) {
+        int nextMaxIndex = 0;
+        //注意到条件 i &lt;= nextMaxIndex
+        for (int i = 0; i &lt;= nums.length - 1 &amp;&amp; i &lt;= nextMaxIndex; i++) {
+
+            if(nextMaxIndex &lt; (i + nums[i])){
+                nextMaxIndex = (i + nums[i]);
+            }
+            nextMaxIndex = Math.max(nextMaxIndex, i + nums[i]);
+        }
+        return nextMaxIndex &gt;= nums.length - 1;
+    }
+</code></pre>
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://forge.medium.com/10-habits-of-unsuccessful-people-you-dont-want-to-copy-d401ac677c91">10 Bad Habits of Unsuccessful People</a></p>
+
+<p>成功没有捷径、成功各不相同。但是不成功却大体是类似的，所以我们要做好的将那些导致我们不成功的做法、习惯成生活中剔除，避免不成功<strong>Just try to avoid being unsuccessful</strong></p>
+
+<p>10个坏习惯：</p>
+
+<ol>
+<li>Always being distracted（经常分心，无法集中注意力）</li>
+<li>Only talking the talk（光说不做）</li>
+<li>Spending time with the wrong people</li>
+<li>Always focusing on the negative</li>
+<li>Procrastinating (拖延)</li>
+<li>Not listening to others</li>
+<li>Giving in to laziness</li>
+<li>Not being curious (没有好奇心)</li>
+<li>Not being nice</li>
+<li>Giving up</li>
+</ol>
+
+
+<h2>Tip</h2>
+
+<p>零拷贝(Zero Copy)</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/arts10/%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?x-oss-process=style/black" alt="零拷贝" /></p>
+
+<p>参考资料:</p>
+
+<p><a href="https://pdfs.semanticscholar.org/6a35/60046cb8d3258669c86072a7cab05e1d2300.pdf">零拷贝介绍</a>
+<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy1/index.html">Linux 中的零拷贝技术，第 1 部分</a>
+<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy2/index.html">Linux 中的零拷贝技术，第 2 部分</a>
+<a href="https://juejin.im/entry/59b740fdf265da06633d02cf">零拷贝底层实现原理</a>
+<a href="https://medium.com/@xunnan.xu/its-all-about-buffers-zero-copy-mmap-and-java-nio-50f2a1bfc05c">It’s all about buffers: zero-copy, mmap and Java NIO</a></p>
+
+<h2>Share</h2>
+
+<p><a href="https://www.infoq.cn/article/Reactive-Systems-Akka-Actors-DomainDrivenDesign">使用 Akka 的 Actor 模型和领域驱动设计构建反应式系统</a></p>
+]]></content>
+  </entry>
+  
+</feed>

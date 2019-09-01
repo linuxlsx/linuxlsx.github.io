@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Arts | 平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/blog/categories/arts/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-07-02T23:25:25+08:00</updated>
+  <updated>2019-09-01T17:18:29+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Arts Week 10]]></title>
+    <title type="html"><![CDATA[ARTS 第10周 流控算法]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/07/02/arts-week-10/"/>
     <updated>2019-07-02T23:22:44+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/07/02/arts-week-10</id>
@@ -132,7 +132,7 @@ rotate the input matrix in-place such that it becomes:
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-8]]></title>
+    <title type="html"><![CDATA[ARTS 第8周 学习的10个步骤]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/05/24/arts-week-8/"/>
     <updated>2019-05-24T15:20:26+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/05/24/arts-week-8</id>
@@ -275,7 +275,7 @@ Your goal is to reach the last index in the minimum number of jumps.
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-7]]></title>
+    <title type="html"><![CDATA[ARTS 第7周 动态规划]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/05/05/arts-week-7/"/>
     <updated>2019-05-05T21:06:15+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/05/05/arts-week-7</id>
@@ -471,7 +471,7 @@ public static final String getBase10From62(final long longNumber)
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-six]]></title>
+    <title type="html"><![CDATA[ARTS 第6周 大数据优化]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/04/28/arts-week-six/"/>
     <updated>2019-04-28T21:50:10+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/04/28/arts-week-six</id>
@@ -635,7 +635,7 @@ author = 小蘑菇
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-five]]></title>
+    <title type="html"><![CDATA[ARTS 第5周 GSON源码分析]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/04/22/arts-week-five/"/>
     <updated>2019-04-22T00:58:05+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/04/22/arts-week-five</id>

@@ -9,7 +9,8 @@
   <meta name="author" content="linuxlsx">
 
   
-  <meta name="description" content="Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手. 但是今天启动应用的时候，报了如下的错误: Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside &hellip;">
+  <meta name="description" content="synchronized 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 synchronized 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式: 1. 对于普通方法, 锁是当前对象的实例
+2. 对于静态同步方法, &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -77,23 +78,23 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2019/07/02/arts-week-10/">Arts Week 10</a>
+        <a href="/blog/2019/09/01/arts-week-11/">ARTS 第11周 零拷贝</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2019/06/13/arts-week-9/">Arts-week-9</a>
+        <a href="/blog/2019/07/02/arts-week-10/">ARTS 第10周 流控算法</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2019/05/24/arts-week-8/">Arts-week-8</a>
+        <a href="/blog/2019/06/13/arts-week-9/">ARTS 第9周 晋升述职</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2019/05/05/arts-week-7/">Arts-week-7</a>
+        <a href="/blog/2019/05/24/arts-week-8/">ARTS 第8周 学习的10个步骤</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2019/04/28/arts-week-six/">Arts-week-six</a>
+        <a href="/blog/2019/05/05/arts-week-7/">ARTS 第7周 动态规划</a>
       </li>
     
   </ul>
@@ -132,35 +133,34 @@
     
   
   <li class="entry first-entry">
-    <h2 class="entry-title"><a href="/blog/2015/12/04/jrebel-verifyerror/">Jrebel VerifyError</a></h2>
+    <h2 class="entry-title"><a href="/blog/2015/12/10/synchronized-local-variable-string/">Synchronized 作用于局部变量</a></h2>
     
-      <div class="entry-content"><p>Jrebel 动态部署极大提高了开发效率，是开发必备神器之一. 个人也使用了2年多了，一直都非常顺手.  但是今天启动应用的时候，报了如下的错误:</p>
+      <div class="entry-content"><p><code>synchronized</code> 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 <code>synchronized</code> 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式:</p>
 
-<pre><code>Caused by: java.lang.VerifyError: Bad &lt;init&gt; method call from inside of a branch
-Exception Details:
-Location:
-  com/taobao/healthcenter/web/servlet/StatusServlet.&lt;init&gt;(Lcom/zeroturnaround/javarebel/Ge;I[Ljava/lang/Object;)V @11: invokespecial
-Reason:
-  Error exists in the bytecode
-Bytecode:
-  0000000: 04b8 008e c600 0b2a 2b1c 2db7 0113 b112
-  0000010: 771c b800 7dbf                         
-Stackmap Table:
-  same_frame(@15)
-
-  java version : 1.7.0_67
-  jrebel version : 6.0.0
+<pre><code>1. 对于普通方法, 锁是当前对象的实例
+2. 对于静态同步方法, 锁是当前类的 Class 对象
+3. 对于同步方法块, 锁是 synchronized 括号里面配置的对象
 </code></pre>
-
-<p>Google 发现Jrebel官网已经有人提出了这个问题: <a href="http://zeroturnaround.com/forums/topic/verifyerror-bad-method-call-from-inside-of-a-branch/">VerifyError</a></p>
 
 </div>
       
       
         <footer>
-          <a rel="full-article" href="/blog/2015/12/04/jrebel-verifyerror/">Read on &rarr;</a>
+          <a rel="full-article" href="/blog/2015/12/10/synchronized-local-variable-string/">Read on &rarr;</a>
         </footer>
       
+    
+  </li>
+  
+
+
+  
+    
+    
+    
+  
+  <li class="entry ">
+    <h2 class="entry-title"><a href="/blog/2015/12/04/jrebel-verifyerror/">Jrebel VerifyError</a></h2>
     
   </li>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[平凡的世界]]></title>
   <link href="http://linuxlsx.github.io/atom.xml" rel="self"/>
   <link href="http://linuxlsx.github.io/"/>
-  <updated>2019-07-02T23:25:25+08:00</updated>
+  <updated>2019-09-01T17:18:29+08:00</updated>
   <id>http://linuxlsx.github.io/</id>
   <author>
     <name><![CDATA[linuxlsx]]></name>
@@ -14,7 +14,129 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Arts Week 10]]></title>
+    <title type="html"><![CDATA[ARTS 第11周 零拷贝]]></title>
+    <link href="http://linuxlsx.github.io/blog/2019/09/01/arts-week-11/"/>
+    <updated>2019-09-01T17:09:16+08:00</updated>
+    <id>http://linuxlsx.github.io/blog/2019/09/01/arts-week-11</id>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
+
+<p>本周完成的算法题: <a href="https://leetcode.com/problems/jump-game/">Jump Game</a></p>
+
+<!--more-->
+
+
+<p>题目要求:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Given an array of non-negative integers, you are initially positioned at the first index of the array.
+</span><span class='line'>
+</span><span class='line'>Each element in the array represents your maximum jump length at that position.
+</span><span class='line'>
+</span><span class='line'>Determine if you are able to reach the last index.
+</span><span class='line'>
+</span><span class='line'>Example 1:
+</span><span class='line'>
+</span><span class='line'>Input: [2,3,1,1,4]
+</span><span class='line'>Output: true
+</span><span class='line'>Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+</span><span class='line'>Example 2:
+</span><span class='line'>
+</span><span class='line'>Input: [3,2,1,0,4]
+</span><span class='line'>Output: false
+</span><span class='line'>Explanation: You will always arrive at index 3 no matter what. Its maximum
+</span><span class='line'>             jump length is 0, which makes it impossible to reach the last index.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个题的解可以使用贪心算法来解决。但是具体细节与<a href="https://leetcode.com/problems/jump-game-ii/">Jump GameII</a>略有不同。对于实例中给出的第二种情况，当我们到达<code>index 3</code>以后，再也无法往后继续跳，所以我们要在循环条件中增加<code>i &lt;= nextMaxIndex</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='Java'><span class='line'><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canJump</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">nextMaxIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>    <span class="c1">//注意到条件 i &lt;= nextMaxIndex</span>
+</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">nextMaxIndex</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">nextMaxIndex</span> <span class="o">&lt;</span> <span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">])){</span>
+</span><span class='line'>            <span class="n">nextMaxIndex</span> <span class="o">=</span> <span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="n">nextMaxIndex</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">nextMaxIndex</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">nextMaxIndex</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Review</h2>
+
+<p>本周Review <a href="https://forge.medium.com/10-habits-of-unsuccessful-people-you-dont-want-to-copy-d401ac677c91">10 Bad Habits of Unsuccessful People</a></p>
+
+<p>成功没有捷径、成功各不相同。但是不成功却大体是类似的，所以我们要做好的将那些导致我们不成功的做法、习惯成生活中剔除，避免不成功<strong>Just try to avoid being unsuccessful</strong></p>
+
+<p>10个坏习惯：</p>
+
+<ol>
+<li>Always being distracted（经常分心，无法集中注意力）</li>
+<li>Only talking the talk（光说不做）</li>
+<li>Spending time with the wrong people</li>
+<li>Always focusing on the negative</li>
+<li>Procrastinating (拖延)</li>
+<li>Not listening to others</li>
+<li>Giving in to laziness</li>
+<li>Not being curious (没有好奇心)</li>
+<li>Not being nice</li>
+<li>Giving up</li>
+</ol>
+
+
+<h2>Tip</h2>
+
+<p>零拷贝(Zero Copy)</p>
+
+<p><img src="https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/arts10/%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?x-oss-process=style/black" alt="零拷贝" /></p>
+
+<p>参考资料:</p>
+
+<p><a href="https://pdfs.semanticscholar.org/6a35/60046cb8d3258669c86072a7cab05e1d2300.pdf">零拷贝介绍</a>
+<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy1/index.html">Linux 中的零拷贝技术，第 1 部分</a>
+<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy2/index.html">Linux 中的零拷贝技术，第 2 部分</a>
+<a href="https://juejin.im/entry/59b740fdf265da06633d02cf">零拷贝底层实现原理</a>
+<a href="https://medium.com/@xunnan.xu/its-all-about-buffers-zero-copy-mmap-and-java-nio-50f2a1bfc05c">It’s all about buffers: zero-copy, mmap and Java NIO</a></p>
+
+<h2>Share</h2>
+
+<p><a href="https://www.infoq.cn/article/Reactive-Systems-Akka-Actors-DomainDrivenDesign">使用 Akka 的 Actor 模型和领域驱动设计构建反应式系统</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ARTS 第10周 流控算法]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/07/02/arts-week-10/"/>
     <updated>2019-07-02T23:22:44+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/07/02/arts-week-10</id>
@@ -178,7 +300,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-9]]></title>
+    <title type="html"><![CDATA[ARTS 第9周 晋升述职]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/06/13/arts-week-9/"/>
     <updated>2019-06-13T15:55:16+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/06/13/arts-week-9</id>
@@ -406,7 +528,7 @@ HashMap遍历的顺序是不固定的，所以当你加入或者增加元素时�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-8]]></title>
+    <title type="html"><![CDATA[ARTS 第8周 学习的10个步骤]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/05/24/arts-week-8/"/>
     <updated>2019-05-24T15:20:26+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/05/24/arts-week-8</id>
@@ -590,7 +712,7 @@ HashMap遍历的顺序是不固定的，所以当你加入或者增加元素时�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-7]]></title>
+    <title type="html"><![CDATA[ARTS 第7周 动态规划]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/05/05/arts-week-7/"/>
     <updated>2019-05-05T21:06:15+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/05/05/arts-week-7</id>
@@ -871,7 +993,7 @@ HashMap遍历的顺序是不固定的，所以当你加入或者增加元素时�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-six]]></title>
+    <title type="html"><![CDATA[ARTS 第6周 大数据优化]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/04/28/arts-week-six/"/>
     <updated>2019-04-28T21:50:10+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/04/28/arts-week-six</id>
@@ -1082,7 +1204,7 @@ Q = 每个条目需要的工作（amount of work per item）</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-five]]></title>
+    <title type="html"><![CDATA[ARTS 第5周 GSON源码分析]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/04/22/arts-week-five/"/>
     <updated>2019-04-22T00:58:05+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/04/22/arts-week-five</id>
@@ -2175,7 +2297,7 @@ Orpheus目前达到了5个9的一致性。</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-four]]></title>
+    <title type="html"><![CDATA[ARTS 第4周 负载均衡算法]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/04/14/arts-week-four/"/>
     <updated>2019-04-14T00:06:02+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/04/14/arts-week-four</id>
@@ -2329,7 +2451,7 @@ Orpheus目前达到了5个9的一致性。</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-three]]></title>
+    <title type="html"><![CDATA[ARTS 第3周 GC复制算法]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/04/08/arts-week-three/"/>
     <updated>2019-04-08T00:00:13+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/04/08/arts-week-three</id>
@@ -3057,13 +3179,11 @@ Orpheus目前达到了5个9的一致性。</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Arts-week-two]]></title>
+    <title type="html"><![CDATA[ARTS 第2周 GC引用计数算法]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/03/29/arts-week-two/"/>
     <updated>2019-03-29T21:25:12+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/03/29/arts-week-two</id>
-    <content type="html"><![CDATA[<h1>ARTS 第2周</h1>
-
-<h2>Algorithm</h2>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
 
 <p>本周完成的算法题: <a href="https://leetcode.com/problems/valid-sudoku/">Valid Sudoku</a></p>
 
@@ -4282,13 +4402,11 @@ Orpheus目前达到了5个9的一致性。</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[ARTS First Week]]></title>
+    <title type="html"><![CDATA[ARTS 第1周 关键词匹配算法调研]]></title>
     <link href="http://linuxlsx.github.io/blog/2019/03/21/arts-first-week/"/>
     <updated>2019-03-21T23:09:03+08:00</updated>
     <id>http://linuxlsx.github.io/blog/2019/03/21/arts-first-week</id>
-    <content type="html"><![CDATA[<h1>ARTS 第1周</h1>
-
-<h2>Algorithm</h2>
+    <content type="html"><![CDATA[<h2>Algorithm</h2>
 
 <p>本周完成的算法题: <a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/">Find First and Last Position of Element in Sorted Array</a></p>
 
@@ -5413,85 +5531,6 @@ require(['jquery', 'bootstrap', 'dist', 'paginator' , 'menu', 'pager'],function(
 <p>所以当把上面的申明放到父容器相关的配置文件中的时候, 父容器会尝试寻找切入点, 但是这个时候切入点其实在子容器, 父容器访问不到子容器中的bean, 达不到拦截的效果。</p>
 
 <p>将配置迁移到 子容器相关的配置文件中就能达到拦截的效果。至于 Aspect 的bean 可以配置在父容器中 也可以配置在子容器中。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Synchronized 作用于局部变量]]></title>
-    <link href="http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string/"/>
-    <updated>2015-12-10T20:36:22+08:00</updated>
-    <id>http://linuxlsx.github.io/blog/2015/12/10/synchronized-local-variable-string</id>
-    <content type="html"><![CDATA[<p><code>synchronized</code> 是java 中元老级的锁。他的使用非常的简单, 可以作用在普通方法，静态方法以及方法块上。对象是 <code>synchronized</code> 实现同步的基础，java 中每个对象都可以作为锁。具体表现为以下三种方式:</p>
-
-<pre><code>1. 对于普通方法, 锁是当前对象的实例
-2. 对于静态同步方法, 锁是当前类的 Class 对象
-3. 对于同步方法块, 锁是 synchronized 括号里面配置的对象
-</code></pre>
-
-<!-- more -->
-
-
-<p>今天代码review 的时候, 发现一个新奇的写法，简化后的代码如下:</p>
-
-<pre><code>public static Object get(String key){
-
-  String syncKey = key + "something else";
-
-  synchronized (syncKey){
-      // 简化的逻辑
-      // obj = map.get(syncKey)
-      // if obj == null
-      //      obj = Provider.get()
-      //      map.put(obj)
-      // return obj
-  }
-}
-</code></pre>
-
-<p>咋一看这跟我们常规的写法不一样，常规的写法 一般是将 <code>syncKey</code> 定义为类的一个属性, 这样能够保证多线程确实是基于同一个对象实例来做同步的。对于这个写法作者的解释是 java 对于String 是做过特殊处理的，值一样的String 是会做缓存的。所以多线程访问的情况下仍然是作用在同一个对象上, 可以达到同步的效果。</p>
-
-<p>对于这个结论是一半对一半不对, 具体能不能达到想要的同步效果，就要看是不是作用在同一个对象实例上。那String 到底是不是同一个对象实例呢？ 那就要从 String 的内存模型说起了。具体详解可以参考<a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java：String</a></p>
-
-<p>所以针对这个示例，其实是不对的。 <code>String syncKey = key + "something else"</code> 每次都返回一个 <code>new String()</code> 对于 <code>synchronized</code> 来说肯定不是同一个对象实例, 所以就达不到同步的效果。但是如果修改成如下的就是可以的:</p>
-
-<pre><code>public static Object get(String key){
-
-  String syncKey = "something else";
-
-  synchronized (syncKey){
-      // 简化的逻辑
-      // obj = map.get(syncKey)
-      // if obj == null
-      //      obj = Provider.get()
-      //      map.put(obj)
-      // return obj
-  }
-}
-</code></pre>
-
-<p><code>String syncKey = "something else";</code> 这样的方式是将 <code>something else</code> 这个字符串保存到了JVM 的字符串常量池中, 并且可以共享。所以多线程访问的时候拿到的都是同一个对象, 就能达到同步的效果。</p>
-
-<p>Java 还有没有能够达到这种效果的对象吗？答案是肯定的, 以下的几种情况得到的都是同一个对象实例:</p>
-
-<pre><code>1. byte(Byte), short(Short), int(Integer), long(Long) 值在[-128,127] 之间
-2. boolean (true or false)
-3. char 值在 ['\u0000' - '\u007f']
-</code></pre>
-
-<p>这个是Java 语言规范中定义的。这些值会在JVM中缓存下来, 每次使用都会返回同一个实例。但是仅限<code>Integer i = 1</code> 这样的方式. 如果是 <code>Integer i = new Integer(1)</code> 的话， 那就是不同的对象了。</p>
-
-<h4>结论</h4>
-
-<p><code>synchronized</code> 将锁标记保存在对象头中, 所以只要对象是同一个就能够达到同步的效果，也不一定要是实例变量。而Java 语言中某些对象实例虽然是局部变量, 但是由于一些性能优化上的考虑, 会对String, Byte,Short,Boolean,Integer,Long 类型的数据做一些优化。</p>
-
-<h4>参考资料</h4>
-
-<ol>
-<li><a href="http://www.cnblogs.com/ITtangtang/p/3976820.html">深入理解Java: String</a></li>
-<li><a href="http://java-performance.info/string-intern-in-java-6-7-8/">String.intern in Java 6, 7 and 8 – string pooling</a></li>
-<li><a href="http://codelog.me/2015/01/20/2015-01-20-string-intern/">深入理解Java String#intern() 内存模型</a></li>
-</ol>
-
 ]]></content>
   </entry>
   
