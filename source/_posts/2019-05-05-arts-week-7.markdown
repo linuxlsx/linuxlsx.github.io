@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "arts-week-7"
+title: "ARTS 第7周 动态规划"
 date: 2019-05-05 21:06:15 +0800
 comments: true
 categories: ["ARTS", "动态规划", "短链接"]

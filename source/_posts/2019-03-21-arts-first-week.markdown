@@ -1,11 +1,10 @@
 ---
 layout: post
-title: "ARTS First Week"
+title: "ARTS 第1周 关键词匹配算法调研"
 date: 2019-03-21 23:09:03 +0800
 comments: true
 categories: ['ARTS']
 ---
-# ARTS 第1周
 
 ## Algorithm
 

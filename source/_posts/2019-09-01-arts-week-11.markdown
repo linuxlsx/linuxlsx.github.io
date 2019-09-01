@@ -1,0 +1,90 @@
+---
+layout: post
+title: "ARTS 第11周 零拷贝"
+date: 2019-09-01 17:09:16 +0800
+comments: true
+categories: ['Zero Copy', '零拷贝']
+---
+
+## Algorithm
+
+本周完成的算法题: [Jump Game](https://leetcode.com/problems/jump-game/)
+
+<!--more-->
+
+题目要求:
+
+```
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+Example 1:
+
+Input: [2,3,1,1,4]
+Output: true
+Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+Example 2:
+
+Input: [3,2,1,0,4]
+Output: false
+Explanation: You will always arrive at index 3 no matter what. Its maximum
+             jump length is 0, which makes it impossible to reach the last index.
+
+```
+
+这个题的解可以使用贪心算法来解决。但是具体细节与[Jump GameII](https://leetcode.com/problems/jump-game-ii/)略有不同。对于实例中给出的第二种情况，当我们到达`index 3`以后，再也无法往后继续跳，所以我们要在循环条件中增加`i <= nextMaxIndex`
+
+```Java
+    public boolean canJump(int[] nums) {
+        int nextMaxIndex = 0;
+        //注意到条件 i <= nextMaxIndex
+        for (int i = 0; i <= nums.length - 1 && i <= nextMaxIndex; i++) {
+
+            if(nextMaxIndex < (i + nums[i])){
+                nextMaxIndex = (i + nums[i]);
+            }
+            nextMaxIndex = Math.max(nextMaxIndex, i + nums[i]);
+        }
+        return nextMaxIndex >= nums.length - 1;
+    }
+```
+
+## Review
+
+本周Review [10 Bad Habits of Unsuccessful People](https://forge.medium.com/10-habits-of-unsuccessful-people-you-dont-want-to-copy-d401ac677c91)
+
+成功没有捷径、成功各不相同。但是不成功却大体是类似的，所以我们要做好的将那些导致我们不成功的做法、习惯成生活中剔除，避免不成功**Just try to avoid being unsuccessful**
+
+10个坏习惯：
+
+1. Always being distracted（经常分心，无法集中注意力）
+2. Only talking the talk（光说不做）
+3. Spending time with the wrong people
+4. Always focusing on the negative
+5. Procrastinating (拖延)
+6. Not listening to others
+7. Giving in to laziness
+8. Not being curious (没有好奇心)
+9. Not being nice
+10. Giving up 
+
+## Tip
+
+零拷贝(Zero Copy)
+
+![零拷贝](https://0bb6ac2.oss-cn-hongkong.aliyuncs.com/arts10/%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?x-oss-process=style/black)
+
+参考资料:
+
+[零拷贝介绍](https://pdfs.semanticscholar.org/6a35/60046cb8d3258669c86072a7cab05e1d2300.pdf)
+[Linux 中的零拷贝技术，第 1 部分](https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy1/index.html)
+[Linux 中的零拷贝技术，第 2 部分](https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy2/index.html)
+[零拷贝底层实现原理](https://juejin.im/entry/59b740fdf265da06633d02cf)
+[It’s all about buffers: zero-copy, mmap and Java NIO](https://medium.com/@xunnan.xu/its-all-about-buffers-zero-copy-mmap-and-java-nio-50f2a1bfc05c)
+
+## Share
+
+[使用 Akka 的 Actor 模型和领域驱动设计构建反应式系统](https://www.infoq.cn/article/Reactive-Systems-Akka-Actors-DomainDrivenDesign)

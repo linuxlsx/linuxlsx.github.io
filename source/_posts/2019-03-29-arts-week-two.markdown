@@ -1,12 +1,10 @@
 ---
 layout: post
-title: "arts-week-two"
+title: "ARTS 第2周 GC引用计数算法"
 date: 2019-03-29 21:25:12 +0800
 comments: true
 categories: ["ARTS", "Sudoku", "GC", "引用计数"]
 ---
-
-# ARTS 第2周
 
 ## Algorithm
 

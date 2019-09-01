@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "arts-week-six"
+title: "ARTS 第6周 大数据优化"
 date: 2019-04-28 21:50:10 +0800
 comments: true
 categories: ['ARTS', 'Parallel Stream', 'ForkJoinPool', 'Rete']

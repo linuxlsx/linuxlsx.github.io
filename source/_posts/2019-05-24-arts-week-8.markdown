@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "arts-week-8"
+title: "ARTS 第8周 学习的10个步骤"
 date: 2019-05-24 15:20:26 +0800
 comments: true
 categories: ["ARTS", "Jump Game", "贪心算法", "Synchronized"]
